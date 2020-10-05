@@ -3,9 +3,26 @@
 
     class HomeController
     {
-        public function Index($message = "")
+        public function index($message = "")
         {
-            require_once(VIEWS_PATH."add-cellphone.php");
-        }        
+            if(!isset($_SESSION["loggedUser"])){
+                $this->showLoginView();
+            }else{
+                $this->showHomeView();
+            }
+        }
+
+        public function showLoginView(){
+            require_once(VIEWS_PATH."login.php");
+        }
+
+        public function showHomeView(){
+            require_once(VIEWS_PATH."home.php");
+        }
+
+        public function showRegisterView(){ 
+            require_once(VIEWS_PATH."register.php");
+        }
     }
+
 ?>
