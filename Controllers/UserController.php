@@ -34,4 +34,20 @@
             $this->index();
         }
 
+        public function add($name, $email, $pass){
+            
+            $arrayToEncode = array();
+
+            $valueArray['name'] = $name;
+            $valueArray['email'] = $email;
+            $valueArray['pass'] = $pass;
+
+            array_push($arrayToEncode, $valueArray);
+
+            $jsonContent = json_encode($arrayToEncode, JSON_PRETTY_PRINT);
+            file_put_contents('Data/users.json', $jsonContent);
+
+            require_once(VIEWS_PATH."login.php");
+        }
+
     }
