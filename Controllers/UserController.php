@@ -12,19 +12,37 @@
             require_once(VIEWS_PATH."home.php");
         }
 
-        public function login($email, $pass){
-            if($email == "user@myapp.com"){
-                if($pass == "123456"){
-                    $_SESSION["loggedUser"] = 1; //Aca va el id del usuario
-                    $_SESSION["userName"] = $email;
-                    $this->showHomeView();
+        public function login($email, $pass, $administrator){
+            if($administrator){
+                if($email == "admin@cine.com"){
+                    if($pass == "123456"){
+                        $_SESSION["loggedUser"] = 1; //Aca va el id del usuario
+                        $_SESSION["userName"] = $email;
+                        $_SESSION["isAdmin"] = $administrator;
+                        $this->showHomeView();
+                    }else{
+                        echo "<script> if(confirm('Verifique que la contraseña sea correcta. (ES 123456)'));";
+                        echo "window.location = '../index.php';</script>";
+                    }
                 }else{
-                    echo "<script> if(confirm('Verifique que la contraseña sea correcta. (ES 123456)'));";
+                    echo "<script> if(confirm('Verifique que el email sea correcto. (ES user@myapp.com)'));";
                     echo "window.location = '../index.php';</script>";
                 }
             }else{
-                echo "<script> if(confirm('Verifique que el email sea correcto. (ES user@myapp.com)'));";
-                echo "window.location = '../index.php';</script>";
+                if($email == "user@myapp.com"){
+                    if($pass == "123456"){
+                        $_SESSION["loggedUser"] = 1; //Aca va el id del usuario
+                        $_SESSION["userName"] = $email;
+                        $_SESSION["isAdmin"] = $administrator;
+                        $this->showHomeView();
+                    }else{
+                        echo "<script> if(confirm('Verifique que la contraseña sea correcta. (ES 123456)'));";
+                        echo "window.location = '../index.php';</script>";
+                    }
+                }else{
+                    echo "<script> if(confirm('Verifique que el email sea correcto. (ES user@myapp.com)'));";
+                    echo "window.location = '../index.php';</script>";
+                }
             }
         }
 
