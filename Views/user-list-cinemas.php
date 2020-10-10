@@ -28,14 +28,14 @@
                 <th>Ticket Price</th>
                 <th>Owner</th>
                 <?php if($_SESSION["type"] == "administrator") { ?>
-                <th style="text-align: center">  </th>
+                <th style="text-align: center">Delete</th>
                 <?php } ?>
               </tr>
             </thead>
             <tbody>
               <?php
               $count = 0;
-              foreach($cinemasList as $cinema) {
+              foreach($cinemasListAll as $cinema) {
                 $count++;
               ?>
               <tr>
@@ -47,49 +47,18 @@
                 <td style="vertical-align: middle"><?php echo $cinema->getOwner(); ?></td>
                 <?php if($_SESSION["type"] == "administrator") { ?>
                   <td style="text-align: center">
-                    <a href="<?php echo FRONT_ROOT."Cinema/delete?id=".$cinema->getId();?>">
-                      <button small type="submit" class="btn btn-primary"  value="<?php echo $cinema->getId(); ?>">Eliminar</button>
-                    </a>
+                    <a href="<?php echo FRONT_ROOT."Cinema/delete?id=".$cinema->getId();?>" class="btn btn-danger">Delete</a>
                   </td>
                 <?php } } ?>
               </tr>
             </tbody>
           </table>
+            <a href="<?php echo FRONT_ROOT."Cinema/addCinemaForm";?>" class="btn btn-primary btn-lg btn-block">Add</a>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<!--<?php //if($_SESSION["type"] == "administrator") { ?>
-
-
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <h1 class="display-2">Add Cinema</h1>
-      </div>
-    </div>
-  </div>
-
-<form action="<?php //echo FRONT_ROOT."Cinema/addCinema"; ?>" method="post">
-  <div class="py-5">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-2"> <input type="text" class="form-control" placeholder="Cinema name" name="name" id="name"> </div>
-        <div class="col-md-2"> <input type="number" class="form-control" placeholder="Total capacity" name="capacity" id="capacity"> </div>
-        <div class="col-md-2"> <input type="text" class="form-control" placeholder="Address" name="address" id="address"> </div>
-        <div class="col-md-2"> <input type="number" class="form-control" placeholder="Ticket price" name="price" id="price"> </div>
-        <div class="col-md-2"> <button type="submit" class="btn btn-primary">Add</button></div>
-      </div>
-    </div>
-  </div>
-</form>
-
-<div class="mt-5">
-</div>
-
-<?php //} ?>-->
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
