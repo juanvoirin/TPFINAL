@@ -2,23 +2,18 @@
  include_once('header.php');
  include_once('nav-guest.php');
 ?>
-<div class="py-5 text-center" style="background-image: url('default/images/background.jpg');background-size:cover;">
+<div class="py-5 text-center" style="background-image: url('<?php echo IMG_PATH."background.jpg"?>');background-size:cover;">
   <div class="container">
     <div class="row">
       <div class="mx-auto col-md-6 col-10 bg-white p-5">
-        <h1 class="mb-4">Register<br></h1>
-        <form action="<?php echo FRONT_ROOT ?>User/addUser" method="post">
+        <h1 class="mb-4">Data Cinema<br></h1>
+        <form action="<?php echo FRONT_ROOT ?>Cinema/addCinema" method="post">
           <div class="form-group"> <input type="text" class="form-control" placeholder="Name" name="name" id="name"> </div>
-          <div class="form-group"> <input type="email" class="form-control" placeholder="Email" name="email" id="email"> </div>
-          <div class="form-group"> <input type="password" class="form-control" placeholder="Password" name="pass" id="password"> 
-            <small class="form-text text-muted text-right">
-              <a href=<?php echo FRONT_ROOT."User/index"?>> Already have an account?</a>
-            </small>
-          </div>
+          <div class="form-group"> <input type="number" class="form-control" placeholder="Capacity" name="capacity" id="capacity"> </div>
+          <div class="form-group"> <input type="text" class="form-control" placeholder="Address" name="address" id="address"> </div>
+          <div class="form-group"> <input type="text" class="form-control" placeholder="$ Price" name="price" id="price"> </div>
           <button type="submit" class="btn btn-primary">Sign up<br></button>
         </form>
-        <br>
-        <a class="btn text-white" href="http://www.lanoticia.com/wp-content/uploads/2019/08/Adopte-gatitos-refugio-Mecklenburg.jpg" style="background: rgb(59, 89, 152);" target="_blank"><i class="fa fa-facebook fa-fw fa-1x py-1"></i>Sign up with Facebook</a>
       </div>
     </div>
   </div>

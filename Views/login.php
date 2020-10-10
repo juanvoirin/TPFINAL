@@ -5,7 +5,7 @@
 <header>
   <title>Log in</title>
 </header>
-<div class="py-5 text-center" style="height:100%; background-image: url('<?php echo IMG_PATH."background.jpg"?>'); background-size:cover;">
+<div class="p-5 text-center" style="width:100%; background-image: url('<?php echo IMG_PATH."background.jpg"?>'); background-size:cover;">
   <div class="container">
     <div class="row">
       <div class="mx-auto col-md-6 col-10 bg-light p-3">
@@ -18,10 +18,6 @@
           <div class="form-group mb-3">
             <label for="formInputPassword">Passwrod</label>
             <input type="password" class="form-control" placeholder="Password" name="pass" id="formInputPassword">
-          </div>
-          <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1" name="administrator">
-            <label class="form-check-label" for="exampleCheck1">Administrator</label>
           </div>
           <button type="submit" class="btn btn-primary" name="btnLogin">Sign in</button>
         </form>

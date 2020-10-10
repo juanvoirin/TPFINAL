@@ -1,0 +1,16 @@
+[
+    {
+        "name": "Cine Paseo Aldrey",
+        "capacity": "50",
+        "address": "Sarmiento 2685",
+        "price": "500",
+        "owner": "Pepito De La Mancha"
+    },
+    {
+        "name": "Mini Paseo Aldrey",
+        "capacity": "25",
+        "address": "No se",
+        "price": "100",
+        "owner": "Usuario Administrador Cines"
+    }
+]
