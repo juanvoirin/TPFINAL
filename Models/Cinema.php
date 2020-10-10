@@ -3,12 +3,21 @@
 
 	class Cinema {
 
+		private $id;
 		private $name;
 		private $capacity;
 		private $address;
 		private $price;
 		private $owner;
         
+
+		public function setId($id) {
+			$this->id = $id;
+		}
+
+		public function getId() {
+			return $this->id;
+		}
 
 		public function setName($name) {
 			$this->name = $name;

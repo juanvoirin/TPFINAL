@@ -19,6 +19,7 @@ class CinemaDAO implements ICinemaDAO {
         foreach ($this->cinemasList as $row){
             if($name == $row->getName()){
                 $cinema = new Cinema();
+                $cinema->setId($row->getId());
                 $cinema->setName($row->getName());
                 $cinema->setCapacity($row->getCapacity());
                 $cinema->setAddress($row->getAddress());
@@ -40,6 +41,7 @@ class CinemaDAO implements ICinemaDAO {
         foreach ($this->cinemasList as $row){
             if($owner == $row->getOwner()){
                 $cinema = new Cinema();
+                $cinema->setId($row->getId());
                 $cinema->setName($row->getName());
                 $cinema->setCapacity($row->getCapacity());
                 $cinema->setAddress($row->getAddress());
@@ -67,12 +69,32 @@ class CinemaDAO implements ICinemaDAO {
         $cinema->setAddress($address);
         $cinema->setPrice($price);
         $cinema->setOwner($owner);
+        $cinema->setId($this->createIdCinema());
         
         $this->retrieveData();
 
         array_push($this->cinemasList, $cinema);
         
         $this->saveData();
+    }
+
+    public function deleteById($id){
+        $this->retrieveData();
+
+        //Falta realizar la eliminacion buscando el cine por id
+    }
+
+    private function createIdCinema(){
+        $this->retrieveData();
+
+        $newId = 0;
+
+        foreach($this->cinemasList as $cinema){
+            $newId = $cinema->getId();
+        }
+        $newId ++;
+        echo $newId;
+        return $newId;
     }
 
     private function retrieveData(){
@@ -86,6 +108,7 @@ class CinemaDAO implements ICinemaDAO {
 
         foreach ($arrayToDecode as $row) {
             $cinema = new Cinema();
+            $cinema->setId($row['id']);
             $cinema->setName($row['name']);
             $cinema->setCapacity($row['capacity']);
             $cinema->setAddress($row['address']);
@@ -102,6 +125,7 @@ class CinemaDAO implements ICinemaDAO {
         $jsonPath = $this->getJsonFilePath();
 
         foreach ($this->cinemasList as $cinema) {
+            $valueArray['id'] = $cinema->getId();
             $valueArray['name'] = $cinema->getName();
             $valueArray['capacity'] = $cinema->getCapacity();
             $valueArray['address'] = $cinema->getAddress();

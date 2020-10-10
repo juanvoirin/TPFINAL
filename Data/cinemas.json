@@ -1,5 +1,5 @@
-[
-    {
+[{
+        "id": "1",
         "name": "Cine Paseo Aldrey",
         "capacity": "50",
         "address": "Sarmiento 2685",
@@ -7,6 +7,7 @@
         "owner": "Pepito De La Mancha"
     },
     {
+        "id": "2",
         "name": "Mini Paseo Aldrey",
         "capacity": "25",
         "address": "No se",
