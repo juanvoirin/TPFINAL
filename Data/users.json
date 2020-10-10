@@ -3,12 +3,18 @@
         "name": "Usuario Predeterminado",
         "email": "user@myapp.com",
         "pass": "123456",
-        "tipo": "user"
-    }
+        "type": "user"
+    },
     {
         "name": "Usuario Administrador Cines",
         "email": "admin@cine.com",
         "pass": "123456",
-        "tipo": "administrador"
+        "type": "administrator"
+    },
+    {
+        "name": "Juan Francisco Voirin",
+        "email": "juanfranciscovoirin@gmail.com",
+        "pass": "123456",
+        "type": "user"
     }
 ]

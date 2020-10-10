@@ -2,9 +2,13 @@
 
     namespace Controllers;
 
+    use DAO\UserDAO as UserDAO;
+
     class UserController {
 
-        public function index($message = ""){
+        private $userDao;
+
+        public function index(){
             require_once(VIEWS_PATH."login.php");
         }
 
@@ -12,35 +16,22 @@
             require_once(VIEWS_PATH."home.php");
         }
 
-        public function login($email, $pass, $administrator){
-            if($administrator){
-                if($email == "admin@cine.com"){
-                    if($pass == "123456"){
-                        $_SESSION["loggedUser"] = 1; //Aca va el id del usuario
-                        $_SESSION["userName"] = $email;
-                        $_SESSION["isAdmin"] = $administrator;
-                        $this->showHomeView();
-                    }else{
-                        echo "<script> if(confirm('Verifique que la contraseña sea correcta. (ES 123456)'));";
-                        echo "window.location = '../index.php';</script>";
-                    }
-                }else{
-                    echo "<script> if(confirm('Verifique que el email sea correcto. (ES user@myapp.com)'));";
-                    echo "window.location = '../index.php';</script>";
-                }
+        public function login($email, $pass){
+            
+            $this->userDao = new UserDAO();
+            $user = $this->userDao->getByEmail($email);
+
+            if($user == null){
+                echo "<script> if(confirm('Verifique que el email sea correcto.'));";
+                echo "window.location = '../index.php';</script>";
             }else{
-                if($email == "user@myapp.com"){
-                    if($pass == "123456"){
-                        $_SESSION["loggedUser"] = 1; //Aca va el id del usuario
-                        $_SESSION["userName"] = $email;
-                        $_SESSION["isAdmin"] = $administrator;
-                        $this->showHomeView();
-                    }else{
-                        echo "<script> if(confirm('Verifique que la contraseña sea correcta. (ES 123456)'));";
-                        echo "window.location = '../index.php';</script>";
-                    }
+                if($user->getPass() == $pass){
+                    $_SESSION["loggedUser"] = $user->getEmail();
+                    $_SESSION["userName"] = $user->getName();
+                    $_SESSION["type"] = $user->getType();
+                    $this->showHomeView();
                 }else{
-                    echo "<script> if(confirm('Verifique que el email sea correcto. (ES user@myapp.com)'));";
+                    echo "<script> if(confirm('Verifique que la contraseña sea correcta.'));";
                     echo "window.location = '../index.php';</script>";
                 }
             }
@@ -52,18 +43,10 @@
             $this->index();
         }
 
-        public function add($name, $email, $pass){
-            
-            $arrayToEncode = array();
+        public function addUser($name, $email, $pass){
 
-            $valueArray['name'] = $name;
-            $valueArray['email'] = $email;
-            $valueArray['pass'] = $pass;
-
-            array_push($arrayToEncode, $valueArray);
-
-            $jsonContent = json_encode($arrayToEncode, JSON_PRETTY_PRINT);
-            file_put_contents('Data/users.json', $jsonContent);
+            $this->userDao = new UserDAO();
+            $this->userDao->add($name, $email, $pass, "user");
 
             require_once(VIEWS_PATH."login.php");
         }

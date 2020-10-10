@@ -1,0 +1,130 @@
+<?php
+
+namespace DAO;
+
+use Models\Cinema as Cinema;
+use DAO\ICinemaDAO as ICinemaDAO;
+
+
+class CinemaDAO implements ICinemaDAO {
+
+    private $cinemasList = array();
+
+    public function getByName($name) {
+        
+        $this->retrieveData();
+
+        $cinemas = array();
+
+        foreach ($this->cinemasList as $row){
+            if($name == $row->getName()){
+                $cinema = new Cinema();
+                $cinema->setName($row->getName());
+                $cinema->setCapacity($row->getCapacity());
+                $cinema->setAddress($row->getAddress());
+                $cinema->setPrice($row->getPrice());
+                $cinema->setOwner($row->getOwner());
+
+                array_push($cinemas, $cinema);
+            }
+        }
+        return $cinemas;
+    }
+
+    public function getByOwner($owner) {
+        
+        $this->retrieveData();
+
+        $cinemas = array();
+
+        foreach ($this->cinemasList as $row){
+            if($owner == $row->getOwner()){
+                $cinema = new Cinema();
+                $cinema->setName($row->getName());
+                $cinema->setCapacity($row->getCapacity());
+                $cinema->setAddress($row->getAddress());
+                $cinema->setPrice($row->getPrice());
+                $cinema->setOwner($row->getOwner());
+
+                array_push($cinemas, $cinema);
+            }
+        }
+        return $cinemas;
+    }
+
+    public function getAll(){
+
+        $this->retrieveData();
+
+        return $this->cinemasList;
+
+    }
+
+    public function add($name, $capacity, $address, $price, $owner){
+        $cinema = new Cinema();
+        $cinema->setName($name);
+        $cinema->setCapacity($capacity);
+        $cinema->setAddress($address);
+        $cinema->setPrice($price);
+        $cinema->setOwner($owner);
+        
+        $this->retrieveData();
+
+        array_push($this->cinemasList, $cinema);
+        
+        $this->saveData();
+    }
+
+    private function retrieveData(){
+        $this->cinemasList = array();
+
+        $jsonPath = $this->getJsonFilePath();
+
+        $jsonContent = file_get_contents($jsonPath);
+        
+        $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
+
+        foreach ($arrayToDecode as $row) {
+            $cinema = new Cinema();
+            $cinema->setName($row['name']);
+            $cinema->setCapacity($row['capacity']);
+            $cinema->setAddress($row['address']);
+            $cinema->setPrice($row['price']);
+            $cinema->setOwner($row['owner']);
+
+            array_push($this->cinemasList, $cinema);
+        }
+    }
+
+    private function saveData(){
+        $arrayToEncode = array();
+
+        $jsonPath = $this->getJsonFilePath();
+
+        foreach ($this->cinemasList as $cinema) {
+            $valueArray['name'] = $cinema->getName();
+            $valueArray['capacity'] = $cinema->getCapacity();
+            $valueArray['address'] = $cinema->getAddress();
+            $valueArray['price'] = $cinema->getPrice();
+            $valueArray['owner'] = $cinema->getOwner();
+
+            array_push($arrayToEncode, $valueArray);
+
+        }
+        $jsonContent = json_encode($arrayToEncode, JSON_PRETTY_PRINT);
+        file_put_contents($jsonPath, $jsonContent);
+    }
+
+    private function getJsonFilePath(){
+
+        $initialPath = "Data/cinemas.json";
+        if(file_exists($initialPath)){
+            $jsonFilePath = $initialPath;
+        }else{
+            $jsonFilePath = "../".$initialPath;
+        }
+
+        return $jsonFilePath;
+    }
+}
+?>

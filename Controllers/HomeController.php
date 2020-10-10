@@ -3,7 +3,7 @@
 
     class HomeController
     {
-        public function index($message = "")
+        public function index()
         {
             if(!isset($_SESSION["loggedUser"])){
                 $this->showLoginView();
