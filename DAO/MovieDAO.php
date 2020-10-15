@@ -84,6 +84,15 @@
             $this->saveData();
         }
 
+        private function addMoviesAPI(){
+
+            $urlAPI = "https://api.themoviedb.org/3/movie/now_playing?api_key=1e9aba021ef977ce53b2219af44e6cd7&language=en-US&page=1";
+            $APIarray = json_decode(file_get_contents($urlAPI), true);
+            for($i=0; $i<count($APIarray); $i++ ){
+               $this->add($APIarray[$i]["id"],$APIarray[$i]["poster_path"],$APIarray[$i]["original_language"],$APIarray[$i]["genre_ids"], $APIarray[$i]["title"],$APIarray[$i]["overview"], $APIarray[$i]["release_date"]);
+            }
+        }
+
         private function retrieveData(){
             $this->movieList = array();
 
