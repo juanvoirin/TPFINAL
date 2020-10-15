@@ -2,7 +2,10 @@
 
     namespace Controllers;
 
+    use DAO\MovieDAO as MovieDAO;
+    use DAO\GenreDAO as GenreDAO;
     use DAO\UserDAO as UserDAO;
+    use Controllers\HomeController as HomeController;
 
     class UserController {
 
@@ -13,6 +16,16 @@
         }
 
         public function showHomeView(){
+            $this->genreDao = new GenreDAO();
+
+            $genreList = array();
+            $genreList = $this->genreDao->getAll();
+            
+            $this->movieDao = new MovieDAO();
+
+            $movieList = array();
+            $movieList = $this->movieDao->getMoviesAPI();
+
             require_once(VIEWS_PATH."home.php");
         }
 
@@ -35,6 +48,8 @@
                     echo "window.location = '../index.php';</script>";
                 }
             }
+            $home = new HomeController();
+            $home->showHomeView();
         }
 
         public function logout(){
