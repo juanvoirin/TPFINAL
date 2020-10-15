@@ -1,8 +1,14 @@
 <?php
     namespace Controllers;
 
+    use DAO\MovieDAO as MovieDAO;
+    use DAO\GenreDAO as GenreDAO;
+
     class HomeController
     {
+        private $movieDao;
+        private $genreDao;
+
         public function index()
         {
             if(!isset($_SESSION["loggedUser"])){
@@ -17,6 +23,16 @@
         }
 
         public function showHomeView(){
+            $this->genreDao = new GenreDAO();
+
+            $genreList = array();
+            $genreList = $this->genreDao->getAll();
+            
+            $this->movieDao = new MovieDAO();
+
+            $movieList = array();
+            $movieList = $this->movieDao->getMoviesAPI();
+
             require_once(VIEWS_PATH."home.php");
         }
 

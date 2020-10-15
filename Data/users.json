@@ -16,5 +16,11 @@
         "email": "juanfranciscovoirin@gmail.com",
         "pass": "123456",
         "type": "user"
+    },
+    {
+        "name": "Alan",
+        "email": "alanmedina1995@gmail.com",
+        "pass": "123456",
+        "type": "user"
     }
 ]

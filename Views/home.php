@@ -35,13 +35,13 @@
       <?php foreach($movieList as $movie) { ?> <!-- Comienzo de tarjeta -->
       <div class="col-md-4 mb-5" style="">
         <div class="card">
-          <img class="card-img-top" src="<?php echo $movie->getImage(); ?>" alt="Card image cap">
+          <img class="card-img-top" src="<?php echo $movie->getPoster_path(); ?>" alt="Card image cap">
           <div class="card-body">
             <h5 class="card-title"><?php echo $movie->getTitle(); ?></h5>
-            <p class="card-text"><?php echo $movie->getDescription(); ?></p>
+            <p class="card-text"><?php echo $movie->getOverview(); ?></p>
           </div>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">Género: <?php echo $movie->genresToString(); ?> </li>
+            <li class="list-group-item">Género: <?php echo "genero"//$movie->getGenres_ids(); ?> </li>
           </ul>
           <div class="card-body mx-auto">
             <?php if ($_SESSION["isAdmin"] == 1) { ?>
