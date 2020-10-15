@@ -53,10 +53,10 @@
 
             $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
             
-            foreach ($arrayToDecode as $row) {
+            foreach ($arrayToDecode["genres"] as $row) {
                 $genre = new Genre();
-                $genre->setId($row['id']);
-                $genre->setName($row['name']);
+                $genre->setId($row["id"]);
+                $genre->setName($row["name"]);
 
                 array_push($this->genreList, $genre);
             }

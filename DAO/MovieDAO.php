@@ -10,6 +10,8 @@
 
         private $moviesList = array();
 
+        private $linkImage = "https://image.tmdb.org/t/p/w500";
+
         public function getByTitle($title) {
 
             $this->retrieveData();
@@ -91,6 +93,29 @@
             for($i=0; $i<count($APIarray); $i++ ){
                $this->add($APIarray[$i]["id"],$APIarray[$i]["poster_path"],$APIarray[$i]["original_language"],$APIarray[$i]["genre_ids"], $APIarray[$i]["title"],$APIarray[$i]["overview"], $APIarray[$i]["release_date"]);
             }
+        }
+
+        public function getMoviesAPI(){
+            $urlAPI = "https://api.themoviedb.org/3/movie/now_playing?api_key=1e9aba021ef977ce53b2219af44e6cd7&language=en-US&page=1";
+            
+            $APIarray = json_decode(file_get_contents($urlAPI), true);
+            
+            $this->moviesList = array();
+
+            foreach($APIarray["results"] as $movie){
+                $movieNew = new Movie();
+                $movieNew->setId($movie["id"]);
+                $movieNew->setPoster_path($this->linkImage.$movie["poster_path"]);
+                $movieNew->setOriginal_language($movie["original_language"]);
+                $movieNew->setGenre_ids($movie["genre_ids"]);
+                $movieNew->setTitle($movie["original_title"]);
+                $movieNew->setOverview($movie["overview"]);
+                $movieNew->setRelease_date($movie["release_date"]);
+
+                array_push($this->moviesList, $movieNew);
+            }
+
+            return $this->moviesList;
         }
 
         private function retrieveData(){
