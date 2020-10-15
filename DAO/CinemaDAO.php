@@ -54,6 +54,26 @@ class CinemaDAO implements ICinemaDAO {
         return $cinemas;
     }
 
+    public function getById($id){
+
+        $this->retrieveData();
+
+        $cinema = new Cinema();
+
+        foreach ($this->cinemasList as $row){
+            if($id == $row->getId()){
+                $cinema->setId($row->getId());
+                $cinema->setName($row->getName());
+                $cinema->setCapacity($row->getCapacity());
+                $cinema->setAddress($row->getAddress());
+                $cinema->setPrice($row->getPrice());
+                $cinema->setOwner($row->getOwner());
+
+            }
+        }
+        return $cinema;
+    }
+
     public function getAll(){
 
         $this->retrieveData();
@@ -81,7 +101,46 @@ class CinemaDAO implements ICinemaDAO {
     public function deleteById($id){
         $this->retrieveData();
 
-        //Falta realizar la eliminacion buscando el cine por id
+        $cinemas = array();
+
+        foreach($this->cinemasList as $row){
+            if($id != $row->getId()){
+                $cinema = new Cinema ();
+                $cinema->setId($row->getId());
+                $cinema->setName($row->getName());
+                $cinema->setCapacity($row->getCapacity());
+                $cinema->setAddress($row->getAddress());
+                $cinema->setPrice($row->getPrice());
+                $cinema->setOwner($row->getOwner());
+
+                array_push($cinemas, $cinema);
+            }
+        }
+        $this->cinemasList = $cinemas;
+        $this->saveData();
+        
+    }
+
+    public function update($id, $name, $capacity, $address, $price, $owner){
+        $this->retrieveData();
+
+        $cinemas = array();
+
+         foreach($this->cinemasList as $row){
+             if($id == $row->getId()){
+                $cinema = new Cinema ();
+                $cinema->setId($id);
+                $cinema->setName($name);
+                $cinema->setCapacity($capacity);
+                $cinema->setAddress($address);
+                $cinema->setPrice($price);
+                $cinema->setOwner($owner);
+
+                array_push($cinemas, $cinema);
+             }
+         }
+         $this->cinemaList = $cinemas;
+         $this->saveData();
     }
 
     private function createIdCinema(){
