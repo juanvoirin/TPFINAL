@@ -24,7 +24,6 @@
                     $movie->setOriginal_language($row->getOriginal_language());
                     $movie->setGenre_ids($row->getGenre_ids());
                     $movie->setTitle($row->getTitle());
-                    
                     $movie->setOverview($row->getOverview());
                     $movie->setRelease_date($row->getRelease_date());
 
