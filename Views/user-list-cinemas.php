@@ -29,6 +29,7 @@
                 <th>Owner</th>
                 <?php if($_SESSION["type"] == "administrator") { ?>
                 <th style="text-align: center">Delete</th>
+                <th style="text-align: center">Update</th>
                 <?php } ?>
               </tr>
             </thead>
@@ -47,13 +48,18 @@
                 <td style="vertical-align: middle"><?php echo $cinema->getOwner(); ?></td>
                 <?php if($_SESSION["type"] == "administrator") { ?>
                   <td style="text-align: center">
-                    <a href="<?php echo FRONT_ROOT."Cinema/delete?id=".$cinema->getId();?>" class="btn btn-danger">Delete</a>
+                    <a href="<?php echo FRONT_ROOT."Cinema/deleteCinema?id=".$cinema->getId();?>" class="btn btn-danger">Delete</a>
+                  </td>
+                  <td style="text-align: center">
+                    <a href="<?php echo FRONT_ROOT."Cinema/updateToFormCinema?id=".$cinema->getId();?>" class="btn btn-warning">Update</a>
                   </td>
                 <?php } } ?>
               </tr>
             </tbody>
           </table>
+          <?php if($_SESSION["type"] == "administrator") { ?>
             <a href="<?php echo FRONT_ROOT."Cinema/addCinemaForm";?>" class="btn btn-primary btn-lg btn-block">Add</a>
+            <?php } ?>
         </div>
       </div>
     </div>
