@@ -81,7 +81,24 @@ class CinemaDAO implements ICinemaDAO {
     public function deleteById($id){
         $this->retrieveData();
 
-        //Falta realizar la eliminacion buscando el cine por id
+        $cinemas = array();
+
+        foreach($this->cinemasList as $row){
+            if($id != $row->getId()){
+                $cinema = new Cinema ();
+                $cinema->setId($row->getId());
+                $cinema->setName($row->getName());
+                $cinema->setCapacity($row->getCapacity());
+                $cinema->setAddress($row->getAddress());
+                $cinema->setPrice($row->getPrice());
+                $cinema->setOwner($row->getOwner());
+
+                array_push($cinemas, $cinema);
+            }
+        }
+        $this->cinemasList = $cinemas;
+        $this->saveData();
+        
     }
 
     private function createIdCinema(){
