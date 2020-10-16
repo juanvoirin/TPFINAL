@@ -37,14 +37,16 @@
         <div class="card">
           <img class="card-img-top" src="<?php echo $movie->getPoster_path(); ?>" alt="Card image cap">
           <div class="card-body">
-            <h5 class="card-title"><?php echo $movie->getTitle(); ?></h5>
-            <p class="card-text"><?php echo $movie->getOverview(); ?></p>
+            <h5 class="card-title font-weight-bold"><?php echo $movie->getTitle(); ?></h5>
           </div>
           <ul class="list-group list-group-flush">
+            <li class="list-group-item">Overview: <?php echo $movie->getOverview(); ?></li>
             <li class="list-group-item">Género: <?php echo "genero"//$movie->getGenres_ids(); ?> </li>
+            <li class="list-group-item">Original Language: <?php echo $movie->getOriginal_language(); ?> </li>
+            <li class="list-group-item">Release Date: <?php echo $movie->getRelease_date(); ?> </li>
           </ul>
           <div class="card-body mx-auto">
-            <?php if ($_SESSION["isAdmin"] == 1) { ?>
+            <?php if($_SESSION["type"] == "administrator") { ?>
               <a href="<?php echo  FRONT_ROOT."Screening/deleteMovie?idMovie=".$movie->getID(); ?>"> 
                 <button href="details-purchase.php" class="btn btn-primary">Eliminar</button> 
               </a>
