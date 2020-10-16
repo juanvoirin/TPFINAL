@@ -44,14 +44,8 @@
 
         public function updateToFormCinema($id){
             $this->cinemaDao = new CinemaDAO();
-            $cinema = $this->chinemaDao->getById($id);
+            $cinema = $this->cinemaDao->getById($id);
             
-            $name = $cinema->getName();
-            $capacity = $cinema->getCapacity();
-            $address = $cinema->getAddress();
-            $price = $cinema->getPrice();
-            $owner = $cinema->getOwner();
-
             require_once(VIEWS_PATH."adm-update-form-cinemas.php");
         }
         
