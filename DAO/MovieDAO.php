@@ -98,7 +98,7 @@
 
             foreach($APIarray["results"] as $movie){
                 
-                if(in_array($genre_ids,$movie["genre_ids"])){
+                if(array_key_exists($genre_ids,$movie["genre_ids"])){
                     $movieNew = new Movie();
                     $movieNew->setId($movie["id"]);
                     $movieNew->setPoster_path($this->linkImage.$movie["poster_path"]);
