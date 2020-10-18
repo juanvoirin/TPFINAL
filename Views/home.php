@@ -1,5 +1,8 @@
-<?php 
- include_once('header.php');
+<?php
+
+use DAO\GenreDAO;
+
+include_once('header.php');
  include_once('nav-user.php');
  require_once("validate-session.php");
 ?>
@@ -41,7 +44,7 @@
           </div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">Overview: <?php echo $movie->getOverview(); ?></li>
-            <li class="list-group-item">Género: <?php echo "genero"//$movie->getGenres_ids(); ?> </li>
+            <li class="list-group-item">Género: <?php echo  "GenreDAO->getName($movie->getGenres_ids())"; ?> </li>
             <li class="list-group-item">Original Language: <?php echo $movie->getOriginal_language(); ?> </li>
             <li class="list-group-item">Release Date: <?php echo $movie->getRelease_date(); ?> </li>
           </ul>
