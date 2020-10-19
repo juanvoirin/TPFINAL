@@ -162,7 +162,6 @@ class CinemaDAO implements ICinemaDAO {
             $newId = $cinema->getId();
         }
         $newId ++;
-        echo $newId;
         return $newId;
     }
 
