@@ -61,6 +61,62 @@
 
         }
 
+        public function getByDate($release_date){
+            $urlAPI = "https://api.themoviedb.org/3/movie/now_playing?api_key=1e9aba021ef977ce53b2219af44e6cd7&language=en-US&page=1";
+            
+            $APIarray = json_decode(file_get_contents($urlAPI), true);
+            
+            $this->moviesList = array();
+
+            foreach($APIarray["results"] as $movie){
+                
+                if($release_date == $movie["release_date"]){
+                    $movieNew = new Movie();
+                    $movieNew->setId($movie["id"]);
+                    $movieNew->setPoster_path($this->linkImage.$movie["poster_path"]);
+                    $movieNew->setOriginal_language($movie["original_language"]);
+                    $movieNew->setGenre_ids($movie["genre_ids"]);
+                    $movieNew->setTitle($movie["original_title"]);
+                    $movieNew->setOverview($movie["overview"]);
+                    $movieNew->setRelease_date($movie["release_date"]);
+                }
+                
+
+                array_push($this->moviesList, $movieNew);
+            }
+
+            return $this->moviesList;
+        }
+        
+
+        public function getByGenreIds($genre_ids){
+            $urlAPI = "https://api.themoviedb.org/3/movie/now_playing?api_key=1e9aba021ef977ce53b2219af44e6cd7&language=en-US&page=1";
+            
+            $APIarray = json_decode(file_get_contents($urlAPI), true);
+            
+            $this->moviesList = array();
+
+            foreach($APIarray["results"] as $movie){
+                
+                if(array_key_exists($genre_ids,$movie["genre_ids"])){
+                    $movieNew = new Movie();
+                    $movieNew->setId($movie["id"]);
+                    $movieNew->setPoster_path($this->linkImage.$movie["poster_path"]);
+                    $movieNew->setOriginal_language($movie["original_language"]);
+                    $movieNew->setGenre_ids($movie["genre_ids"]);
+                    $movieNew->setTitle($movie["original_title"]);
+                    $movieNew->setOverview($movie["overview"]);
+                    $movieNew->setRelease_date($movie["release_date"]);
+                }
+                
+
+                array_push($this->moviesList, $movieNew);
+            }
+
+            return $this->moviesList;
+
+        }
+
         public function getAll(){
 
             $this->retrieveData();

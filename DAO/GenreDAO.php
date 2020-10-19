@@ -44,6 +44,36 @@
             $this->saveData();
         }
 
+        public function getName($id){
+            $this->retrieveData();
+            $genres = array();
+            foreach($this->genreList as $row){
+
+                if(array_key_exists($id,$row)){
+
+                    array_push($genres, $row->getName());
+                    
+                }
+            }
+            return $genres;
+        }
+
+        public function getGenresAPI(){
+            $urlAPI = "https://api.themoviedb.org/3/genre/movie/list?api_key=1e9aba021ef977ce53b2219af44e6cd7&language=en-US";
+            $APIarray = json_decode(file_get_contents($urlAPI), true);
+
+            $this->genreList = array();
+
+            foreach($APIarray["genres"] as $genre){
+                $genreNew = new Genre();
+                $genreNew->setId($genre["id"]);
+                $genreNew->setName($genre["name"]);
+
+                array_push($this->genreList, $genre);
+            }
+            return $this->genreList;
+        }
+
         private function retrieveData(){
             $this->genreList = array();
 
