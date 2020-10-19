@@ -1,6 +1,6 @@
 <?php 
  include_once('header.php');
- include_once('nav-guest.php');
+ include_once('nav-user.php');
 ?>
 <div class="py-5 text-center" style="background-image: url('<?php echo IMG_PATH."background.jpg"?>');background-size:cover;">
   <div class="container">
