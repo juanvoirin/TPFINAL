@@ -1,13 +1,18 @@
-[
-    {
+[{
         "name": "Usuario Predeterminado",
         "email": "user@myapp.com",
         "pass": "123456",
         "type": "user"
     },
     {
-        "name": "Usuario Administrador Cines",
+        "name": "Pepito De La Mancha",
         "email": "admin@cine.com",
+        "pass": "123456",
+        "type": "administrator"
+    },
+    {
+        "name": "Martin Fierro",
+        "email": "admin1@cine.com",
         "pass": "123456",
         "type": "administrator"
     },

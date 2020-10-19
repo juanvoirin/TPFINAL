@@ -6,5 +6,13 @@
         "address": "Sarmiento 2685",
         "price": "500",
         "owner": "Pepito De La Mancha"
+    },
+    {
+        "id": 2,
+        "name": "Cine Abasto Shopping",
+        "capacity": "500",
+        "address": "Corrientes 3000",
+        "price": "500",
+        "owner": "Martin Fierro"
     }
 ]

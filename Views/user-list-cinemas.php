@@ -46,14 +46,16 @@
                 <td style="vertical-align: middle"><?php echo $cinema->getAddress(); ?></td>
                 <td style="vertical-align: middle"><?php echo $cinema->getPrice(); ?></td>
                 <td style="vertical-align: middle"><?php echo $cinema->getOwner(); ?></td>
-                <?php if($_SESSION["type"] == "administrator") { ?>
-                  <td style="text-align: center">
+                <td style="text-align: center">
+                  <?php if($_SESSION["type"] == "administrator" && $_SESSION["userName"] == $cinema->getOwner()) { ?>
                     <a href="<?php echo FRONT_ROOT."Cinema/deleteCinema?id=".$cinema->getId();?>" class="btn btn-danger">Delete</a>
-                  </td>
-                  <td style="text-align: center">
+                  <?php } ?>
+                </td>
+                <td style="text-align: center">
+                  <?php if($_SESSION["type"] == "administrator" && $_SESSION["userName"] == $cinema->getOwner()) { ?>  
                     <a href="<?php echo FRONT_ROOT."Cinema/updateToFormCinema?id=".$cinema->getId();?>" class="btn btn-warning">Update</a>
-                  </td>
-                <?php } } ?>
+                  <?php } } ?>
+                </td>
               </tr>
             </tbody>
           </table>

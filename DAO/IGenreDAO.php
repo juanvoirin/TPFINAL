@@ -4,9 +4,9 @@
 
     interface IGenreDAO
     {
-        function getByName($name);
-        function add($id, $name);
+        function getGenreByName($name);
         function getAll();
+        function getGenreById($id);
 
     }
     
