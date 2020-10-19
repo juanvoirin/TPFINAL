@@ -1,10 +1,11 @@
 <?php
-
-use DAO\GenreDAO;
-
-include_once('header.php');
- include_once('nav-user.php');
- require_once("validate-session.php");
+ include_once('header.php');
+ if(!isset($_SESSION["type"])){
+  include_once('nav-guest.php');
+ }else{
+  include_once('nav-user.php');
+ }
+ //require_once("validate-session.php");
 ?>
 <div class="pt-5 pb-1">
   <div class="container">
@@ -13,10 +14,12 @@ include_once('header.php');
         <h1 class="display-2">Movies in theaters now<br></h1>
         <h5 class="">Sort by</h5>
         <div class="btn-group">
-          <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> Date</button>
-          <div class="dropdown-menu"> 
-          <a class="dropdown-item" href="<?php echo  FRONT_ROOT."Movie/showListNewest";?>">Newest</a>
-          <a class="dropdown-item" href="<?php echo  FRONT_ROOT."Movie/showListOldest";?>">Oldest<br></a>
+          <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Date</button>
+          <div class="dropdown-menu">
+            <form action="<?php echo FRONT_ROOT ?>Movie/showListByDate" method="GET" class="dropdown-item">
+              <div class="form-group"> <input type="date" class="form-control" placeholder="Date" name="date" id="date"></div>
+              <button type="submit" class="btn btn-secondary btn-block">Go<br></button>
+            </form>
           </div>
         </div>
         <div class="btn-group">
@@ -39,15 +42,16 @@ include_once('header.php');
       <div class="col-md-4 mb-5" style="">
         <div class="card">
           <img class="card-img-top" src="<?php echo $movie->getPoster_path(); ?>" alt="Card image cap">
-          <div class="card-body">
+          <div class="card-body mx-auto">
             <h5 class="card-title font-weight-bold"><?php echo $movie->getTitle(); ?></h5>
           </div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">Overview: <?php echo $movie->getOverview(); ?></li>
-            <li class="list-group-item">Género: <?php echo 'generos' //GenreDAO->getName($movie->getGenres_ids()); ?> </li>
+            <li class="list-group-item">Género: <?php echo $movie->getGenresString(); ?></li>
             <li class="list-group-item">Original Language: <?php echo $movie->getOriginal_language(); ?> </li>
             <li class="list-group-item">Release Date: <?php echo $movie->getRelease_date(); ?> </li>
           </ul>
+          <?php if(isset($_SESSION["type"])){  ?>
           <div class="card-body mx-auto">
             <?php if($_SESSION["type"] == "administrator") { ?>
               <a href="<?php echo  FRONT_ROOT."Screening/deleteMovie?idMovie=".$movie->getID(); ?>"> 
@@ -59,6 +63,7 @@ include_once('header.php');
             </a>
             <?php } ?>
           </div>
+            <?php } ?>
         </div>
       </div>
       <?php } ?> <!-- Final de la tarjeta -->

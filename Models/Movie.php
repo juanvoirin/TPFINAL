@@ -6,7 +6,7 @@
         private $id;
         private $poster_path;
         private $original_language;
-        private $genre_ids;
+        private $genres;
         private $title;
         private $overview;
         private $release_date;
@@ -35,12 +35,34 @@
             return $this->original_language;
         }
         
-        public function setGenre_ids($genre_ids){
-            $this->genre_ids = $genre_ids;
+        public function setGenres($genres){
+            $this->genres = $genres;
         }
 
-        public function getGenre_ids () {
-            return $this->genre_ids;
+        public function getGenres(){
+            return $this->genres;
+        }
+
+        public function getGenresString(){
+            $result = "";
+            foreach($this->genres as $genre){
+                if($result == ""){
+                    $result = $genre->getName();
+                }else{
+                    $result = $result.", ".$genre->getName();
+                }
+            }
+            return $result;
+        }
+
+        public function genreExist($id){
+            $result = false;
+            foreach($this->genres as $genre){
+                if($genre->getId() == $id){
+                    $result = true;
+                }
+            }
+            return $result;
         }
 
         public function setTitle($title){
