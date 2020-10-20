@@ -14,10 +14,11 @@
             
             $this->retrieveData();
 
-            $user = new User();
+            $user = null;
 
             foreach ($this->usersList as $row){
                 if($email == $row->getEmail()){
+                    $user = new User();
                     $user->setName($row->getName());
                     $user->setEmail($row->getEmail());
                     $user->setPass($row->getPass());

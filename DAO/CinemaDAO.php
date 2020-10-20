@@ -137,9 +137,19 @@ class CinemaDAO implements ICinemaDAO {
                 $cinema->setOwner($owner);
 
                 array_push($cinemas, $cinema);
+             }else{
+                $cinema = new Cinema ();
+                $cinema->setId($row->getId());
+                $cinema->setName($row->getName());
+                $cinema->setCapacity($row->getCapacity());
+                $cinema->setAddress($row->getAddress());
+                $cinema->setPrice($row->getPrice());
+                $cinema->setOwner($row->getOwner());
+
+                array_push($cinemas, $cinema);
              }
          }
-         $this->cinemaList = $cinemas;
+         $this->cinemasList = $cinemas;
          $this->saveData();
     }
 
@@ -152,7 +162,6 @@ class CinemaDAO implements ICinemaDAO {
             $newId = $cinema->getId();
         }
         $newId ++;
-        echo $newId;
         return $newId;
     }
 

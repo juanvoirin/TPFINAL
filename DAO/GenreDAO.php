@@ -10,14 +10,12 @@
 
         private $genreList = array();
 
-        public function getByName($name)
-        {
-            $this->retrieveData();
-
+        public function getGenreByName($name){
+            $this->getGenresAPI();
             $genres = array();
 
             foreach ($this->genreList as $row){
-                if($name == $row->getName()){
+                if($row->getName() == $name){
                     $genre = new Genre();
                     $genre->setId($row->getId());
                     $genre->setName($row->getName());
@@ -25,23 +23,44 @@
                     array_push($genres, $genre);
                 }
             }
-            return $genre;
+            return $genres;
         }
 
         public function getAll(){
 
-            $this->retrieveData();
-            return $this->genreList;
+            return $this->getGenresAPI();
         }
 
-        public function add ($id, $name){
-            $genre = new Genre();
-            $genre->setId($id);
-            $genre->setName($name);
+        public function getGenreById($id){
+            $this->getGenresAPI();
+            $genres = array();
 
-            $this->retrieveData();
-            array_push($this->genreList, $genre);
-            $this->saveData();
+            foreach($this->genreList as $row){
+                if($row->getId() == $id[0] or (isset($id[1]) && $row->getId() == $id[1]) or (isset($id[2]) && $row->getId() == $id[2])){
+                    $genre = new Genre();
+                    $genre->setId($row->getId());
+                    $genre->setName($row->getName());
+
+                    array_push($genres, $genre);
+                }
+            }
+            return $genres;
+        }
+
+        private function getGenresAPI(){
+            $urlAPI = "https://api.themoviedb.org/3/genre/movie/list?api_key=1e9aba021ef977ce53b2219af44e6cd7&language=en-US";
+            $APIarray = json_decode(file_get_contents($urlAPI), true);
+
+            $this->genreList = array();
+
+            foreach($APIarray["genres"] as $genre){
+                $genreNew = new Genre();
+                $genreNew->setId($genre["id"]);
+                $genreNew->setName($genre["name"]);
+
+                array_push($this->genreList, $genreNew);
+            }
+            return $this->genreList;
         }
 
         private function retrieveData(){

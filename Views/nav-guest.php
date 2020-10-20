@@ -4,7 +4,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbar12"> 
-      <a class="navbar-brand d-none d-md-block" href="<?php echo FRONT_ROOT."Home/showLoginView "?>">
+      <a class="navbar-brand d-none d-md-block" href="<?php echo FRONT_ROOT."Home/showHomeView "?>">
         <i class="fa d-inline fa-lg fa-circle"></i>
         <b>MoviePass</b>
       </a>

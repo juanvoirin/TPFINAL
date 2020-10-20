@@ -24,7 +24,7 @@
             $this->movieDao = new MovieDAO();
 
             $movieList = array();
-            $movieList = $this->movieDao->getMoviesAPI();
+            $movieList = $this->movieDao->getAllAPI();
 
             require_once(VIEWS_PATH."home.php");
         }

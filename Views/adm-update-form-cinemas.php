@@ -1,18 +1,49 @@
 <?php 
  include_once('header.php');
- include_once('nav-guest.php');
+ include_once('nav-user.php');
 ?>
 <div class="py-5 text-center" style="background-image: url('<?php echo IMG_PATH."background.jpg"?>');background-size:cover;">
   <div class="container">
     <div class="row">
-      <div class="mx-auto col-md-6 col-10 bg-white p-5">
-        <h1 class="mb-4">Data Cinema<br></h1>
+      <div class="mx-auto col-md-8 col-10 bg-white p-5">
+        <h1 class="mb-4 bg-primary text-white">Data Cinema<br></h1>
         <form action="<?php echo FRONT_ROOT ?>Cinema/updateCinema" method="post">
-          <div class="form-group"> <input type="text" class="form-control" placeholder="Name" name="name" id="name"> </div>
-          <div class="form-group"> <input type="number" class="form-control" placeholder="Capacity" name="capacity" id="capacity"> </div>
-          <div class="form-group"> <input type="text" class="form-control" placeholder="Address" name="address" id="address"> </div>
-          <div class="form-group"> <input type="text" class="form-control" placeholder="$ Price" name="price" id="price"> </div>
-          <div class="form-group"> <input type="text" class="form-control" placeholder="Owner" name="owner" id="owner"> </div>
+          <div class="form-group row">
+            <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">ID</label>
+            <div class="col-sm-9">
+              <input type="number" class="form-control" readonly="readonly" placeholder="Id" name="id" id="id" value="<?php echo $cinema->getId();?>">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">NAME</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Name" name="name" id="name" value="<?php echo $cinema->getName();?>">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">CAPACITY</label>
+            <div class="col-sm-9">
+              <input type="number" class="form-control" placeholder="Capacity" name="capacity" id="capacity" value="<?php echo $cinema->getCapacity();?>">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">ADDRESS</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Address" name="address" id="address" value="<?php echo $cinema->getAddress();?>">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3" back>PRICE</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="$ Price" name="price" id="price" value="<?php echo $cinema->getPrice();?>">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">OWNER</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" readonly="readonly" placeholder="Owner" name="owner" id="owner" value="<?php echo $cinema->getOwner();?>">
+            </div>
+          </div>
           <button type="submit" class="btn btn-primary">Confirm<br></button>
         </form>
       </div>
