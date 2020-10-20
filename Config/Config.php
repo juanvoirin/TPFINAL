@@ -8,7 +8,7 @@
     define("JS_PATH", FRONT_ROOT.VIEWS_PATH . "js/");
     define("IMG_PATH", CSS_PATH . "images/");
 
-    define("DB_HOST", "	fdb29.awardspace.net:3306");
+    define("DB_HOST", "fdb29.awardspace.net:3306");
     define("DB_NAME", "3622566_tpfinal");
     define("DB_USER", "3622566_tpfinal");
     define("DB_PASS", "donpepitodelamancha123");
