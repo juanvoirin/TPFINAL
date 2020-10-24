@@ -28,12 +28,7 @@
             return $user;
         }
 
-        public function add($name, $email, $pass, $type){
-            $user = new User();
-            $user->setName($name);
-            $user->setEmail($email);
-            $user->setPass($pass);
-            $user->setType($type);
+        public function add(User $user){
             
             $this->retrieveData();
 

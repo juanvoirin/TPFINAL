@@ -2,6 +2,7 @@
 
     namespace Controllers;
 
+    use Models\User as User;
     use DAO\MovieDAO as MovieDAO;
     use DAO\GenreDAO as GenreDAO;
     use DAO\UserDAO as UserDAO;
@@ -60,8 +61,14 @@
 
         public function addUser($name, $email, $pass){
 
+            $user = new User();
+            $user->setName($name);
+            $user->setEmail($email);
+            $user->setPass($pass);
+            $user->setType("user");
+
             $this->userDao = new UserDAO();
-            $this->userDao->add($name, $email, $pass, "user");
+            $this->userDao->add($user);
 
             require_once(VIEWS_PATH."login.php");
         }
