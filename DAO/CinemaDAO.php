@@ -12,6 +12,7 @@ class CinemaDAO implements ICinemaDAO {
 
     private $cinemasList = array();
     private $connection;
+    private $tableName = "cinemas";
 
     public function getByName($name) {
         
@@ -24,9 +25,9 @@ class CinemaDAO implements ICinemaDAO {
                 $cinema = new Cinema();
                 $cinema->setId($row->getId());
                 $cinema->setName($row->getName());
-                $cinema->setCapacity($row->getCapacity());
+                //$cinema->setCapacity($row->getCapacity());
                 $cinema->setAddress($row->getAddress());
-                $cinema->setPrice($row->getPrice());
+                //$cinema->setPrice($row->getPrice());
                 $cinema->setOwner($row->getOwner());
 
                 array_push($cinemas, $cinema);
@@ -46,9 +47,9 @@ class CinemaDAO implements ICinemaDAO {
                 $cinema = new Cinema();
                 $cinema->setId($row->getId());
                 $cinema->setName($row->getName());
-                $cinema->setCapacity($row->getCapacity());
+                //$cinema->setCapacity($row->getCapacity());
                 $cinema->setAddress($row->getAddress());
-                $cinema->setPrice($row->getPrice());
+                //$cinema->setPrice($row->getPrice());
                 $cinema->setOwner($row->getOwner());
 
                 array_push($cinemas, $cinema);
@@ -67,9 +68,9 @@ class CinemaDAO implements ICinemaDAO {
             if($id == $row->getId()){
                 $cinema->setId($row->getId());
                 $cinema->setName($row->getName());
-                $cinema->setCapacity($row->getCapacity());
+                //$cinema->setCapacity($row->getCapacity());
                 $cinema->setAddress($row->getAddress());
-                $cinema->setPrice($row->getPrice());
+                //$cinema->setPrice($row->getPrice());
                 $cinema->setOwner($row->getOwner());
 
             }
@@ -104,6 +105,8 @@ class CinemaDAO implements ICinemaDAO {
 
             array_push($this->cinemasList, $cinema);
         }
+
+        return $this->cinemasList;
     }
 
     public function add(Cinema $cinema){
@@ -127,9 +130,9 @@ class CinemaDAO implements ICinemaDAO {
                 $cinema = new Cinema ();
                 $cinema->setId($row->getId());
                 $cinema->setName($row->getName());
-                $cinema->setCapacity($row->getCapacity());
+                //$cinema->setCapacity($row->getCapacity());
                 $cinema->setAddress($row->getAddress());
-                $cinema->setPrice($row->getPrice());
+                //$cinema->setPrice($row->getPrice());
                 $cinema->setOwner($row->getOwner());
 
                 array_push($cinemas, $cinema);
@@ -150,9 +153,9 @@ class CinemaDAO implements ICinemaDAO {
                 $cinema = new Cinema ();
                 $cinema->setId($id);
                 $cinema->setName($name);
-                $cinema->setCapacity($capacity);
+                //$cinema->setCapacity($capacity);
                 $cinema->setAddress($address);
-                $cinema->setPrice($price);
+                //$cinema->setPrice($price);
                 $cinema->setOwner($owner);
 
                 array_push($cinemas, $cinema);
@@ -160,9 +163,9 @@ class CinemaDAO implements ICinemaDAO {
                 $cinema = new Cinema ();
                 $cinema->setId($row->getId());
                 $cinema->setName($row->getName());
-                $cinema->setCapacity($row->getCapacity());
+                //$cinema->setCapacity($row->getCapacity());
                 $cinema->setAddress($row->getAddress());
-                $cinema->setPrice($row->getPrice());
+                //$cinema->setPrice($row->getPrice());
                 $cinema->setOwner($row->getOwner());
 
                 array_push($cinemas, $cinema);
@@ -197,9 +200,9 @@ class CinemaDAO implements ICinemaDAO {
             $cinema = new Cinema();
             $cinema->setId($row['id']);
             $cinema->setName($row['name']);
-            $cinema->setCapacity($row['capacity']);
+            //$cinema->setCapacity($row['capacity']);
             $cinema->setAddress($row['address']);
-            $cinema->setPrice($row['price']);
+            //$cinema->setPrice($row['price']);
             $cinema->setOwner($row['owner']);
 
             array_push($this->cinemasList, $cinema);

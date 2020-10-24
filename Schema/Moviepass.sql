@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS 3622566_tpfinal;
-USE 3622566_tpfinal;
+CREATE DATABASE IF NOT EXISTS sql10372627;
+USE sql10372627;
 
 CREATE TABLE IF NOT EXISTS `users`
 (
@@ -90,16 +90,16 @@ CREATE TABLE bill
 )Engine=InnoDB;
         
 	
-DROP PROCEDURE IF EXISTS `Cinemas_GetAll`;
+DROP procedure IF EXISTS `Cinemas_GetAll`;
 
 DELIMITER $$
 
-CREATE PROCEDURE Cinemas_GetAll ()
+CREATE PROCEDURE Cinemas_GetAll()
 BEGIN
     SELECT cinemas.name as `name`, cinemas.address as `address`, users.name as `owner`
     FROM cinemas
     JOIN users
     ON (cinemas.id_user = users.id);
-END $$
+END$$
 
 DELIMITER ;
