@@ -64,12 +64,6 @@
             }        	    	
         }
         
-        public function GetLastIdInsert() 
-        {
-            $id = $this->pdo->lastInsertId();
-            return $id;
-        }
-        
         private function Prepare($query)
         {
             try

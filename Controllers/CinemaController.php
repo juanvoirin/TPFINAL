@@ -29,8 +29,15 @@
 
         public function addCinema($name, $capacity, $address, $price){
 
+            $cinema = new Cinema();
+            $cinema->setName($name);
+            $cinema->setCapacity($capacity);
+            $cinema->setAddress($address);
+            $cinema->setPrice($price);
+            $cinema->setOwner($_SESSION["userName"]);
+
             $this->cinemaDao = new CinemaDAO();
-            $this->cinemaDao->add($name, $capacity, $address, $price, $_SESSION["userName"]);
+            $this->cinemaDao->add($cinema);
 
             $this->showListView();
         }

@@ -82,13 +82,8 @@ class CinemaDAO implements ICinemaDAO {
 
     }
 
-    public function add($name, $capacity, $address, $price, $owner){
-        $cinema = new Cinema();
-        $cinema->setName($name);
-        $cinema->setCapacity($capacity);
-        $cinema->setAddress($address);
-        $cinema->setPrice($price);
-        $cinema->setOwner($owner);
+    public function add(Cinema $cinema){
+        
         $cinema->setId($this->createIdCinema());
         
         $this->retrieveData();
