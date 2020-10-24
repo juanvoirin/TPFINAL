@@ -4,11 +4,14 @@ namespace DAO;
 
 use Models\Cinema as Cinema;
 use DAO\ICinemaDAO as ICinemaDAO;
+use DAO\Connection as Connection;
+use DAO\QueryType as QueryType;
 
 
 class CinemaDAO implements ICinemaDAO {
 
     private $cinemasList = array();
+    private $connection;
 
     public function getByName($name) {
         
@@ -74,12 +77,33 @@ class CinemaDAO implements ICinemaDAO {
         return $cinema;
     }
 
+    /*GET JSON
     public function getAll(){
 
         $this->retrieveData();
 
         return $this->cinemasList;
 
+    }*/
+
+    public function getAll(){
+        $this->cinemasList = array();
+
+        $query = "CALL Cinemas_GetAll()";
+
+        $this->connection = Connection::GetInstance();
+
+        $result = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
+    
+        foreach($result as $row){
+            $cinema = new Cinema();
+            $cinema->setId($row['id']);
+            $cinema->setName($row['name']);
+            $cinema->setAddress($row['address']);
+            $cinema->setOwner($row['owner']);
+
+            array_push($this->cinemasList, $cinema);
+        }
     }
 
     public function add(Cinema $cinema){

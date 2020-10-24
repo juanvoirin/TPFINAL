@@ -16,11 +16,11 @@ CREATE TABLE IF NOT EXISTS `cinemas`
 	`id` INT NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(50),
     `address` VARCHAR (50),
-    `id_user` INT NOT NULL,
+    `owner` INT NOT NULL,
     CONSTRAINT `pk_cinema` PRIMARY KEY (`id`),
-    CONSTRAINT uc_name unique (`name`),
-    CONSTRAINT uc_adrress unique (`address`),
-    CONSTRAINT fk_user_cinema FOREIGN KEY (`id_user`) REFERENCES users(`id`)
+    CONSTRAINT unq_name unique (`name`),
+    CONSTRAINT unq_adrress unique (`address`),
+    CONSTRAINT fk_user_cinema FOREIGN KEY (`owner`) REFERENCES users(`id`)
 )Engine=InnoDB;
     
 CREATE TABLE rooms
@@ -74,7 +74,7 @@ CREATE TABLE credit_cias
     CONSTRAINT pk_credit_cia PRIMARY KEY (`id`)
 )Engine=InnoDB;
         
-CREATE TABLE Bill
+CREATE TABLE bill
 (
 	`id` INT NOT NULL auto_increment,
     `day` datetime,
@@ -90,18 +90,16 @@ CREATE TABLE Bill
 )Engine=InnoDB;
         
 	
-        
-        
-        
-	
-        
-        
-	
-        
-        
-    
-    
-    
-    
-    
+DROP PROCEDURE IF EXISTS `Cinemas_GetAll`;
 
+DELIMITER $$
+
+CREATE PROCEDURE Cinemas_GetAll ()
+BEGIN
+    SELECT cinemas.name as `name`, cinemas.address as `address`, users.name as `owner`
+    FROM cinemas
+    JOIN users
+    ON (cinemas.id_user = users.id);
+END $$
+
+DELIMITER ;
