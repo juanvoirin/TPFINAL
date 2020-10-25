@@ -11,6 +11,8 @@
     class UserController {
 
         private $userDao;
+        private $genreDao;
+        private $movieDao;
 
         public function index(){
             require_once(VIEWS_PATH."login.php");

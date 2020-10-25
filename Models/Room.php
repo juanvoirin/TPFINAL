@@ -7,7 +7,7 @@
         private $name;
         private $capacity;
         private $price;
-        private $idCinema;
+        private $cinema;
 
         public function setId($id){
             $this->id = $id;
@@ -41,12 +41,12 @@
 			return $this->price;
         }
         
-        public function setIdCinema($idCinema){
-            $this->idCinema = $idCinema;
+        public function setCinema(Cinema $cinema){
+            $this->cinema = $cinema;
         }
 
-        public function getIdCinema() {
-			return $this->idCinema;
+        public function getCinema() {
+			return $this->cinema;
 		}
     }
 ?>

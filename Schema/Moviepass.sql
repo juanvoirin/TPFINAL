@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `cinemas`
     CONSTRAINT fk_user_cinema FOREIGN KEY (`owner`) REFERENCES users(`id`)
 )Engine=InnoDB;
     
-CREATE TABLE rooms
+CREATE TABLE IF NOT EXISTS rooms
 (
 	`id` INT NOT NULL auto_increment,
     `name` VARCHAR(50),
@@ -34,7 +34,7 @@ CREATE TABLE rooms
     CONSTRAINT fk_room_cinema FOREIGN KEY (id_cinema) REFERENCES cinemas(`id`)
 )Engine=InnoDB;
         
-CREATE TABLE movies 
+CREATE TABLE IF NOT EXISTS movies 
 (
 	`id` INT NOT NULL,
     `title` VARCHAR(100),
@@ -46,7 +46,7 @@ CREATE TABLE movies
     CONSTRAINT pk_movie PRIMARY KEY (`id`)
 )Engine=InnoDB;
         
-CREATE TABLE screenings
+CREATE TABLE IF NOT EXISTS screenings
 (
 	`id` INT NOT NULL auto_increment,
     `day` datetime,
@@ -57,7 +57,7 @@ CREATE TABLE screenings
     CONSTRAINT fk_movie_screening FOREIGN KEY (id_movie) REFERENCES movies(`id`)
 )Engine=InnoDB;
         
-CREATE TABLE tickets 
+CREATE TABLE IF NOT EXISTS tickets 
 (
 	`id` INT NOT NULL auto_increment,
     id_user INT NOT NULL,
@@ -67,14 +67,14 @@ CREATE TABLE tickets
     CONSTRAINT fk_screening_tickets FOREIGN KEY(id_screening) REFERENCES screenings(`id`)
 )Engine=InnoDB;
         
-CREATE TABLE credit_cias 
+CREATE TABLE IF NOT EXISTS credit_cias 
 (
 	`id` INT NOT NULL auto_increment,
     `name` VARCHAR(50),
     CONSTRAINT pk_credit_cia PRIMARY KEY (`id`)
 )Engine=InnoDB;
         
-CREATE TABLE bill
+CREATE TABLE IF NOT EXISTS bill
 (
 	`id` INT NOT NULL auto_increment,
     `day` datetime,
@@ -90,16 +90,101 @@ CREATE TABLE bill
 )Engine=InnoDB;
         
 	
-DROP procedure IF EXISTS `Cinemas_GetAll`;
+DROP PROCEDURE IF EXISTS `Cinemas_GetAll`;
 
 DELIMITER $$
 
 CREATE PROCEDURE Cinemas_GetAll()
 BEGIN
-    SELECT cinemas.name as `name`, cinemas.address as `address`, users.name as `owner`
+    SELECT cinemas.id as `id`, cinemas.name as `name`, cinemas.address as `address`, users.name as `owner`
     FROM cinemas
     JOIN users
     ON (cinemas.id_user = users.id);
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Cinemas_GetById`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Cinemas_GetById(IN id INT)
+BEGIN
+    SELECT cinemas.id as `id`, cinemas.name as `name`, cinemas.address as `address`, users.name as `owner`
+    FROM cinemas
+    JOIN users
+    ON (cinemas.id_user = users.id)
+    WHERE (cinemas.id = id);
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Cinemas_GetByOwnerId`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Cinemas_GetByOwnerId(IN ownerId INT)
+BEGIN
+    SELECT cinemas.id as `id`, cinemas.name as `name`, cinemas.address as `address`, users.name as `owner`
+    FROM cinemas
+    JOIN users
+    ON (cinemas.id_user = users.id)
+    WHERE (users.id = id);
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Cinemas_Add`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Cinemas_Add(IN `name` VARCHAR(50), IN `address` INT, IN `owner` INT)
+BEGIN
+    INSERT INTO cinemas
+        (cinemas.name, cinemas.address, cinemas.id_user)
+    VALUES
+        (`name`, `address`, `owner`);
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Cinemas_Delete`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Cinemas_Delete(IN id INT)
+BEGIN
+    DELETE
+    FROM cinemas
+    WHERE (cinemas.id = id);
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Rooms_Add`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Rooms_Add(IN `name` VARCHAR(50), IN price INT, IN capacity INT, IN id_cinema INT)
+BEGIN
+    INSERT INTO rooms
+        (rooms.name, rooms.price, rooms.capacity, rooms.id_cinema)
+    VALUES
+        (`name`, price, capacity, id_cinema);
+END$$
+
+DELIMITER ;DROP PROCEDURE IF EXISTS `Rooms_GetByCinemaId`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Rooms_GetByCinemaId(IN id INT)
+BEGIN
+    SELECT rooms.id as `id`, rooms.name as `name`, rooms.price as `price`,
+        rooms.capacity as `capacity`, rooms.id_cinema as `idCinema`
+    FROM rooms
+    JOIN cinemas
+    ON (cinemas.id = rooms.id_cinema)
+    WHERE (rooms.id_cinema = id);
 END$$
 
 DELIMITER ;

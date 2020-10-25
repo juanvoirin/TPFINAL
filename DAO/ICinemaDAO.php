@@ -6,8 +6,7 @@
 
     interface ICinemaDAO 
     {
-        function getByName($name);
-        function getByOwner($owner);
+        function getByOwnerId($owner);
         function add(Cinema $cinema);
         function getAll();
     }
