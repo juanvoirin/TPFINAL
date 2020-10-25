@@ -28,6 +28,15 @@
             return $user;
         }
 
+        public function getById($id){
+            
+            $user = new User();
+
+            //Falta
+
+            return $user;
+        }
+
         public function add(User $user){
             
             $this->retrieveData();
