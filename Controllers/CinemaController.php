@@ -4,6 +4,7 @@
 
     use DAO\CinemaDAO as CinemaDAO;
     use Models\Cinema as Cinema;
+    use DAO\UserDAO as UserDAO;
 
     class CinemaController
     {
@@ -27,14 +28,14 @@
             require_once(VIEWS_PATH."adm-form-cinemas.php");
         }
 
-        public function addCinema($name, $capacity, $address, $price){
+        public function addCinema($name, $address){
 
+            $userDao = new UserDAO();
+            
             $cinema = new Cinema();
             $cinema->setName($name);
-            $cinema->setCapacity($capacity);
             $cinema->setAddress($address);
-            $cinema->setPrice($price);
-            $cinema->setOwner($_SESSION["userName"]);
+            $cinema->setOwner($userDao->getByEmail($_SESSION["loggedUser"]));
 
             $this->cinemaDao = new CinemaDAO();
             $this->cinemaDao->add($cinema);
@@ -56,9 +57,9 @@
             require_once(VIEWS_PATH."adm-update-form-cinemas.php");
         }
         
-        public function updateCinema($id, $name, $capacity, $address, $price, $owner){
+        public function updateCinema($id, $name, $address, $owner){
             $this->cinemaDao = new CinemaDAO();
-            $this->cinemaDao->update($id, $name, $capacity, $address, $price, $owner);
+            $this->cinemaDao->update($id, $name, $address, $owner);
             
             $this->showListView();
         }

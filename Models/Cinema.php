@@ -33,7 +33,7 @@
 			return $this->address;
 		}
 
-		public function setOwner($owner){
+		public function setOwner(User $owner){
 			$this->owner = $owner;
 		}
 

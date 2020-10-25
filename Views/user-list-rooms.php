@@ -8,7 +8,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <h1 class="display-2">Cinemas</h1>
+        <h1 class="display-2">Rooms of <?php echo $cinema->getName() ?></h1>
       </div>
     </div>
   </div>
@@ -22,10 +22,9 @@
             <thead class="thead-dark">
               <tr>
                 <th>#</th>
-                <th>Cinema Name</th>
-                <th>Address</th>
-                <th>Owner</th>
-                <th>Rooms</th>
+                <th>Room Name</th>
+                <th>Capacity</th>
+                <th>Ticket Price</th>
                 <?php if($_SESSION["type"] == "administrator") { ?>
                 <th style="text-align: center">Delete</th>
                 <th style="text-align: center">Update</th>
@@ -35,17 +34,14 @@
             <tbody>
               <?php
               $count = 0;
-              foreach($cinemasListAll as $cinema) {
+              foreach($roomList as $room) {
                 $count++;
               ?>
               <tr>
                 <th style="vertical-align: middle"><?php echo $count; ?></th>
-                <td style="vertical-align: middle"><?php echo $cinema->getName(); ?></td>
-                <td style="vertical-align: middle"><?php echo $cinema->getAddress(); ?></td>
-                <td style="vertical-align: middle"><?php echo $cinema->getOwner()->getName(); ?></td>
-                <td style="text-align: center">
-                  <a href="<?php echo FRONT_ROOT."Room/showRooms?id=".$cinema->getId();?>" class="btn btn-primary">Rooms</a>
-                </td>
+                <td style="vertical-align: middle"><?php echo $room->getName(); ?></td>
+                <td style="vertical-align: middle"><?php echo $room->getCapacity(); ?></td>
+                <td style="vertical-align: middle"><?php echo $room->getPrice(); ?></td>
                 <td style="text-align: center">
                   <?php if($_SESSION["type"] == "administrator" && $_SESSION["userName"] == $cinema->getOwner()) { ?>
                     <a href="<?php echo FRONT_ROOT."Cinema/deleteCinema?id=".$cinema->getId();?>" class="btn btn-danger">Delete</a>
