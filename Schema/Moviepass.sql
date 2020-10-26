@@ -55,8 +55,8 @@ CREATE TABLE IF NOT EXISTS screenings
     id_room INT NOT NULL,
     id_movie INT NOT NULL,
     CONSTRAINT pk_screening PRIMARY KEY(`id`),
-    CONSTRAINT fk_room_screening FOREIGN KEY (id_room) REFERENCES rooms(`id`),
-    /*CONSTRAINT fk_movie_screening FOREIGN KEY (id_movie) REFERENCES movies(`id`)*/
+    CONSTRAINT fk_room_screening FOREIGN KEY (id_room) REFERENCES rooms(`id`)/*,
+    CONSTRAINT fk_movie_screening FOREIGN KEY (id_movie) REFERENCES movies(`id`)*/
 )Engine=InnoDB;
         
 CREATE TABLE IF NOT EXISTS tickets 
