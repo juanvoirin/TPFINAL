@@ -37,10 +37,10 @@ CREATE TABLE IF NOT EXISTS rooms
 /*CREATE TABLE IF NOT EXISTS movies 
 (
 	`id` INT NOT NULL,
-    `title` VARCHAR(100),
+    `title` VARCHAR(100) NOT NULL,
     `poster_path` VARCHAR(500),
     original_language VARCHAR (50),
-    `overview` VARCHAR (500),
+    `overview` VARCHAR (500) NOT NULL,
     `release_date` date,
     `id_genre` INT NOT NULL,
     CONSTRAINT pk_movie PRIMARY KEY (`id`)
@@ -49,7 +49,9 @@ CREATE TABLE IF NOT EXISTS rooms
 CREATE TABLE IF NOT EXISTS screenings
 (
 	`id` INT NOT NULL auto_increment,
-    `day` datetime,
+    `day` date NOT NULL,
+	`time` time NOT NULL,
+	`runtime` int NOT NULL,
     id_room INT NOT NULL,
     id_movie INT NOT NULL,
     CONSTRAINT pk_screening PRIMARY KEY(`id`),
@@ -77,7 +79,7 @@ CREATE TABLE IF NOT EXISTS credit_cias
 CREATE TABLE IF NOT EXISTS bill
 (
 	`id` INT NOT NULL auto_increment,
-    `day` datetime,
+    `day` datetime NOT NULL,
     `quantity` INT NOT NULL,
     `price` INT NOT NULL,
     id_user INT NOT NULL,
