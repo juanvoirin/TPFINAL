@@ -4,59 +4,73 @@
 
     use Models\User as User;
     use DAO\IUserDAO as IUserDAO;
+    use DAO\Connection as Connection;
+    use DAO\QueryType as QueryType;
     
 
     class UserDAO implements IUserDAO {
 
         private $usersList = array();
+        private $connection;
+        private $tableName = "users";
 
         public function getByEmail($email) {
             
-            $this->retrieveData();
+            $query = "CALL Users_GetByEmail(?)";
+            $parameters["email"] = $email;
+            $this->connection = Connection::GetInstance();
+            $result = $this->connection->Execute($query,$parameters , QueryType::StoredProcedure);
 
-            $user = null;
+            $user = new User();
 
-            foreach ($this->usersList as $row){
-                if($email == $row->getEmail()){
-                    $user = new User();
-                    $user->setName($row->getName());
-                    $user->setEmail($row->getEmail());
-                    $user->setPass($row->getPass());
-                    $user->setType($row->getType());
-                }
+
+            foreach ($result as $row){
+                
+                $user->setId($row['id']);
+                $user->setName($row['name']);
+                $user->setEmail($row['email']);
+                $user->setPass($row['pass']);
+                $user->setType($row['type']);
+                
             }
             return $user;
         }
 
         public function getById($id){
             
-            $user = new User();
+            $query = "CALL Users_GetById(?)";
+            $parameters["id"] = $id;
+            $this->connection = Connection::GetInstance();
+            $result = $this->connection->Execute($query,$parameters , QueryType::StoredProcedure);
 
-            //Falta
+            $user = new User();    
+        
 
+            foreach ($result as $row){
+     
+                $user->setId($row['id']);
+                $user->setName($row['name']);
+                $user->setEmail($row['email']);
+                $user->setPass($row['pass']);
+                $user->setType($row['type']);
+                
+            }
             return $user;
         }
 
-        public function add(User $user){
-            
-            $this->retrieveData();
+        public function getAll(){
 
-            array_push($this->usersList, $user);
-            
-            $this->saveData();
-        }
-
-        private function retrieveData(){
             $this->usersList = array();
-    
-            $jsonPath = $this->getJsonFilePath();
-    
-            $jsonContent = file_get_contents($jsonPath);
-            
-            $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
-    
-            foreach ($arrayToDecode as $row) {
+
+            $query = "CALL Users_GetAll()";
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
+
+            foreach($result as $row){
                 $user = new User();
+                $user->setId($row['id']);
                 $user->setName($row['name']);
                 $user->setEmail($row['email']);
                 $user->setPass($row['pass']);
@@ -64,36 +78,40 @@
 
                 array_push($this->usersList, $user);
             }
+
+            return $this->usersList;
+
         }
 
-        private function saveData(){
-            $arrayToEncode = array();
-    
-            $jsonPath = $this->getJsonFilePath();
 
-            foreach ($this->usersList as $users) {
-                $valueArray['name'] = $users->getName();
-                $valueArray['email'] = $users->getEmail();
-                $valueArray['pass'] = $users->getPass();
-                $valueArray['type'] = $users->getType();
-    
-                array_push($arrayToEncode, $valueArray);
-    
-            }
-            $jsonContent = json_encode($arrayToEncode, JSON_PRETTY_PRINT);
-            file_put_contents($jsonPath, $jsonContent);
+        public function add(User $user){
+            
+            $query = "CALL Users_Add(?,?,?,?)";
+            
+            $parameters["name"] = $user->getName();
+            $parameters["email"] = $user->getEmail();
+            $parameters["pass"] = $user->getPass();
+            $parameters["type"] = $user->getType();
+
+            $this->connection = Connection::GetInstance();
+
+            $this->connection->ExecuteNonQuery($query,$parameters, QueryType::StoredProcedure);
+
+
         }
-    
-        private function getJsonFilePath(){
-    
-            $initialPath = "Data/users.json";
-            if(file_exists($initialPath)){
-                $jsonFilePath = $initialPath;
-            }else{
-                $jsonFilePath = "../".$initialPath;
-            }
-    
-            return $jsonFilePath;
+
+        public function deletebyEmail($email){
+
+            $query = "CALL Users_Delete(?)";
+
+            $parameters["email"] = $email;
+
+            $this->connection = Connection::GetInstance();
+
+            $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+        
         }
+
+
     }
 ?>
