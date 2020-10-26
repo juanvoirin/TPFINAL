@@ -6,6 +6,7 @@
         private $id;
         private $date;
         private $time;
+        private $runtime;
         private $idRoom;
         private $idMovie;
 
@@ -31,6 +32,14 @@
 
         public function getTime(){
             return $this->date;
+        }
+
+        public function setRuntime($runtime){
+            $this->runtime = $runtime;
+        }
+
+        public function getRuntime(){
+            return $this->runtime;
         }
 
         public function setId_room($idRoom){
