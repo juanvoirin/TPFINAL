@@ -23,8 +23,6 @@
 
             $user = new User();
 
-            //userDao??            
-        
 
             foreach ($result as $row){
                 
@@ -45,9 +43,7 @@
             $this->connection = Connection::GetInstance();
             $result = $this->connection->Execute($query,$parameters , QueryType::StoredProcedure);
 
-            $user = new User();
-
-            //userDao??            
+            $user = new User();    
         
 
             foreach ($result as $row){
