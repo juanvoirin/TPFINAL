@@ -173,7 +173,9 @@ BEGIN
         (`name`, price, capacity, id_cinema);
 END$$
 
-DELIMITER ;DROP PROCEDURE IF EXISTS `Rooms_GetByCinemaId`;
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Rooms_GetByCinemaId`;
 
 DELIMITER $$
 
@@ -188,3 +190,72 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+DROP PROCEDURE IF EXISTS 'Users_GetByEmail';
+
+DELIMITER ;
+
+CREATE PROCEDURE Users_GetByEmail(IN email VARCHAR)
+BEGIN
+    SELECT users.id as 'id', users.email as 'email', users.pass as 'pass', users.type as 'type', users.name as 'name'
+    FROM users;
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS 'Users_GetById';
+
+DELIMITER ;
+
+CREATE PROCEDURE Users_GetByid(IN id INT)
+BEGIN
+    SELECT users.id as 'id', users.email as 'email', users.pass as 'pass', users.type as 'type', users.name as 'name'
+    FROM users;
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS 'Users_GetAll';
+
+DELIMITER ;
+
+CREATE PROCEDURE Users_GetAll()
+BEGIN
+    SELECT users.id as 'id', users.email as 'email', users.pass as 'pass', users.type as 'type', users.name as 'name'
+    FROM users;
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS 'Users_Add';
+
+DELIMITER ;
+
+CREATE PROCEDURE Users_Add(IN 'name' VARCHAR(50), IN email VARCHAR(100), IN pass VARCHAR(50), IN 'type' VARCHAR(10))
+BEGIN
+    INSERT INTO users
+        (users.name, users.email, users.pass, users.type)
+    VALUES
+        ('name', 'email', 'pass', 'type');
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS 'Users_Delete';
+
+DELIMITER ;
+
+CREATE PROCEDURE Users_Delete (in email VARCHAR)
+BEGIN
+    ON DELETE CASCADE
+    FROM users
+    WHERE (users.email = email);
+END$$
+
+DELIMITER ;
+
+
+
+
+
+
