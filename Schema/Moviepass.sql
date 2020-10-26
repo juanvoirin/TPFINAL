@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS rooms
     CONSTRAINT fk_room_cinema FOREIGN KEY (id_cinema) REFERENCES cinemas(`id`)
 )Engine=InnoDB;
         
-CREATE TABLE IF NOT EXISTS movies 
+/*CREATE TABLE IF NOT EXISTS movies 
 (
 	`id` INT NOT NULL,
     `title` VARCHAR(100),
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS movies
     `release_date` date,
     `id_genre` INT NOT NULL,
     CONSTRAINT pk_movie PRIMARY KEY (`id`)
-)Engine=InnoDB;
+)Engine=InnoDB;*/
         
 CREATE TABLE IF NOT EXISTS screenings
 (
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS screenings
     id_movie INT NOT NULL,
     CONSTRAINT pk_screening PRIMARY KEY(`id`),
     CONSTRAINT fk_room_screening FOREIGN KEY (id_room) REFERENCES rooms(`id`),
-    CONSTRAINT fk_movie_screening FOREIGN KEY (id_movie) REFERENCES movies(`id`)
+    /*CONSTRAINT fk_movie_screening FOREIGN KEY (id_movie) REFERENCES movies(`id`)*/
 )Engine=InnoDB;
         
 CREATE TABLE IF NOT EXISTS tickets 
