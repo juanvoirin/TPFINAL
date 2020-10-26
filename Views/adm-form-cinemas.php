@@ -9,10 +9,8 @@
         <h1 class="mb-4">Data Cinema<br></h1>
         <form action="<?php echo FRONT_ROOT ?>Cinema/addCinema" method="post">
           <div class="form-group"> <input type="text" class="form-control" placeholder="Name" name="name" id="name"> </div>
-          <div class="form-group"> <input type="number" class="form-control" placeholder="Capacity" name="capacity" id="capacity"> </div>
           <div class="form-group"> <input type="text" class="form-control" placeholder="Address" name="address" id="address"> </div>
-          <div class="form-group"> <input type="text" class="form-control" placeholder="$ Price" name="price" id="price"> </div>
-          <button type="submit" class="btn btn-primary">Sign up<br></button>
+          <button type="submit" class="btn btn-primary">Add Cinema<br></button>
         </form>
       </div>
     </div>
