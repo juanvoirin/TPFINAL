@@ -49,7 +49,7 @@
                 </td>
                 <td style="text-align: center">
                 <?php { ?>
-                    <a href="<?php echo FRONT_ROOT."Room/deleteRoom?id=".$room->getId();?>" class="btn btn-warning">Update</a>
+                    <a href="<?php echo FRONT_ROOT."Room/updateRoom?id=".$room->getId();?>" class="btn btn-warning">Update</a>
                   <?php } } ?>
                 </td>
               </tr>
