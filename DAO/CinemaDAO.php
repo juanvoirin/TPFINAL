@@ -119,9 +119,17 @@
 
         }
 
-        public function update($id, $name, $address, $owner){
+        public function update(Cinema $cinema){
             
-            //FALTA
+            $query = "CALL Cinemas_Update(?, ?, ?)";
+
+            $parameters["id"] = $cinema->getId();
+            $parameters["name"] = $cinema->getName();
+            $parameters["address"] = $cinema->getAddress();
+
+            $this->connection = Connection::GetInstance();
+
+            $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
         }
 
     }

@@ -2,7 +2,7 @@
  include_once('header.php');
  include_once('nav-guest.php');
 ?>
-<div class="py-5 text-center" style="height: 100vh; background-image: url('<?php echo IMG_PATH."background.jpg"?>');background-size:cover;">
+<div class="py-5 text-center" style="height: 78vh; background-image: url('<?php echo IMG_PATH."background.jpg"?>');background-size:cover;">
   <div class="container">
     <div class="row">
       <div class="mx-auto col-md-6 col-10 bg-white p-5">

@@ -57,9 +57,18 @@
             require_once(VIEWS_PATH."adm-update-form-cinemas.php");
         }
         
-        public function updateCinema($id, $name, $address, $owner){
+        public function updateCinema($id, $name, $address, $idOwner){
             $this->cinemaDao = new CinemaDAO();
-            $this->cinemaDao->update($id, $name, $address, $owner);
+
+            $userDao = new UserDAO();
+
+            $cinema = new Cinema();
+            $cinema->setId($id);
+            $cinema->setName($name);
+            $cinema->setAddress($address);
+            $cinema->setOwner($userDao->getByEmail($idOwner));
+
+            $this->cinemaDao->update($cinema);
             
             $this->showListView();
         }
