@@ -112,7 +112,7 @@ DELIMITER $$
 
 CREATE PROCEDURE Cinemas_GetById(IN id INT)
 BEGIN
-    SELECT cinemas.id as `id`, cinemas.name as `name`, cinemas.address as `address`, users.name as `owner`
+    SELECT cinemas.id as `id`, cinemas.name as `name`, cinemas.address as `address`, users.id as `owner`
     FROM cinemas
     JOIN users
     ON (cinemas.id_user = users.id)
@@ -146,6 +146,19 @@ BEGIN
         (cinemas.name, cinemas.address, cinemas.id_user)
     VALUES
         (`name`, `address`, `owner`);
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Cinemas_Update`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Cinemas_Update(IN `id` INT, IN `name` VARCHAR(50), IN `address` VARCHAR(100))
+BEGIN
+    UPDATE `cinemas`
+    SET cinemas.name=`name`, cinemas.address=`address`
+    WHERE cinemas.id = `id`;
 END$$
 
 DELIMITER ;
