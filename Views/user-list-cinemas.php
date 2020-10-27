@@ -47,12 +47,12 @@
                   <a href="<?php echo FRONT_ROOT."Room/showRooms?id=".$cinema->getId();?>" class="btn btn-primary">Rooms</a>
                 </td>
                 <td style="text-align: center">
-                  <?php if($_SESSION["type"] == "administrator" && $_SESSION["userName"] == $cinema->getOwner()) { ?>
+                  <?php if($_SESSION["type"] == "administrator" && $_SESSION["loggedUser"] == $cinema->getOwner()->getEmail()) { ?>
                     <a href="<?php echo FRONT_ROOT."Cinema/deleteCinema?id=".$cinema->getId();?>" class="btn btn-danger">Delete</a>
                   <?php } ?>
                 </td>
                 <td style="text-align: center">
-                  <?php if($_SESSION["type"] == "administrator" && $_SESSION["userName"] == $cinema->getOwner()) { ?>  
+                  <?php if($_SESSION["type"] == "administrator" && $_SESSION["loggedUser"] == $cinema->getOwner()->getEmail()) { ?>  
                     <a href="<?php echo FRONT_ROOT."Cinema/updateToFormCinema?id=".$cinema->getId();?>" class="btn btn-warning">Update</a>
                   <?php } } ?>
                 </td>
