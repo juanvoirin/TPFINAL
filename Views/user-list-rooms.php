@@ -56,7 +56,7 @@
             </tbody>
           </table>
           <?php if($_SESSION["type"] == "administrator") { ?>
-            <a href="<?php echo FRONT_ROOT."Room/showAddRoom?id=".$cinema->getId();?>" class="btn btn-primary btn-lg btn-block">Add</a>
+            <a href="<?php echo FRONT_ROOT."Room/showAddRoom?idCinema=".$cinema->getId();?>" class="btn btn-primary btn-lg btn-block">Add</a>
             <?php } ?>
         </div>
       </div>

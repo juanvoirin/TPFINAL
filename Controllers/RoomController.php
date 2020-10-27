@@ -25,12 +25,12 @@
             require_once(VIEWS_PATH."user-list-rooms.php");
         }
 
-        public function showAddRoom($id){
+        public function showAddRoom($idCinema){
             require_once(VIEWS_PATH."adm-form-room.php");
         }
 
     
-        public function addRoom($name, $capacity, $price, $id){
+        public function addRoom($idCinema, $name, $capacity, $price){
             $this->roomDao = new RoomDAO();
 
             $cinemaDao = new CinemaDAO();
@@ -39,11 +39,10 @@
             $room->setName($name);
             $room->setCapacity($capacity);
             $room->setPrice($price);
-            //$room->setCinema($_GET['id']);
-            $room->setCinema($cinemaDao->getById($id));
+            $room->setCinema($cinemaDao->getById($idCinema));
 
             $this->roomDao->add($room);
             
-            $this->showRooms($id);
+            $this->showRooms($idCinema);
         }
     }

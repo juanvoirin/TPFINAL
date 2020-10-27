@@ -33,7 +33,7 @@
                 $room->setName($row['name']);
                 $room->setPrice($row['price']);
                 $room->setCapacity($row['capacity']);
-                $room->setCinema($cinemaDao($row['idCinema']));
+                $room->setCinema($cinemaDao->getById($row['idCinema']));
 
                 array_push($this->roomsList, $room);
             }
@@ -48,7 +48,7 @@
             $parameters["name"] = $room->getName();
             $parameters["price"] = $room->getPrice();
             $parameters["capacity"] = $room->getCapacity();
-            $parameters["idCinema"] = $room->getId();
+            $parameters["id_cinema"] = $room->getCinema()->getId();
 
             $this->connection = Connection::GetInstance();
 
