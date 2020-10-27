@@ -45,4 +45,43 @@
             
             $this->showRooms($idCinema);
         }
+
+        public function deleteRoom($id, $idcinema){
+
+            $this->roomDao = new RoomDao();
+            $this->roomDao->deleteById($id);
+            
+            $this->showRooms($idcinema);
+
+        }
+
+        public function updateToFormRoom($id, $idcinema){
+            $this->roomDao = new RoomDAO();
+            $room = $this->roomDao->GetByid($id);
+
+            $cinemaDao = new CinemaDAO();
+            $cinema = $cinemaDao->getById($idcinema);
+
+            require_once(VIEWS_PATH."adm-update-form-rooms.php");
+        }
+
+        public function updateRoom($id, $name, $capacity, $price, $idCinema){
+
+            $this->roomDao = new RoomDAO();
+
+            $cinemaDao = new CinemaDAO;
+
+            $room = new Room();
+            $room->setId($id);
+            $room->setName($name);
+            $room->setCapacity($capacity);
+            $room->setPrice($price);
+            $room->setCinema($cinemaDao->getById($idCinema));
+
+            $this->roomDao->update($room);
+
+            $this->showRooms($idCinema);
+
+        }
+
     }

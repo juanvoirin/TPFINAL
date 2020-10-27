@@ -43,13 +43,13 @@
                 <td style="vertical-align: middle"><?php echo $room->getCapacity(); ?></td>
                 <td style="vertical-align: middle"><?php echo $room->getPrice(); ?></td>
                 <td style="text-align: center">
-                  <?php if($_SESSION["type"] == "administrator" && $_SESSION["userName"] == $cinema->getOwner()) { ?>
-                    <a href="<?php echo FRONT_ROOT."Cinema/deleteCinema?id=".$cinema->getId();?>" class="btn btn-danger">Delete</a>
+                  <?php { ?>
+                    <a href="<?php echo FRONT_ROOT."Room/deleteRoom?id=".$room->getId()."&idcinema=".$room->getCinema()->getId();?>" class="btn btn-danger">Delete</a>
                   <?php } ?>
                 </td>
                 <td style="text-align: center">
-                  <?php if($_SESSION["type"] == "administrator" && $_SESSION["userName"] == $cinema->getOwner()) { ?>  
-                    <a href="<?php echo FRONT_ROOT."Cinema/updateToFormCinema?id=".$cinema->getId();?>" class="btn btn-warning">Update</a>
+                <?php { ?>
+                    <a href="<?php echo FRONT_ROOT."Room/updateToFormRoom?id=".$room->getId()."&idcinema=".$room->getCinema()->getId();?>" class="btn btn-warning">Update</a>
                   <?php } } ?>
                 </td>
               </tr>
