@@ -63,13 +63,13 @@
 
             $this->connection = Connection::GetInstance();
 
-            $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+            $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
 
         }
 
         public function GetById($id){
 
-            $query = "CALL Rooms_GetById(?)";
+            $query = "CALL Room_GetById(?)";
 
             $parameters["id"] = $id;
 
@@ -86,7 +86,7 @@
                 $room->setName($row['name']);
                 $room->setCapacity($row['capacity']);
                 $room->setPrice($row['price']);
-                $room->setCinema($row['id_cinema']);
+                $room->setCinema($cinemaDao->getById($row['id_cinema']));
 
             }
             return $room;

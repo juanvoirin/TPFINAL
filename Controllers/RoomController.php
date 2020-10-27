@@ -46,16 +46,16 @@
             $this->showRooms($idCinema);
         }
 
-        public function deleteRoom($id){
+        public function deleteRoom($id, $idcinema){
 
             $this->roomDao = new RoomDao();
             $this->roomDao->deleteById($id);
-
-            $this->showRooms($id);
+            
+            $this->showRooms($idcinema);
 
         }
 
-        public function updateToFormRoom($id){
+        public function updateToFormRoom($id, $idcinema){
             $this->roomDao = new RoomDAO();
             $room = $this->roomDao->GetByid($id);
 

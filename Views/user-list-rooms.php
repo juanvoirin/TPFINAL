@@ -44,12 +44,12 @@
                 <td style="vertical-align: middle"><?php echo $room->getPrice(); ?></td>
                 <td style="text-align: center">
                   <?php { ?>
-                    <a href="<?php echo FRONT_ROOT."Room/deleteRoom?id=".$room->getId();?>" class="btn btn-danger">Delete</a>
+                    <a href="<?php echo FRONT_ROOT."Room/deleteRoom?id=".$room->getId()."&idcinema=".$room->getCinema()->getId();?>" class="btn btn-danger">Delete</a>
                   <?php } ?>
                 </td>
                 <td style="text-align: center">
                 <?php { ?>
-                    <a href="<?php echo FRONT_ROOT."Room/updateToFormRoom?id=".$room->getId();?>" class="btn btn-warning">Update</a>
+                    <a href="<?php echo FRONT_ROOT."Room/updateToFormRoom?id=".$room->getId()."&idcinema=".$room->getCinema()->getId();?>" class="btn btn-warning">Update</a>
                   <?php } } ?>
                 </td>
               </tr>
