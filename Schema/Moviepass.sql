@@ -127,11 +127,11 @@ DELIMITER $$
 
 CREATE PROCEDURE Cinemas_GetByOwnerId(IN ownerId INT)
 BEGIN
-    SELECT cinemas.id as `id`, cinemas.name as `name`, cinemas.address as `address`, users.name as `owner`
+    SELECT cinemas.id as `id`, cinemas.name as `name`, cinemas.address as `address`, users.id as `owner`
     FROM cinemas
     JOIN users
     ON (cinemas.id_user = users.id)
-    WHERE (users.id = id);
+    WHERE (users.id = ownerId);
 END$$
 
 DELIMITER ;
