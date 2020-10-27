@@ -48,7 +48,7 @@
             $parameters["name"] = $room->getName();
             $parameters["price"] = $room->getPrice();
             $parameters["capacity"] = $room->getCapacity();
-            $parameters["idCinema"] = $room->getCinema()->getId();
+            $parameters["idCinema"] = $room->getId();
 
             $this->connection = Connection::GetInstance();
 

@@ -6,30 +6,30 @@
   <div class="container">
     <div class="row">
       <div class="mx-auto col-md-8 col-10 bg-white p-5">
-        <h1 class="mb-4 bg-primary text-white">Data Cinema<br></h1>
-        <form action="<?php echo FRONT_ROOT ?>Cinema/updateCinema" method="post">
+        <h1 class="mb-4 bg-primary text-white">Data Room<br></h1>
+        <form action="<?php echo FRONT_ROOT ?>Room/updateRoom" method="post">
           <div class="form-group row">
             <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">ID</label>
             <div class="col-sm-9">
-              <input type="number" class="form-control" readonly="readonly" placeholder="Id" name="id" id="id" value="<?php echo $cinema->getId();?>">
+              <input type="number" class="form-control" readonly="readonly" placeholder="Id" name="id" id="id" value="<?php echo $room->getId();?>">
             </div>
           </div>
           <div class="form-group row">
             <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">NAME</label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Name" name="name" id="name" value="<?php echo $cinema->getName();?>">
+              <input type="text" class="form-control" placeholder="Name" name="name" id="name" value="<?php echo $room->getName();?>">
             </div>
           </div>
           <div class="form-group row">
-            <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">ADDRESS</label>
+            <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">CAPACITY</label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Address" name="address" id="address" value="<?php echo $cinema->getAddress();?>">
+              <input type="text" class="form-control" placeholder="Capacity" name="capacity" id="capacity" value="<?php echo $room->getCapacity();?>">
             </div>
           </div>
           <div class="form-group row">
-           <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">OWNER</label>
+           <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">PRICE</label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" readonly="readonly" placeholder="Owner" name="owner" id="owner" value="<?php echo $cinema->getOwner()->getName(); ?>">
+              <input type="text" class="form-control" readonly="readonly" placeholder="price" name="price" id="price" value="<?php echo $room->getPrice();?>">
             </div>
           </div>
           <button type="submit" class="btn btn-primary">Confirm<br></button>
