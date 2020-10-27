@@ -98,7 +98,7 @@ DELIMITER $$
 
 CREATE PROCEDURE Cinemas_GetAll()
 BEGIN
-    SELECT cinemas.id as `id`, cinemas.name as `name`, cinemas.address as `address`, users.name as `owner`
+    SELECT cinemas.id as `id`, cinemas.name as `name`, cinemas.address as `address`, users.id as `owner`
     FROM cinemas
     JOIN users
     ON (cinemas.id_user = users.id);
@@ -140,7 +140,7 @@ DROP PROCEDURE IF EXISTS `Cinemas_Add`;
 
 DELIMITER $$
 
-CREATE PROCEDURE Cinemas_Add(IN `name` VARCHAR(50), IN `address` INT, IN `owner` INT)
+CREATE PROCEDURE Cinemas_Add(IN `name` VARCHAR(50), IN `address` VARCHAR(100), IN `owner` INT)
 BEGIN
     INSERT INTO cinemas
         (cinemas.name, cinemas.address, cinemas.id_user)
