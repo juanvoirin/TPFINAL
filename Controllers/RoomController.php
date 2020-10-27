@@ -30,7 +30,7 @@
         }
 
     
-        public function addRoom($name, $capacity, $price){
+        public function addRoom($name, $capacity, $price, $id){
             $this->roomDao = new RoomDAO();
 
             $cinemaDao = new CinemaDAO();
@@ -39,10 +39,11 @@
             $room->setName($name);
             $room->setCapacity($capacity);
             $room->setPrice($price);
-            $room->setCinema($_GET['id']);
+            //$room->setCinema($_GET['id']);
+            $room->setCinema($cinemaDao->getById($id));
 
             $this->roomDao->add($room);
             
-            $this->showRooms($_GET['id']);
+            $this->showRooms($id);
         }
     }
