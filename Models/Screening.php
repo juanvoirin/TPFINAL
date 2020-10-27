@@ -7,6 +7,7 @@
         private $date;
         private $time;
         private $runtime;
+        private $sold;
         private $idRoom;
         private $idMovie;
 
@@ -31,7 +32,7 @@
         }
 
         public function getTime(){
-            return $this->date;
+            return $this->time;
         }
 
         public function setRuntime($runtime){
@@ -42,7 +43,7 @@
             return $this->runtime;
         }
 
-        public function setId_room($idRoom){
+        public function setIdRoom($idRoom){
             $this->idRoom = $idRoom;
         }
 
@@ -50,12 +51,20 @@
             return $this->idRoom;
         }
 
-        public function setId_movie($idMovie){
+        public function setIdMovie($idMovie){
             $this->idMovie = $idMovie;
         }
 
         public function getIdMovie(){
             return $this->idMovie;
+        }
+
+        public function setSold($sold){
+            $this->sold = $sold;
+        }
+
+        public function getSold(){
+            return $this->sold;
         }
 
     }
