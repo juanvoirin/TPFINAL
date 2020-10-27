@@ -55,6 +55,58 @@
             $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
         }
 
+        public function deleteByid($id){
+
+            $query = "CALL Rooms_Delete(?)";
+
+            $parameters["id"] = $id;
+
+            $this->connection = Connection::GetInstance();
+
+            $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+        }
+
+        public function GetById($id){
+
+            $query = "CALL Rooms_GetById(?)";
+
+            $parameters["id"] = $id;
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+            $room = new Room();
+
+            $cinemaDao = new CinemaDAO();
+
+            foreach($result as $row){
+                $room->setId($row['id']);
+                $room->setName($row['name']);
+                $room->setCapacity($row['capacity']);
+                $room->setPrice($row['price']);
+                $room->setCinema($row['id_cinema']);
+
+            }
+            return $room;
+        }
+
+        public function update(Room $room){
+
+            $query = "CALL Rooms_Update(?,?,?,?)";
+
+            $parameters["id"] = $room->getId();
+            $parameters["name"] = $room->getName();
+            $parameters["capacity"] = $room->getCapacity();
+            $parameters["price"] = $room->getPrice();
+
+            $this->connection = Connection::GetInstance();
+
+            $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+        }
+
     }
 
 ?>

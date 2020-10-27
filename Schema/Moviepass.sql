@@ -190,6 +190,48 @@ END$$
 
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `Rooms_Delete` ;
+
+DELIMITER $$
+
+CREATE PROCEDURE Rooms_Delete(IN id INT)
+BEGIN   
+    DELETE
+    FROM rooms
+    WHERE (rooms.id = id);
+END$$
+
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `Room_GetById` ;
+
+DELIMITER $$ 
+
+CREATE PROCEDURE Room_GetById (IN id INT)
+BEGIN   
+    SELECT rooms.id as `id`, rooms.name as `name`, rooms.capacity as `capacity`, rooms.price as `price`, rooms.id_cinema as `id_cinema`,
+    FROM rooms
+    JOIN cinemas
+    ON (rooms.id_cinema = cinemas.id)
+    WHERE (rooms.id = id);
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Rooms_Update` ;
+
+DELIMITER $$
+
+CREATE PROCEDURE Rooms_Update (IN id INT, IN `name` VARCHAR(50), IN capacity INT, IN price INT)
+BEGIN
+    UPDATE rooms
+    SET rooms.name = `name`, rooms.capacity = capacity, rooms.price = price
+    WHERE (rooms.od = id);
+END$$
+
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `Rooms_GetByCinemaId`;
 
 DELIMITER $$
@@ -270,5 +312,6 @@ BEGIN
 END$$
 
 DELIMITER ;
+
 
 
