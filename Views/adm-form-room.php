@@ -8,8 +8,9 @@ include_once('nav-user.php');
         <div class="mx-auto col-md-6 col-10 bg-white p-5">
         <h1 class="mb-4">Data Room<br></h1>
         <form action="<?php echo FRONT_ROOT ?>Room/addRoom" method="post">
+          <div class="form-group"> <input type="number" class="form-control" readonly="readonly" placeholder="Id" name="Id" id="Id" value="$id"> </div>
           <div class="form-group"> <input type="text" class="form-control" placeholder="Name" name="name" id="name"> </div>
-          <div class="form-group"> <input type="text" class="form-control" placeholder="Capacity" name="capacity" id="capacity"> </div>
+          <div class="form-group"> <input type="number" class="form-control" placeholder="Capacity" name="capacity" id="capacity"> </div>
           <div class="form-group"> <input type="text" class="form-control" placeholder="TicketPrice" name="ticketprice" id="ticketprice"> </div>
           <button type="submit" class="btn btn-primary">Add Room<br></button>
         </form>
