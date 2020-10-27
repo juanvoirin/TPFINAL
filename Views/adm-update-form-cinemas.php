@@ -21,27 +21,15 @@
             </div>
           </div>
           <div class="form-group row">
-            <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">CAPACITY</label>
-            <div class="col-sm-9">
-              <input type="number" class="form-control" placeholder="Capacity" name="capacity" id="capacity" value="<?php echo $cinema->getCapacity();?>">
-            </div>
-          </div>
-          <div class="form-group row">
             <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">ADDRESS</label>
             <div class="col-sm-9">
               <input type="text" class="form-control" placeholder="Address" name="address" id="address" value="<?php echo $cinema->getAddress();?>">
             </div>
           </div>
           <div class="form-group row">
-            <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3" back>PRICE</label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="$ Price" name="price" id="price" value="<?php echo $cinema->getPrice();?>">
-            </div>
-          </div>
-          <div class="form-group row">
             <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">OWNER</label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" readonly="readonly" placeholder="Owner" name="owner" id="owner" value="<?php echo $cinema->getOwner();?>">
+              <input type="text" class="form-control" readonly="readonly" placeholder="Owner" name="owner" id="owner" value="<?php echo $cinema->getOwner()->getName(); ?>">
             </div>
           </div>
           <button type="submit" class="btn btn-primary">Confirm<br></button>
