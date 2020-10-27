@@ -103,7 +103,7 @@
 
             $this->connection = Connection::GetInstance();
 
-            $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+            $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
 
         }
 

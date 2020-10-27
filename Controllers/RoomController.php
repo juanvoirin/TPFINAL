@@ -59,7 +59,10 @@
             $this->roomDao = new RoomDAO();
             $room = $this->roomDao->GetByid($id);
 
-            require_once(VIEWS_PATH."adm-update-form.rooms.php");
+            $cinemaDao = new CinemaDAO();
+            $cinema = $cinemaDao->getById($idcinema);
+
+            require_once(VIEWS_PATH."adm-update-form-rooms.php");
         }
 
         public function updateRoom($id, $name, $capacity, $price, $idCinema){

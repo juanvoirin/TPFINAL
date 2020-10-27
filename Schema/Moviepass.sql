@@ -227,7 +227,7 @@ CREATE PROCEDURE Rooms_Update (IN id INT, IN `name` VARCHAR(50), IN capacity INT
 BEGIN
     UPDATE rooms
     SET rooms.name = `name`, rooms.capacity = capacity, rooms.price = price
-    WHERE (rooms.od = id);
+    WHERE (rooms.id = id);
 END$$
 
 DELIMITER ;
