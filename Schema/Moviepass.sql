@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS screenings
     `day` date NOT NULL,
 	`time` time NOT NULL,
 	`runtime` int NOT NULL,
+    `sold` int NOT NULL,
     id_room INT NOT NULL,
     id_movie INT NOT NULL,
     CONSTRAINT pk_screening PRIMARY KEY(`id`),
