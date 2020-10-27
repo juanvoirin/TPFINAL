@@ -15,11 +15,26 @@
             require_once(VIEWS_PATH."home.php");
         }
 
-        public function showListView(){
+        public function showListViewAll(){
 
             $this->cinemaDao = new CinemaDAO();
             $cinemasListAll = array();
             $cinemasListAll = $this->cinemaDao->getAll();
+
+            $all = TRUE;
+
+            require_once(VIEWS_PATH."user-list-cinemas.php");
+        }
+
+        public function showListViewByOwner(){
+
+            $userDao = new UserDAO();
+
+            $this->cinemaDao = new CinemaDAO();
+            $cinemasListAll = array();
+            $cinemasListAll = $this->cinemaDao->getByOwnerId($userDao->getByEmail($_SESSION["loggedUser"])->getId());
+
+            $all = FALSE;
 
             require_once(VIEWS_PATH."user-list-cinemas.php");
         }
@@ -40,14 +55,14 @@
             $this->cinemaDao = new CinemaDAO();
             $this->cinemaDao->add($cinema);
 
-            $this->showListView();
+            $this->showListViewAll();
         }
 
         public function deleteCinema($id){
             $this->cinemaDao = new CinemaDAO();
             $this->cinemaDao->deleteById($id);
 
-            $this->showListView();
+            $this->showListViewAll();
         }
 
         public function updateToFormCinema($id){
@@ -70,7 +85,7 @@
 
             $this->cinemaDao->update($cinema);
             
-            $this->showListView();
+            $this->showListViewAll();
         }
 
     }

@@ -5,7 +5,6 @@
  }else{
   include_once('nav-user.php');
  }
- //require_once("validate-session.php");
 ?>
 <div class="pt-5 pb-1">
   <div class="container">
