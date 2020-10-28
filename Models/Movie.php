@@ -10,6 +10,7 @@
         private $title;
         private $overview;
         private $release_date;
+        private $runtime;
 
         public function setId($id) {
             $this->id = $id;
@@ -87,6 +88,14 @@
 
         public function getRelease_date(){
             return $this->release_date;
+        }
+
+        public function setRuntime($runtime){
+            $this->runtime = $runtime;
+        }
+
+        public function getRuntime(){
+            return $this->runtime;
         }
         
     }
