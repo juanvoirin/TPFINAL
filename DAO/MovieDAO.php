@@ -39,15 +39,13 @@
         }
 
         public function getById($id)
-        {
-            
+        {   
             $this->getMoviesAPI();
 
-            $movies = array();
+            $movie = new Movie();
 
             foreach ($this->moviesList as $row){
                 if($id == $row->getId()){
-                    $movie = new Movie();
                     $movie->setId($row->getId());
                     $movie->setPoster_path($row->getPoster_path());
                     $movie->setOriginal_language($row->getOriginal_language());
@@ -55,12 +53,9 @@
                     $movie->setTitle($row->getTitle());
                     $movie->setOverview($row->getOverview());
                     $movie->setRelease_date($row->getRelease_date());
-
-                    array_push($movies, $movie);
                 }
             }
-            return $movies;
-
+            return $movie;
         }
 
         public function getByDate($release_date){
@@ -97,17 +92,8 @@
             return $this->getMoviesAPI();
         }
 
-        public function add($id, $poster_path, $original_language, $genre_ids, $title, $overview, $release_date){
+        public function add(Movie $movie){
             
-            $movie = new Movie();
-            $movie->setId($id);
-            $movie->setPoster_path($poster_path);
-            $movie->setOriginal_language($original_language);
-            $movie->setGenres($genre_ids);
-            $movie->setTitle($title);
-            $movie->setOverview($overview);
-            $movie->setRelease_date($release_date);
-
             //Funcion que guarde la pelicula en una base de datos
             //Por definir si se guarda pelicula entera o solo id y se trae desde la api
         }
@@ -132,6 +118,7 @@
                 $movieNew->setTitle($movie["original_title"]);
                 $movieNew->setOverview($movie["overview"]);
                 $movieNew->setRelease_date($movie["release_date"]);
+                //$movieNew->setRuntime($movie["runtime"]); FALTA ARREGLAR
 
                 array_push($this->moviesList, $movieNew);
             }
