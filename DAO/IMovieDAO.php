@@ -10,6 +10,10 @@
         function getById($id);
         function add(Movie $movie);
         function getAllAPI();
+        function getByDate($release_date);
+        function getByGenreIds($genre);
+        function getMoviesAPI();
+        
 
     }
 
