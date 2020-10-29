@@ -384,3 +384,14 @@ END$$
 
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `Screenings_GetCinemaByDateAndMovie`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Screenings_GetCinemaByDateAndMovie(IN `date` date, IN `id_movie` INT)
+BEGIN
+
+
+END$$
+
+DELIMITER ;
