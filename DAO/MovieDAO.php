@@ -6,6 +6,8 @@
     use DAO\IMovieDAO as IMovieDAO;
     use DAO\GenreDAO as GenreDAO;
     use DAO\LanguagesDAO as LanguagesDAO;
+    use DAO\Connection as Connection;
+    use DAO\QueryType as QueryType;
 
 
     class MovieDAO implements IMovieDAO {
@@ -94,7 +96,7 @@
 
         public function add(Movie $movie){
             
-            $query = "CALL Movies_Add(?,?,?,?,?,?,?)";
+            $query = "CALL Movies_Add(?,?,?,?,?,?,?)"; // FALTA HACER FUNCION EN EL MOVIEPASS
 
             $parameters["id"] = $movie->getId();
             $parameters["title"] = $movie->getTitle();
@@ -109,10 +111,6 @@
 
             $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
 
-
-
-            //Funcion que guarde la pelicula en una base de datos
-            //Por definir si se guarda pelicula entera o solo id y se trae desde la api
         }
 
         private function getMoviesAPI(){
