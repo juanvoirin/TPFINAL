@@ -12,7 +12,7 @@
         function getAllAPI();
         function getByDate($release_date);
         function getByGenreIds($genre);
-        function getMoviesAPI();
+        
         
 
     }
