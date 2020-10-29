@@ -94,6 +94,23 @@
 
         public function add(Movie $movie){
             
+            $query = "CALL Movies_Add(?,?,?,?,?,?,?)";
+
+            $parameters["id"] = $movie->getId();
+            $parameters["title"] = $movie->getTitle();
+            $parameters["poster_path"] = $movie->getPoster_path();
+            $parameters["original_language"] = $movie->getOriginal_language();
+            $parameters["overview"] = $movie->getOverview();
+            $parameters["release_date"] = $movie->getRelease_date();
+            $parameters["id_genre"] = $movie->getGenres();
+            $parameters["runtime"] = $movie->getRuntime();
+
+            $this->connection = Connection::GetInstance();
+
+            $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+
+
+
             //Funcion que guarde la pelicula en una base de datos
             //Por definir si se guarda pelicula entera o solo id y se trae desde la api
         }
