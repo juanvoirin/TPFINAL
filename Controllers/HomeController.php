@@ -31,7 +31,7 @@
             $this->movieDao = new MovieDAO();
 
             $movieList = array();
-            $movieList = $this->movieDao->getAllAPI();
+            $movieList = $this->movieDao->getAllAPI(); //CAMBIAR ESTO Y MOSTRAR LAS PELICULAS QUE TENGAN FUNCIONES
 
             require_once(VIEWS_PATH."home.php");
         }

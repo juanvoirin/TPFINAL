@@ -193,7 +193,7 @@
                 $movieNew->setTitle($movie["original_title"]);
                 $movieNew->setOverview($movie["overview"]);
                 $movieNew->setRelease_date($movie["release_date"]);
-                $movieNew->setRuntime($this->GetRuntimeAPI($movie["id"])); // LLAMAR CORRECTAMENTE
+                $movieNew->setRuntime($this->getRuntimeAPI($movieNew->getId()));
 
                 array_push($this->moviesList, $movieNew);
             }
@@ -201,17 +201,16 @@
             return $this->moviesList;
         }
 
-        private function GetRuntimeAPI($id){
+        private function getRuntimeAPI($id){
 
             $linkDetails = "https://api.themoviedb.org/3/movie/";
 
             $apiKey = "?api_key=1e9aba021ef977ce53b2219af44e6cd7";
 
-            $APIarray = json_decode(file_get_contents($linkDetails.$id.$apiKey));
+            $APIarray = json_decode(file_get_contents($linkDetails.$id.$apiKey), true);
 
-            foreach($APIarray as $movie){
-                $runtime = $movie["runtime"];
-            }
+            $runtime = $APIarray["runtime"];
+
             return $runtime;
 
         }

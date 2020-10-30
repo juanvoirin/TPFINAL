@@ -14,7 +14,7 @@
             require_once(VIEWS_PATH."home.php");
         }
 
-        public function showScreeningsView(){
+        public function showListView(){
             
             //Listar Funciones
 
@@ -89,7 +89,7 @@
             //Instanciar un objeto Screening que sera el que se enviara por parametro al add del DAO.
             //Llamar sentencia add ScreeningDAO
             
-            $this->showScreeningsView();
+            $this->showListView();
         }
     }
 
