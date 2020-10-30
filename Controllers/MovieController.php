@@ -57,6 +57,21 @@
 
             require_once(VIEWS_PATH."home.php");
         }
+
+        public function showAddView(){
+
+            $this->genreDao = new GenreDAO();
+
+            $genreList = array();
+            $genreList = $this->genreDao->getAll();
+
+            $this->movieDao = new MovieDAO();
+
+            $movieList = array();
+            $movieList = $this->movieDao->getAllAPI();
+
+            require_once(VIEWS_PATH."adm-add-movies.php");
+        } 
         
     
     }

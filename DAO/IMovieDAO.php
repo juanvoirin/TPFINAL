@@ -2,12 +2,18 @@
 
     namespace DAO;
 
+    use Models\Movie as Movie;
+
     interface IMovieDAO
     {
         function getByTitle($name);
         function getById($id);
-        function add($id, $poster_path, $original_language, $genre_ids, $title, $overview, $release_date);
+        function add(Movie $movie);
         function getAllAPI();
+        function getByDate($release_date);
+        function getByGenreIds($genre);
+        
+        
 
     }
 
