@@ -7,7 +7,7 @@
         function getGenreByName($name);
         function getAll();
         function getGenreById($id);
-        function getGenresAPI();
+    
         
 
     }

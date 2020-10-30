@@ -42,23 +42,83 @@
 
         public function getById($id)
         {   
-            $this->getMoviesAPI();
+            $query = "CALL Movies_GetById(?)";
+
+            $parameters["id"] = $id;
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 
             $movie = new Movie();
 
-            foreach ($this->moviesList as $row){
-                if($id == $row->getId()){
-                    $movie->setId($row->getId());
-                    $movie->setPoster_path($row->getPoster_path());
-                    $movie->setOriginal_language($row->getOriginal_language());
-                    $movie->setGenres($row->getGenre_ids());
-                    $movie->setTitle($row->getTitle());
-                    $movie->setOverview($row->getOverview());
-                    $movie->setRelease_date($row->getRelease_date());
+            foreach ($result as $row){
+                $movie->setId($row->getId());
+                $movie->setPoster_path($row->getPoster_path());
+                $movie->setOriginal_language($row->getOriginal_language());
+                $movie->setGenres($row->getGenre_ids());
+                $movie->setTitle($row->getTitle());
+                $movie->setOverview($row->getOverview());
+                $movie->setRelease_date($row->getRelease_date());
+                $movie->setRuntime($row->getRuntime());
                 }
-            }
+            
             return $movie;
         }
+
+        public function getByDateBD($date)
+        {   
+            $query = "CALL Movies_GetByDate(?)";
+
+            $parameters["date"] = $date;
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+            $this->moviesList = array();
+
+            foreach ($result as $row){
+                $movie = New Movie();
+                $movie->setId($row->getId());
+                $movie->setPoster_path($row->getPoster_path());
+                $movie->setOriginal_language($row->getOriginal_language());
+                $movie->setGenres($row->getGenre_ids());
+                $movie->setTitle($row->getTitle());
+                $movie->setOverview($row->getOverview());
+                $movie->setRelease_date($row->getRelease_date());
+                $movie->setRuntime($row->getRuntime());
+                }
+        
+            return $this->moviesList;
+        } 
+
+        public function getByGenreBD($genre)
+        {   
+            $query = "CALL Movies_GetByGenre(?)";
+
+            $parameters["id_genre"] = $genre;
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+            $this->moviesList = array();
+
+            foreach ($result as $row){
+                $movie = New Movie();
+                $movie->setId($row->getId());
+                $movie->setPoster_path($row->getPoster_path());
+                $movie->setOriginal_language($row->getOriginal_language());
+                $movie->setGenres($row->getGenre_ids());
+                $movie->setTitle($row->getTitle());
+                $movie->setOverview($row->getOverview());
+                $movie->setRelease_date($row->getRelease_date());
+                $movie->setRuntime($row->getRuntime());
+                }
+        
+            return $this->moviesList;
+        } 
 
         public function getByDate($release_date){
             $this->getMoviesAPI();
@@ -133,12 +193,27 @@
                 $movieNew->setTitle($movie["original_title"]);
                 $movieNew->setOverview($movie["overview"]);
                 $movieNew->setRelease_date($movie["release_date"]);
-                //$movieNew->setRuntime($movie["runtime"]); FALTA ARREGLAR
+                $movieNew->setRuntime($this->GetRuntimeAPI($movie["id"])); // LLAMAR CORRECTAMENTE
 
                 array_push($this->moviesList, $movieNew);
             }
 
             return $this->moviesList;
+        }
+
+        private function GetRuntimeAPI($id){
+
+            $linkDetails = "https://api.themoviedb.org/3/movie/";
+
+            $apiKey = "?api_key=1e9aba021ef977ce53b2219af44e6cd7";
+
+            $APIarray = json_decode(file_get_contents($linkDetails.$id.$apiKey));
+
+            foreach($APIarray as $movie){
+                $runtime = $movie["runtime"];
+            }
+            return $runtime;
+
         }
 
     }

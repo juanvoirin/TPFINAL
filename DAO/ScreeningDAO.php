@@ -17,11 +17,38 @@
 
 
         public function getCinemaByDateAndMovie($idMovie, $date){
+            
+            $query = "CALL Screenings_GetCinemaByDateAndMovie (?,?)";
 
-            //HACER LA SENTENCIA Y EN EL WHERE PONER LA DOBLE CONDICION.
-            //TAMBIEN HACER QUE SI NO HAY NINGUN CINE QUE CUMPLA LOS DOS REQUISITOS QUE DEVUELVA NULL
+            $parameters["date"] = $date;
+            $parameters["id_movie"] = $idMovie;
+            
+            $this->connection = Connection::GetInstance();
 
-            return NULL; //Este return es para probar, despues cambiarlo
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+            $screening = new Screening();
+
+            $roomDao = new RoomDAO();
+
+            $movieDao = new MovieDAO();
+
+            if ($result != NULL){
+                foreach($result as $row){
+                    $screening->setId($row['id']);
+                    $screening->setDate($row['date']);
+                    $screening->setTime($row['time']);
+                    $screening->setRuntime($row['runtime']);
+                    $screening->setSold($row['sold']);
+                    $screening->setIdRoom($roomDao->getById($row['id_room']));
+                    $screening->setIdMovie($movieDao->getById($row['id_movie']));
+    
+                }
+                return $screening;
+            }else{
+                return NULL;
+            }
+
         }
 
         public function getById($id)
