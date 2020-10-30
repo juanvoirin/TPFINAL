@@ -3,11 +3,12 @@
     namespace DAO;
 
     use Models\Room as Room;
+    use DAO\IRoomDAO as IRoomDAO;
     use DAO\Connection as Connection;
     use DAO\QueryType as QueryType;
     use DAO\CinemaDAO as CinemaDAO;
 
-    class RoomDAO {
+    class RoomDAO implements IRoomDAO {
 
         private $roomsList;
         private $connection;

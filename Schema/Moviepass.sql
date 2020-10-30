@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS rooms
     CONSTRAINT fk_room_cinema FOREIGN KEY (id_cinema) REFERENCES cinemas(`id`)
 )Engine=InnoDB;
         
-/*CREATE TABLE IF NOT EXISTS movies 
+CREATE TABLE IF NOT EXISTS movies 
 (
 	`id` INT NOT NULL,
     `title` VARCHAR(100) NOT NULL,
@@ -43,21 +43,22 @@ CREATE TABLE IF NOT EXISTS rooms
     `overview` VARCHAR (500) NOT NULL,
     `release_date` date,
     `id_genre` INT NOT NULL,
+    `runtime` INT,
     CONSTRAINT pk_movie PRIMARY KEY (`id`)
-)Engine=InnoDB;*/
+)Engine=InnoDB;
         
 CREATE TABLE IF NOT EXISTS screenings
 (
 	`id` INT NOT NULL auto_increment,
-    `day` date NOT NULL,
+    `date` date NOT NULL,
 	`time` time NOT NULL,
 	`runtime` int NOT NULL,
     `sold` int NOT NULL,
     id_room INT NOT NULL,
     id_movie INT NOT NULL,
     CONSTRAINT pk_screening PRIMARY KEY(`id`),
-    CONSTRAINT fk_room_screening FOREIGN KEY (id_room) REFERENCES rooms(`id`)/*,
-    CONSTRAINT fk_movie_screening FOREIGN KEY (id_movie) REFERENCES movies(`id`)*/
+    CONSTRAINT fk_room_screening FOREIGN KEY (id_room) REFERENCES rooms(`id`),
+    CONSTRAINT fk_movie_screening FOREIGN KEY (id_movie) REFERENCES movies(`id`)
 )Engine=InnoDB;
         
 CREATE TABLE IF NOT EXISTS tickets 
@@ -211,7 +212,7 @@ DELIMITER $$
 
 CREATE PROCEDURE Room_GetById (IN id INT)
 BEGIN   
-    SELECT rooms.id as `id`, rooms.name as `name`, rooms.capacity as `capacity`, rooms.price as `price`, rooms.id_cinema as `id_cinema`,
+    SELECT rooms.id as `id`, rooms.name as `name`, rooms.capacity as `capacity`, rooms.price as `price`, rooms.id_cinema as `id_cinema`
     FROM rooms
     JOIN cinemas
     ON (rooms.id_cinema = cinemas.id)
@@ -314,5 +315,140 @@ END$$
 
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `Screenings_GetById` ;
 
+DELIMITER $$ 
 
+CREATE PROCEDURE Screenings_GetById (IN id INT)
+BEGIN   
+    SELECT screenings.id as `id`, screenings.date as `date`, screenings.time as `time`, screenings.runtime as `runtime`, screenings.sold as `sold`, screenings.id_room as `id_room`, screenings.id_movie as `id_movie`
+    FROM screenings
+    JOIN rooms
+    ON (screenings.id_room = room.id)
+    WHERE (screenings.id = id);
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Screenings_GetByIdRoom` ;
+
+DELIMITER $$ 
+
+CREATE PROCEDURE Screenings_GetByIdRoom (IN id INT)
+BEGIN   
+    SELECT screenings.id as `id`, screenings.date as `date`, screenings.time as `time`, screenings.runtime as `runtime`, screenings.sold as `sold`, screenings.id_room as `id_room`, screenings.id_movie as `id_movie`
+    FROM screenings
+    JOIN rooms
+    ON (room.id = screenings.id_room)
+    WHERE (screenings.id_room = id);
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Screenings_GetAll` ;
+
+DELIMITER $$ 
+
+CREATE PROCEDURE Screenings_GetAll ()
+BEGIN   
+    SELECT screenings.id as `id`, screenings.date as `date`, screenings.time as `time`, screenings.runtime as `runtime`, screenings.sold as `sold`, screenings.id_room as `id_room`, screenings.id_movie as `id_movie`
+    FROM screenings;
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Screenings_Add`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Screenings_Add(IN `date` date, IN `time` time, IN `runtime` INT, IN `id_room` INT, IN `id_movie` INT)
+BEGIN
+    INSERT INTO screenings
+        (screenings.date, screenings.time, screenings.runtime, screenings.id_room, screenings.id_movie)
+    VALUES
+        (`date`, `time`, `runtime`, `id_room`, `id_movie`);
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Screenings_Delete`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Screenings_Delete(IN id INT)
+BEGIN   
+    DELETE
+    FROM screenings
+    WHERE (screenings.id = id);
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Screenings_GetCinemaByDateAndMovie`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Screenings_GetCinemaByDateAndMovie(IN `date` date, IN `id_movie` INT)
+BEGIN
+    SELECT screenings.id as `id`, screenings.date as `date`, screenings.time as `time`, screenings.runtime as `runtime`, screenings.sold as `sold`, screenings.id_room as `id_room`, screenings.id_movie as `id_movie`,
+    FROM screenings
+    JOIN rooms
+    ON (screenings.id_room = room.id)
+    WHERE (screenings.date = `date` AND screenings.id_movie = `id_movie`);
+
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Movies_Add`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Movies_Add (IN `id` INT, IN `title` VARCHAR(50), IN `poster_path` VARCHAR(100), IN `original_language` VARCHAR(50), IN `overview` VARCHAR(300), iN `release_date` date, IN `id_genre` INT, IN `runtime` INT)
+BEGIN
+    INSERT INTO movies
+        (movies.id, movies.title, movies.poster_path, movies.original_language, movies.overview, movies.release_date, movies.id_genre, movies.runtime)
+    VALUES
+        (`id`, `tilte`, `poster_path`, `original_language`,`overview`, `release_date`, `id_genre`, `runtime`);
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Movies_GetById(?)`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Movies_GetById (IN id INT)
+BEGIN
+    SELECT movie.id as `id`, movie.title as `title`, movie.poster_path as `poster_path`, movie.original_language as `original_language`, movie.overview as `overview`, movie.release_date as `release_date`, movie.id_genre as `id_genre`, movie.runtime as `runtime`
+    FROM movies
+    WHERE movie.id = id ;
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Movies_GetByDate(?)`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Movies_GetByDate (IN `date` INT)
+BEGIN
+    SELECT movie.id as `id`, movie.title as `title`, movie.poster_path as `poster_path`, movie.original_language as `original_language`, movie.overview as `overview`, movie.release_date as `release_date`, movie.id_genre as `id_genre`, movie.runtime as `runtime`
+    FROM movies
+    WHERE movie.release_date = `date` ;
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Movies_GetByGenre(?)`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Movies_GetByGenre (IN genre INT)
+BEGIN
+    SELECT movie.id as `id`, movie.title as `title`, movie.poster_path as `poster_path`, movie.original_language as `original_language`, movie.overview as `overview`, movie.release_date as `release_date`, movie.id_genre as `id_genre`, movie.runtime as `runtime`
+    FROM movies
+    WHERE movie.id_genre = genre ;
+END$$
+
+DELIMITER ;

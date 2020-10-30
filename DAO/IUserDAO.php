@@ -8,6 +8,11 @@
     {
         function getByEmail($email);
         function add(User $user);
+        function getById($id);
+        function getAll();
+        function deletebyEmail($email);
+        
+
     }
 
 ?>
