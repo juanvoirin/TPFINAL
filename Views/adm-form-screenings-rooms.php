@@ -9,22 +9,24 @@ include_once('nav-user.php');
                 <h1 class="mb-4">Data Screening<br></h1>
                 <form action="<?php echo FRONT_ROOT ?>Screening/showFormScreeningTime" method="post">
                     <div class="form-group row">
-                        <label for="idMovie" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">ID MOVIE</label>
+                        <label for="idMovie" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">MOVIE</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" readonly="readonly" placeholder="idMovie" name="idMovie" id="idMovie" value="<?php echo $idMovie;?>">
+                            <select class="form-control" id="idMovie" readonly placeholder="idMovie" name="idMovie">
+                                <option value="<?php echo $movie->getId();?>"><?php echo $movie->getTitle(); ?></option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="date" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">DATE</label>
                         <div class="col-sm-9">
-                            <input type="date" class="form-control" readonly="readonly" placeholder="date" name="date" id="date" value="<?php echo $date;?>">
+                            <input type="date" class="form-control" readonly placeholder="date" name="date" id="date" value="<?php echo $date;?>">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="idCinema" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">CINEMA</label>
                         <div class="col-sm-9">
-                            <select class="form-control" id="idCinema" readonly="readonly" placeholder="idCinema" name="idCinema">
-                                <option value="<?php echo $idCinema;?>"><?php echo $idCinema; ?></option>
+                            <select class="form-control" id="idCinema" readonly placeholder="idCinema" name="idCinema">
+                                <option value="<?php echo $cinema->getId();?>"><?php echo $cinema->getName(); ?></option>
                             </select>
                         </div>
                     </div>

@@ -41,7 +41,7 @@
 			return $this->price;
         }
         
-        public function setCinema($cinema){
+        public function setCinema(Cinema $cinema){
             $this->cinema = $cinema;
         }
 

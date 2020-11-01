@@ -28,7 +28,7 @@
                     $movie->setId($row->getId());
                     $movie->setPoster_path($row->getPoster_path());
                     $movie->setOriginal_language($row->getOriginal_language());
-                    $movie->setGenres($row->getGenre_ids());
+                    $movie->setGenres(1); //ARREGLAR CON NUEVO DAO Y NUEVA TABLA DE GENRES.
                     $movie->setTitle($row->getTitle());
                     $movie->setOverview($row->getOverview());
                     $movie->setRelease_date($row->getRelease_date());
@@ -36,8 +36,8 @@
                     array_push($movies, $movie);
                 }
             }
-            return $movies;
 
+            return $movies;
         }
 
         public function getById($id)
@@ -50,18 +50,19 @@
 
             $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 
-            $movie = new Movie();
+            $movie = NULL;
 
             foreach ($result as $row){
-                $movie->setId($row->getId());
-                $movie->setPoster_path($row->getPoster_path());
-                $movie->setOriginal_language($row->getOriginal_language());
-                $movie->setGenres($row->getGenre_ids());
-                $movie->setTitle($row->getTitle());
-                $movie->setOverview($row->getOverview());
-                $movie->setRelease_date($row->getRelease_date());
-                $movie->setRuntime($row->getRuntime());
-                }
+                $movie = new Movie();
+                $movie->setId($row['id']);
+                $movie->setPoster_path($row['poster_path']);
+                $movie->setOriginal_language($row['original_language']);
+                $movie->setGenres(1); //ARREGLAR CON NUEVO DAO Y NUEVA TABLA DE GENRES.
+                $movie->setTitle($row['title']);
+                $movie->setOverview($row['overview']);
+                $movie->setRelease_date($row['release_date']);
+                $movie->setRuntime($row['runtime']);
+            }
             
             return $movie;
         }
@@ -79,16 +80,16 @@
             $this->moviesList = array();
 
             foreach ($result as $row){
-                $movie = New Movie();
-                $movie->setId($row->getId());
-                $movie->setPoster_path($row->getPoster_path());
-                $movie->setOriginal_language($row->getOriginal_language());
-                $movie->setGenres($row->getGenre_ids());
-                $movie->setTitle($row->getTitle());
-                $movie->setOverview($row->getOverview());
-                $movie->setRelease_date($row->getRelease_date());
-                $movie->setRuntime($row->getRuntime());
-                }
+                $movie = new Movie();
+                $movie->setId($row['id']);
+                $movie->setPoster_path($row['poster_path']);
+                $movie->setOriginal_language($row['original_language']);
+                $movie->setGenres(1); //ARREGLAR CON NUEVO DAO Y NUEVA TABLA DE GENRES.
+                $movie->setTitle($row['title']);
+                $movie->setOverview($row['overview']);
+                $movie->setRelease_date($row['release_date']);
+                $movie->setRuntime($row['runtime']);
+            }
         
             return $this->moviesList;
         } 
@@ -106,16 +107,16 @@
             $this->moviesList = array();
 
             foreach ($result as $row){
-                $movie = New Movie();
-                $movie->setId($row->getId());
-                $movie->setPoster_path($row->getPoster_path());
-                $movie->setOriginal_language($row->getOriginal_language());
-                $movie->setGenres($row->getGenre_ids());
-                $movie->setTitle($row->getTitle());
-                $movie->setOverview($row->getOverview());
-                $movie->setRelease_date($row->getRelease_date());
-                $movie->setRuntime($row->getRuntime());
-                }
+                $movie = new Movie();
+                $movie->setId($row['id']);
+                $movie->setPoster_path($row['poster_path']);
+                $movie->setOriginal_language($row['original_language']);
+                $movie->setGenres(1); //ARREGLAR CON NUEVO DAO Y NUEVA TABLA DE GENRES.
+                $movie->setTitle($row['title']);
+                $movie->setOverview($row['overview']);
+                $movie->setRelease_date($row['release_date']);
+                $movie->setRuntime($row['runtime']);
+            }
         
             return $this->moviesList;
         } 
@@ -156,7 +157,7 @@
 
         public function add(Movie $movie){
             
-            $query = "CALL Movies_Add(?,?,?,?,?,?,?)"; // FALTA HACER FUNCION EN EL MOVIEPASS
+            $query = "CALL Movies_Add(?,?,?,?,?,?,?,?)";
 
             $parameters["id"] = $movie->getId();
             $parameters["title"] = $movie->getTitle();
@@ -164,7 +165,7 @@
             $parameters["original_language"] = $movie->getOriginal_language();
             $parameters["overview"] = $movie->getOverview();
             $parameters["release_date"] = $movie->getRelease_date();
-            $parameters["id_genre"] = $movie->getGenres();
+            $parameters["id_genre"] = 1; //ARREGLAR CON NUEVO DAO Y NUEVA TABLA DE GENRES.
             $parameters["runtime"] = $movie->getRuntime();
 
             $this->connection = Connection::GetInstance();
@@ -213,6 +214,29 @@
 
             return $runtime;
 
+        }
+
+        public function getByIdAPI($idMovie){
+
+            $linkDetails = "https://api.themoviedb.org/3/movie/";
+
+            $apiKey = "?api_key=1e9aba021ef977ce53b2219af44e6cd7";
+
+            $movie = json_decode(file_get_contents($linkDetails.$idMovie.$apiKey), true);
+
+            $language = new LanguagesDAO();
+
+            $movieNew = new Movie();
+            $movieNew->setId($movie["id"]);
+            $movieNew->setPoster_path($this->linkImage.$movie["poster_path"]);
+            $movieNew->setOriginal_language($language->getByCode($movie["original_language"]));
+            $movieNew->setGenres(1);
+            $movieNew->setTitle($movie["original_title"]);
+            $movieNew->setOverview($movie["overview"]);
+            $movieNew->setRelease_date($movie["release_date"]);
+            $movieNew->setRuntime($this->getRuntimeAPI($movieNew->getId()));
+
+            return $movieNew;
         }
 
     }

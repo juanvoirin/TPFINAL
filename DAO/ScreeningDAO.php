@@ -27,23 +27,21 @@
 
             $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 
-            $screening = new Screening();
-
-            $roomDao = new RoomDAO();
-
-            $movieDao = new MovieDAO();
-
             if ($result != NULL){
                 foreach($result as $row){
+                    $screening = new Screening();
+                    $roomDao = new RoomDAO();
+                    $movieDao = new MovieDAO();
+
                     $screening->setId($row['id']);
                     $screening->setDate($row['date']);
                     $screening->setTime($row['time']);
                     $screening->setRuntime($row['runtime']);
                     $screening->setSold($row['sold']);
-                    $screening->setIdRoom($roomDao->getById($row['id_room']));
-                    $screening->setIdMovie($movieDao->getById($row['id_movie']));
-    
+                    $screening->setRoom($roomDao->getById($row['id_room']));
+                    $screening->setMovie($movieDao->getById($row['id_movie']));
                 }
+
                 return $screening;
             }else{
                 return NULL;
@@ -73,8 +71,8 @@
                 $screening->setTime($row['time']);
                 $screening->setRuntime($row['runtime']);
                 $screening->setSold($row['sold']);
-                $screening->setIdRoom($roomDao->getById($row['id_room']));
-                $screening->setIdMovie($movieDao->getById($row['id_movie']));
+                $screening->setRoom($roomDao->getById($row['id_room']));
+                $screening->setMovie($movieDao->getById($row['id_movie']));
 
             }
             return $screening;
@@ -104,8 +102,8 @@
                 $screening->setTime($row['time']);
                 $screening->setRuntime($row['runtime']);
                 $screening->setSold($row['sold']);
-                $screening->setIdRoom($roomDao->getById($row['id_room']));
-                $screening->setIdMovie($movieDao->getById($row['id_movie']));
+                $screening->setRoom($roomDao->getById($row['id_room']));
+                $screening->setMovie($movieDao->getById($row['id_movie']));
 
                 array_push($this->screeningsList, $screening);
             }
@@ -135,8 +133,8 @@
                 $screening->setTime($row['time']);
                 $screening->setRuntime($row['runtime']);
                 $screening->setSold($row['sold']);
-                $screening->setIdRoom($roomDao->getById($row['id_room']));
-                $screening->setIdMovie($movieDao->getById($row['id_movie']));
+                $screening->setRoom($roomDao->getById($row['id_room']));
+                $screening->setMovie($movieDao->getById($row['id_movie']));
 
                 array_push($this->screeningsList, $screening);
             }
@@ -152,8 +150,8 @@
             $parameters["date"] = $screening->getDate();
             $parameters["time"] = $screening->getTime();
             $parameters["runtime"] = $screening->getRuntime();
-            $parameters["id_room"] = $screening->getIdRoom();
-            $parameters["id_movie"] = $screening->getIdMovie();
+            $parameters["id_room"] = $screening->getRoom()->getId();
+            $parameters["id_movie"] = $screening->getMovie()->getId();
 
             $this->connection = Connection::GetInstance();
 
