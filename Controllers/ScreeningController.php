@@ -5,6 +5,7 @@
     use DAO\ScreeningDAO as ScreeningDAO;
     use DAO\RoomDAO as RoomDAO;
     use DAO\MovieDAO as MovieDAO;
+    use Models\Screening as Screening;
 
     class ScreeningController
     {
@@ -14,22 +15,31 @@
             require_once(VIEWS_PATH."home.php");
         }
 
-        public function showScreeningsView(){
+        public function showListView(){
             
-            //Listar Funciones
+            $screeningDao = new ScreeningDAO();
+            $screeningList = $screeningDao->getAll();
 
 
-            require_once(VIEWS_PATH."home.php");//No tengo la vista por eso redirige al HOME
+            require_once(VIEWS_PATH."user-list-screenings.php");
         }
 
         public function showFormScreening($idMovie){
+
+            $movieDao = new MovieDAO();
+
+            $movie = $movieDao->getByIdAPI($idMovie);
 
             require_once(VIEWS_PATH."adm-form-screenings-date.php");
         }
 
         public function showFormScreeningSelectCinema($idMovie, $date){
+
             $screeningDao = new ScreeningDAO();
             $cinemaDao = new CinemaDAO();
+            $movieDao = new MovieDAO();
+
+            $movie = $movieDao->getByIdAPI($idMovie);
 
             $fecha_actual = strtotime(date("d-m-Y"));
             $fecha_entrada = strtotime($date);
@@ -42,7 +52,7 @@
                     $cinemasList = $cinemaDao->getAll();
                     require_once(VIEWS_PATH."adm-form-screenings-cinemas.php");
                 }else{
-                    $this->showFormScreeningSelectRoom($idMovie, $date, $idCinema);
+                    $this->showFormScreeningSelectRoom($idMovie, $date, $idCinema->getRoom()->getCinema()->getId());
                 }
             }else
             {
@@ -51,6 +61,14 @@
         }
 
         public function showFormScreeningSelectRoom($idMovie, $date, $idCinema){
+            $movieDao = new MovieDAO();
+
+            $movie = $movieDao->getByIdAPI($idMovie);
+
+            $cinemaDao = new CinemaDAO();
+
+            $cinema = $cinemaDao->getById($idCinema);
+            
             $roomDao = new RoomDAO();
             
             $roomList = $roomDao->getByCinemaId($idCinema);
@@ -60,7 +78,17 @@
 
         public function showFormScreeningTime($idMovie, $date, $idCinema, $idRoom){
             
+            $movieDao = new MovieDAO();
+
+            $movie = $movieDao->getByIdAPI($idMovie);
+
+            $cinemaDao = new CinemaDAO();
+
+            $cinema = $cinemaDao->getById($idCinema);
             
+            $roomDao = new RoomDAO();
+
+            $room = $roomDao->getById($idRoom);
 
             date_default_timezone_set("America/Argentina/Buenos_Aires");//ESTO MODIFICA EL TIMEZON QUE USA LA PAGINA
 
@@ -84,12 +112,48 @@
 
             $movieDao = new MovieDAO();
             $movie = $movieDao->getById($idMovie);
-            $movieDao->add($movie);
-
-            //Instanciar un objeto Screening que sera el que se enviara por parametro al add del DAO.
-            //Llamar sentencia add ScreeningDAO
+            if($movie == NULL){
+                $movie = $movieDao->getByIdAPI($idMovie);
+                $movieDao->add($movie);
+            }
             
-            $this->showScreeningsView();
+            $cinemaDao = new CinemaDAO();
+            $cinema = $cinemaDao->getById($idCinema);
+
+            $roomDao = new RoomDAO();
+            $room = $roomDao->getById($idRoom);
+
+            $screeningDao = new ScreeningDAO();
+
+            $screening = new Screening();
+            $screening->setDate($date);
+            $screening->setTime($time);
+            $screening->setRuntime($movie->getRuntime());
+            $screening->setRoom($room);
+            $screening->setMovie($movie);
+
+            $screeningDao->add($screening);
+
+            $this->showListView();
+        }
+
+        public function deleteScreening($id){
+            $this->screeningDao = new ScreeningDAO();
+            $this->screeningDao->deleteById($id);
+
+            $this->showListView();
+        }
+
+        public function updateToFormScreening($id){
+            $this->screeningDao = new ScreeningDAO();
+            $screening = $this->screeningDao->getById($id);
+            
+            require_once(VIEWS_PATH."adm-update-form-screenings.php");
+        }
+
+        public function updateScreening(/*FALTA DEFINIR*/){
+            
+            $this->showListView();
         }
     }
 

@@ -8,11 +8,17 @@
     define("JS_PATH", FRONT_ROOT.VIEWS_PATH . "js/");
     define("IMG_PATH", CSS_PATH . "images/");
 
-    define("DB_HOST", "sql10.freemysqlhosting.net:3306");
-    define("DB_NAME", "sql10372627");
-    define("DB_USER", "sql10372627");
-    define("DB_PASS", "CYARptMFAR");
+    /*define("DB_HOST", "localhost:3306");
+    define("DB_NAME", "tpfinalthemovie");
+    define("DB_USER", "root");
+    define("DB_PASS", "");*/
     
+    define("DB_HOST", "johnny.heliohost.org");
+    define("DB_NAME", "juanfran_tpfinal");
+    define("DB_USER", "juanfran_tpfinal");
+    define("DB_PASS", "donpepito");
+    
+
 ?>
 
 
