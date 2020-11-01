@@ -1,6 +1,9 @@
 <?php
     namespace Models;
 
+    use Models\Room;
+    use Models\Movie;
+
     class Screening {
 
         private $id;
@@ -8,8 +11,8 @@
         private $time;
         private $runtime;
         private $sold;
-        private $idRoom;
-        private $idMovie;
+        private $room;
+        private $movie;
 
         public function setId($id){
             $this->id = $id;
@@ -43,20 +46,20 @@
             return $this->runtime;
         }
 
-        public function setIdRoom($idRoom){
-            $this->idRoom = $idRoom;
+        public function setRoom(Room $room){
+            $this->room = $room;
         }
 
-        public function getIdRoom(){
-            return $this->idRoom;
+        public function getRoom(){
+            return $this->room;
         }
 
-        public function setIdMovie($idMovie){
-            $this->idMovie = $idMovie;
+        public function setMovie(Movie $movie){
+            $this->movie = $movie;
         }
 
-        public function getIdMovie(){
-            return $this->idMovie;
+        public function getMovie(){
+            return $this->movie;
         }
 
         public function setSold($sold){
