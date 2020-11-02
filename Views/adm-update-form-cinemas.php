@@ -29,7 +29,9 @@
           <div class="form-group row">
            <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">OWNER</label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" readonly="readonly" placeholder="Owner" name="owner" id="owner" value="<?php echo $cinema->getOwner()->getName(); ?>">
+              <select class="form-control" id="idCinema" readonly placeholder="idCinema" name="idCinema">
+                <option value="<?php echo $cinema->getOwner()->getId();?>"><?php echo $cinema->getOwner()->getName(); ?></option>
+              </select>
             </div>
           </div>
           <button type="submit" class="btn btn-primary">Confirm<br></button>

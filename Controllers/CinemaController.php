@@ -81,7 +81,7 @@
             $cinema->setId($id);
             $cinema->setName($name);
             $cinema->setAddress($address);
-            $cinema->setOwner($userDao->getByEmail($idOwner));
+            $cinema->setOwner($userDao->getById($idOwner));
 
             $this->cinemaDao->update($cinema);
             

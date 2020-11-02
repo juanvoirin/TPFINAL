@@ -10,7 +10,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <h1 class="display-2">Movies in theaters now<br></h1>
+        <h1 class="display-2">Movies in rooms now<br></h1>
         <h5 class="">Sort by</h5>
         <div class="btn-group">
           <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Date</button>
