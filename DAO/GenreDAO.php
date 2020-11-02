@@ -6,6 +6,7 @@
     use DAO\IGenreDAO as IGenreDAO;
     use DAO\Connection as Connection;
     use DAO\QueryType as QueryType;
+    use DAO\MxgDAO as MxgDAO;
 
 
 
@@ -66,21 +67,31 @@
             return $this->genreList;
         }
 
-        public function add(Genre $genre){
+        public function add(Genre $genre, $idMovie){
             $query= "CALL Genre_Add (?,?)";
 
             $parameters[`id`] = $genre->getId();
             $parameters[`name`] = $genre->getName();
+
+            $movieXGenreDAO = new MxgDAO();
+
+            $movieXGenreDAO->add($idMovie, $genre->getId());
 
             $this->connection = Connection::GetInstance();
 
             $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
         }
 
-        public function getByIdMovie($id){
+        public function getByIdMovie($idMovie){
+            $MxgDAO = new MxgDAO();
+
+            $MxgDAO->getIdGenresByIdMovie($idMovie);
+
+            
+            
             $query = "CALL Genre_GetByIdMovie";
 
-            $parameters[`id_movie`] = $id;
+            $parameters[`id_movie`] = $idMovie;
 
             $this->connection = Connection::GetInstance();
 
@@ -150,3 +161,5 @@
 
 
     }
+
+?>

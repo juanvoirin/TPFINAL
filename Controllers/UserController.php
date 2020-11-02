@@ -15,6 +15,16 @@
         private $movieDao;
 
         public function index(){
+            $genreDao = new GenreDAO();
+
+            $genreList = array();
+            $genreList = $genreDao->getAll();
+            
+            $movieDao = new MovieDAO();
+
+            $movieList = array();
+            $movieList = $movieDao->getMovieWithScreening();
+
             require_once(VIEWS_PATH."login.php");
         }
 
@@ -27,7 +37,7 @@
             $this->movieDao = new MovieDAO();
 
             $movieList = array();
-            $movieList = $this->movieDao->getAllAPI();
+            $movieList = $this->movieDao->getMovieWithScreening();
 
             require_once(VIEWS_PATH."home.php");
         }

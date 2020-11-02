@@ -5,6 +5,8 @@
     use DAO\CinemaDAO as CinemaDAO;
     use Models\Cinema as Cinema;
     use DAO\UserDAO as UserDAO;
+    use DAO\GenreDAO as GenreDAO;
+    use DAO\MovieDAO as MovieDAO;
 
     class CinemaController
     {
@@ -12,6 +14,16 @@
         private $cinemaDao;
 
         public function index(){
+            $genreDao = new GenreDAO();
+
+            $genreList = array();
+            $genreList = $genreDao->getAll();
+            
+            $movieDao = new MovieDAO();
+
+            $movieList = array();
+            $movieList = $movieDao->getMovieWithScreening();
+
             require_once(VIEWS_PATH."home.php");
         }
 

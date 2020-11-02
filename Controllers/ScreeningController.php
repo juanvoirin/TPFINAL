@@ -6,12 +6,23 @@
     use DAO\RoomDAO as RoomDAO;
     use DAO\MovieDAO as MovieDAO;
     use Models\Screening as Screening;
+    use DAO\GenreDAO as GenreDAO;
 
     class ScreeningController
     {
 
         public function index()
         {
+            $genreDao = new GenreDAO();
+
+            $genreList = array();
+            $genreList = $genreDao->getAll();
+            
+            $movieDao = new MovieDAO();
+
+            $movieList = array();
+            $movieList = $movieDao->getMovieWithScreening();
+
             require_once(VIEWS_PATH."home.php");
         }
 
