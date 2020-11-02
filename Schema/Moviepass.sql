@@ -93,6 +93,21 @@ CREATE TABLE IF NOT EXISTS bill
     CONSTRAINT fk_credit_cia_bill FOREIGN KEY (id_credit_cia) REFERENCES credit_cias(`id`)
 )Engine=InnoDB;
         
+CREATE TABLE IF NOT EXISTS genres
+(
+    `id` INT NOT NULL,
+    `name` VARCHAR,
+    CONSTRAINT pk_id_genre PRIMARY KEY (`ID`);
+)Engine=InnoDB;
+
+CREATE TABLE IF NOT EXISTS moviesXgenres
+(
+    id INT NOT NULL AUTO_INCREMENT,
+    id_movie INT NOT NULL,
+    id_genre INT NOT NULL,
+    CONSTRAINT fk_if_movie FOREIGN KEY (id_movie) REFERENCES movies(`id`),
+    CONSTRAINT fk_id_genre FOREIGN KEY (id_genre) REFERENCES genre(`id`);
+)Engine=InnoDB;
 	
 DROP PROCEDURE IF EXISTS `Cinemas_GetAll`;
 
@@ -449,3 +464,48 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Genre_Add`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Genre_Add (IN id INT, IN `name` VARCHAR(50))
+BEGIN
+INSERT INTO genres
+    (genres.id, genres.name),
+VALUES 
+    (id, `name`);
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Genre_GetByIdMovie`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Genre_GetByIdMovie (IN id INT)
+BEGIN
+SELECT genres.id as `id`, genres.name as `name`
+FROM moviesXgenres mxg
+INNER JOIN genres g
+ON g.id = mxg.id_genre
+WHERE mxg.id_movie = id;
+END $$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `MxG_Add`;
+
+DELIMITER $$
+
+CREATE PROCEDURE MxG_Add (IN id_movie INT, IN id_genre INT)
+BEGIN
+    INSERT INTO moviesXgenres
+        (moviesXgenres.id_movie, moviesXgenres.id_genre),
+    VALUES
+        (id_movie, id_genre);
+END$$
+
+DELIMITER;
+
+/*ACTUALIZAR BASE DE DATOS
