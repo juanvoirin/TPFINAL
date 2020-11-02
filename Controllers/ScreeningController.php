@@ -143,18 +143,6 @@
 
             $this->showListView();
         }
-
-        public function updateToFormScreening($id){
-            $this->screeningDao = new ScreeningDAO();
-            $screening = $this->screeningDao->getById($id);
-            
-            require_once(VIEWS_PATH."adm-update-form-screenings.php");
-        }
-
-        public function updateScreening(/*FALTA DEFINIR*/){
-            
-            $this->showListView();
-        }
     }
 
 ?>

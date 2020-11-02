@@ -26,6 +26,10 @@
         }
 
         public function showAddRoom($idCinema){
+            $cinemaDao = new CinemaDAO();
+
+            $cinema = $cinemaDao->getById($idCinema);
+
             require_once(VIEWS_PATH."adm-form-room.php");
         }
 
