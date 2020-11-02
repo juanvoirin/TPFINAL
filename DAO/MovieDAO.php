@@ -89,6 +89,8 @@
                 $movie->setOverview($row['overview']);
                 $movie->setRelease_date($row['release_date']);
                 $movie->setRuntime($row['runtime']);
+
+                array_push($this->moviesList, $movie);
             }
         
             return $this->moviesList;
@@ -116,6 +118,8 @@
                 $movie->setOverview($row['overview']);
                 $movie->setRelease_date($row['release_date']);
                 $movie->setRuntime($row['runtime']);
+
+                array_push($this->moviesList, $movie);
             }
         
             return $this->moviesList;
@@ -158,7 +162,7 @@
         public function add(Movie $movie){
             
             $query = "CALL Movies_Add(?,?,?,?,?,?,?,?)";
-
+ 
             $parameters["id"] = $movie->getId();
             $parameters["title"] = $movie->getTitle();
             $parameters["poster_path"] = $movie->getPoster_path();

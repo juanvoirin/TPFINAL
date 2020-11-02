@@ -4,6 +4,9 @@
 
     use Models\Genre as Genre;
     use DAO\IGenreDAO as IGenreDAO;
+    use DAO\Connection as Connection;
+    use DAO\QueryType as QueryType;
+
 
 
     class GenreDAO implements IGenreDAO {
@@ -62,6 +65,40 @@
             }
             return $this->genreList;
         }
+
+        public function add(Genre $genre){
+            $query= "CALL Genre_Add (?,?)";
+
+            $parameters[`id`] = $genre->getId();
+            $parameters[`name`] = $genre->getName();
+
+            $this->connection = Connection::GetInstance();
+
+            $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+        }
+
+        public function getByIdMovie($id){
+            $query = "CALL Genre_GetByIdMovie";
+
+            $parameters[`id_movie`] = $id;
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+            $this->genreList = array();
+
+            foreach ($result as $row){
+                $genre = new Genre();
+                $genre->setId($row[`id`]);
+                $genre->setName($row[`name`]);
+
+                array_push($this->genreList, $genre);
+            }
+            return $this->genreList;
+        }
+
+        
 
         private function retrieveData(){
             $this->genreList = array();
