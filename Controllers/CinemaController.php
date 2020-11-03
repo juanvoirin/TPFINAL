@@ -95,7 +95,10 @@
             $cinema->setAddress($address);
             $cinema->setOwner($userDao->getById($idOwner));
 
-            $this->cinemaDao->update($cinema);
+                $this->cinemaDao->update($cinema);
+
+                $this->updateCinema($id, $name, $address, $idOwner);
+
             
             $this->showListViewAll();
         }
