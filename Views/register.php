@@ -15,10 +15,9 @@
               <a href=<?php echo FRONT_ROOT."User/index"?>> Already have an account?</a>
             </small>
           </div>
-          <button type="submit" class="btn btn-primary">Sign up<br></button>
+          <button type="submit" class="btn btn-primary">Register<br></button>
         </form>
         <br>
-        <a class="btn text-white" style="background: rgb(59, 89, 152);" target="_blank"><i class="fa fa-facebook fa-fw fa-1x py-1"></i>Sign up with Facebook</a>
       </div>
     </div>
   </div>

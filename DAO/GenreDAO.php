@@ -82,6 +82,8 @@
             $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
         }
 
+        
+
         public function getByIdMovie($idMovie){
             $MxgDAO = new MxgDAO();
 

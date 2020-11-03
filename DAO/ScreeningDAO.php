@@ -49,6 +49,8 @@
 
         }
 
+
+
         public function getById($id)
         {
             $query = "CALL Screenings_GetById(?)";
@@ -169,6 +171,72 @@
             $this->connection = Connection::GetInstance();
 
             $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+
+        }
+
+        public function getByIdMovie($idMovie){
+
+            $query = "CALL Screenings_GetByIdMovie(?)";
+
+            $parameters["id_movie"] = $idMovie;
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+            $this->screeningsList = array();
+
+            $roomDao = new RoomDAO();
+
+            $movieDao = new MovieDAO();
+            
+            foreach ($result as $row){
+                $screening = new Screening();
+                $screening->setId($row['id']);
+                $screening->setDate($row['date']);
+                $screening->setTime($row['time']);
+                $screening->setRuntime($row['runtime']);
+                $screening->setSold($row['sold']);
+                $screening->setRoom($roomDao->getById($row['id_room']));
+                $screening->setMovie($movieDao->getById($row['id_movie']));
+
+                array_push($this->screeningsList, $screening);
+
+            }
+            return $this->screeningsList ;
+
+        }
+
+        public function getFinishHourScreening($idRoom, $date){
+
+            $query = "CALL Screenings_GetFinishHoueScreening (?,?)";
+
+            $parameters["date"] = $date;
+            $parameters["id_room"] = $idRoom;
+            
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+            if ($result != NULL){
+                foreach($result as $row){
+                    $screening = new Screening();
+                    $roomDao = new RoomDAO();
+                    $movieDao = new MovieDAO();
+
+                    $screening->setId($row['id']);
+                    $screening->setDate($row['date']);
+                    $screening->setTime($row['time']);
+                    $screening->setRuntime($row['runtime']);
+                    $screening->setSold($row['sold']);
+                    $screening->setRoom($roomDao->getById($row['id_room']));
+                    $screening->setMovie($movieDao->getById($row['id_movie']));
+                }
+
+                return $screening;
+            }else{
+                return NULL;
+            }
 
         }
 

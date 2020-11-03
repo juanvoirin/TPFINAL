@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS `users`
     `type` VARCHAR(20) NOT NULL,
     `name` VARCHAR(50) NOT NULL,
     CONSTRAINT `PK_Users` PRIMARY KEY (`id`)
+    CONSTRAINT unq_email unique(`email`)
 )Engine=InnoDB;
     
 CREATE TABLE IF NOT EXISTS `cinemas`
@@ -358,6 +359,21 @@ END$$
 
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `Screenings_GetByIdMovie` ;
+
+DELIMITER $$ 
+
+CREATE PROCEDURE Screenings_GetByIdMovie (IN id INT)
+BEGIN   
+    SELECT screenings.id as `id`, screenings.date as `date`, screenings.time as `time`, screenings.runtime as `runtime`, screenings.sold as `sold`, screenings.id_room as `id_room`, screenings.id_movie as `id_movie`
+    FROM screenings
+    JOIN movies
+    ON (movies.id = screenings.id_movie)
+    WHERE (screenings.id_movie = id);
+END$$
+
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `Screenings_GetAll` ;
 
 DELIMITER $$ 
@@ -535,3 +551,51 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Movies_GetMoviesWithScreeningsByDate`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Movies_GetMoviesWithScreeningsByDate (IN `date` date)
+BEGIN
+    select movies.id as `id`, movies.title as `title`, movies.poster_path as `poster_path`, movies.original_language as `original_language`, movies.overview as `overview`, movies.release_date as `release_date`, movies.id_genre as `id_genre`, movies.runtime as `runtime`
+    FROM screenings
+    INNER JOIN movies
+    ON screenings.id_movie = movies.id
+    group by movies.id
+    WHERE screening.date = `date`;
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Movies_GetMoviesWithScreeningsByGenre`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Movies_GetMoviesWithScreeningsByGenre (IN id_genre INT)
+BEGIN
+    select movies.id as `id`, movies.title as `title`, movies.poster_path as `poster_path`, movies.original_language as `original_language`, movies.overview as `overview`, movies.release_date as `release_date`, movies.id_genre as `id_genre`, movies.runtime as `runtime`
+    FROM screenings
+    INNER JOIN movies
+    ON screenings.id_movie = movies.id
+    group by movies.id
+    WHERE movie.id_genre = genre;
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Screenings_GetFinishHourScreening`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Screenings_GetFinishHourScreening (IN id_room INT, IN `date` date )
+BEGIN 
+ SELECT screenings.id as `id`, screenings.date as `date`, MAX(screenings.time as `time`), screenings.runtime as `runtime`, screenings.sold as `sold`, screenings.id_room as `id_room`, screenings.id_movie as `id_movie`
+    FROM screenings
+    JOIN rooms
+    ON (rooms.id = screenings.id_room)
+    WHERE (screenings.id_room = id_room) AND (screenings.date = `date`);
+END$$
+
+DELIMITER ;
+
