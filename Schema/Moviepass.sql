@@ -96,17 +96,17 @@ CREATE TABLE IF NOT EXISTS bill
 CREATE TABLE IF NOT EXISTS genres
 (
     `id` INT NOT NULL,
-    `name` VARCHAR,
-    CONSTRAINT pk_id_genre PRIMARY KEY (`ID`);
+    `name` VARCHAR(50),
+    CONSTRAINT pk_id_genre PRIMARY KEY (`id`)
 )Engine=InnoDB;
 
 CREATE TABLE IF NOT EXISTS moviesXgenres
 (
-    id INT NOT NULL AUTO_INCREMENT,
     id_movie INT NOT NULL,
     id_genre INT NOT NULL,
-    CONSTRAINT fk_if_movie FOREIGN KEY (id_movie) REFERENCES movies(`id`),
-    CONSTRAINT fk_id_genre FOREIGN KEY (id_genre) REFERENCES genre(`id`);
+    CONSTRAINT pk_moviesXgenres PRIMARY KEY (`id_movie`, `id_genre`),
+    CONSTRAINT fk_movie_movieXgenre FOREIGN KEY (id_movie) REFERENCES movies(`id`),
+    CONSTRAINT fk_genre_movieXgenre FOREIGN KEY (id_genre) REFERENCES genres(`id`)
 )Engine=InnoDB;
 	
 DROP PROCEDURE IF EXISTS `Cinemas_GetAll`;
@@ -472,40 +472,66 @@ DELIMITER $$
 CREATE PROCEDURE Genre_Add (IN id INT, IN `name` VARCHAR(50))
 BEGIN
 INSERT INTO genres
-    (genres.id, genres.name),
+    (genres.id, genres.name)
 VALUES 
-    (id, `name`);
+    (`id`, `name`);
 END$$
 
 DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `Genre_GetByIdMovie`;
 
+DROP PROCEDURE IF EXISTS `Genre_GetById`;
+
 DELIMITER $$
 
-CREATE PROCEDURE Genre_GetByIdMovie (IN id INT)
+CREATE PROCEDURE Genre_GetById (IN id INT)
 BEGIN
 SELECT genres.id as `id`, genres.name as `name`
-FROM moviesXgenres mxg
-INNER JOIN genres g
-ON g.id = mxg.id_genre
-WHERE mxg.id_movie = id;
+FROM genres
+WHERE genres.id = id;
 END $$
 
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `MxG_Add`;
+DROP PROCEDURE IF EXISTS `Mxg_GetGenresByIdMovie`;
 
 DELIMITER $$
 
-CREATE PROCEDURE MxG_Add (IN id_movie INT, IN id_genre INT)
+CREATE PROCEDURE Mxg_GetGenresByIdMovie (IN id INT)
+BEGIN
+    SELECT moviesXgenres.id_genre as `idGenre`
+    FROM moviesXgenres
+    WHERE moviesXgenres.id_movie = id;
+END $$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `moviesXgenres_Add`;
+
+DELIMITER $$
+
+CREATE PROCEDURE moviesXgenres_Add (IN id_movie INT, IN id_genre INT)
 BEGIN
     INSERT INTO moviesXgenres
-        (moviesXgenres.id_movie, moviesXgenres.id_genre),
+        (moviesXgenres.id_movie, moviesXgenres.id_genre)
     VALUES
-        (id_movie, id_genre);
+        (`id_movie`, `id_genre`);
 END$$
 
-DELIMITER;
+DELIMITER ;
 
-/*ACTUALIZAR BASE DE DATOS
+DROP PROCEDURE IF EXISTS `Movies_GetMoviesWithScreenings`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Movies_GetMoviesWithScreenings ()
+BEGIN
+    select movies.id as `id`, movies.title as `title`, movies.poster_path as `poster_path`, movies.original_language as `original_language`, movies.overview as `overview`, movies.release_date as `release_date`, movies.id_genre as `id_genre`, movies.runtime as `runtime`
+    FROM screenings
+    INNER JOIN movies
+    ON screenings.id_movie = movies.id
+    group by movies.id;
+END$$
+
+DELIMITER ;

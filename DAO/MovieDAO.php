@@ -40,6 +40,33 @@
             return $movies;
         }
 
+        public function getMovieWithScreening()
+        {
+            $query = "CALL Movies_GetMoviesWithScreenings()";
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
+
+            $this->moviesList = array();
+
+            foreach ($result as $row){
+                $movie = new Movie();
+                $movie->setId($row['id']);
+                $movie->setPoster_path($row['poster_path']);
+                $movie->setOriginal_language($row['original_language']);
+                $movie->setGenres(1); //ARREGLAR CON NUEVO DAO Y NUEVA TABLA DE GENRES.
+                $movie->setTitle($row['title']);
+                $movie->setOverview($row['overview']);
+                $movie->setRelease_date($row['release_date']);
+                $movie->setRuntime($row['runtime']);
+
+                array_push($this->moviesList, $movie);
+            }
+        
+            return $this->moviesList;
+        }
+
         public function getById($id)
         {   
             $query = "CALL Movies_GetById(?)";
@@ -172,6 +199,10 @@
             $parameters["id_genre"] = 1; //ARREGLAR CON NUEVO DAO Y NUEVA TABLA DE GENRES.
             $parameters["runtime"] = $movie->getRuntime();
 
+            $genreDao = new GenreDAO();
+
+            
+
             $this->connection = Connection::GetInstance();
 
             $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
@@ -230,11 +261,13 @@
 
             $language = new LanguagesDAO();
 
+            $genreDao = new GenreDAO();
+
             $movieNew = new Movie();
             $movieNew->setId($movie["id"]);
             $movieNew->setPoster_path($this->linkImage.$movie["poster_path"]);
             $movieNew->setOriginal_language($language->getByCode($movie["original_language"]));
-            $movieNew->setGenres(1);
+            $movieNew->setGenres($genreDao->getGenreById($movie["genres"]));
             $movieNew->setTitle($movie["original_title"]);
             $movieNew->setOverview($movie["overview"]);
             $movieNew->setRelease_date($movie["release_date"]);

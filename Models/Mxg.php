@@ -32,3 +32,4 @@
             return $this->id_genre;
         }
     }
+?>

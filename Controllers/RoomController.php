@@ -5,12 +5,24 @@
     use DAO\CinemaDAO as CinemaDAO;
     use DAO\RoomDAO as RoomDAO;
     use Models\Room as Room;
+    use DAO\GenreDAO as GenreDAO;
+    use DAO\MovieDAO as MovieDAO;
 
     class RoomController {
 
         private $roomDao;
 
         public function index(){
+            $genreDao = new GenreDAO();
+
+            $genreList = array();
+            $genreList = $genreDao->getAll();
+            
+            $movieDao = new MovieDAO();
+
+            $movieList = array();
+            $movieList = $movieDao->getMovieWithScreening();
+
             require_once(VIEWS_PATH."home.php");
         }
 
@@ -45,7 +57,11 @@
             $room->setPrice($price);
             $room->setCinema($cinemaDao->getById($idCinema));
 
-            $this->roomDao->add($room);
+            try{
+                $this->roomDao->add($room);
+            }catch{
+                
+            }
             
             $this->showRooms($idCinema);
         }
@@ -82,10 +98,13 @@
             $room->setPrice($price);
             $room->setCinema($cinemaDao->getById($idCinema));
 
-            $this->roomDao->update($room);
+            try{
+                $this->roomDao->update($room);
+            }catch{}
 
             $this->showRooms($idCinema);
 
         }
 
     }
+?>
