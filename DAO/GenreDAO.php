@@ -68,99 +68,52 @@
         }
 
         public function add(Genre $genre, $idMovie){
-            $query= "CALL Genre_Add (?,?)";
+            $query= "CALL Genre_Add(?,?)";
 
-            $parameters[`id`] = $genre->getId();
-            $parameters[`name`] = $genre->getName();
-
-            $movieXGenreDAO = new MxgDAO();
-
-            $movieXGenreDAO->add($idMovie, $genre->getId());
+            $parameters['id'] = $genre->getId();
+            $parameters['name'] = $genre->getName();
 
             $this->connection = Connection::GetInstance();
 
             $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
-        }
 
-        
+            $movieXGenreDAO = new MxgDAO();
+
+            $movieXGenreDAO->add($idMovie, $genre->getId());
+        }
 
         public function getByIdMovie($idMovie){
             $MxgDAO = new MxgDAO();
 
-            $MxgDAO->getIdGenresByIdMovie($idMovie);
+            $idGenres = $MxgDAO->getIdGenresByIdMovie($idMovie);
 
-            
-            
-            $query = "CALL Genre_GetByIdMovie";
+            $this->genreList = array();
 
-            $parameters[`id_movie`] = $idMovie;
+            foreach ($idGenres as $row){
+
+                array_push($this->genreList, $this->getGenreByIdDB($row['idGenre']));
+            }
+            return $this->genreList;
+        }
+
+        public function getGenreByIdDB($idGenre){
+
+            $query = "CALL Genre_GetById(?)";
+
+            $parameters['id'] = $idGenre;
 
             $this->connection = Connection::GetInstance();
 
             $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 
-            $this->genreList = array();
-
-            foreach ($result as $row){
+            foreach($result as $row){
                 $genre = new Genre();
-                $genre->setId($row[`id`]);
-                $genre->setName($row[`name`]);
-
-                array_push($this->genreList, $genre);
-            }
-            return $this->genreList;
-        }
-
-        
-
-        private function retrieveData(){
-            $this->genreList = array();
-
-            $jsonPath = $this->getJsonFilePath();
-
-            $jsonContent = file_get_contents($jsonPath);
-
-            $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
-            
-            foreach ($arrayToDecode["genres"] as $row) {
-                $genre = new Genre();
-                $genre->setId($row["id"]);
-                $genre->setName($row["name"]);
-
-                array_push($this->genreList, $genre);
+                $genre->setId($row['id']);
+                $genre->setName($row['name']);
             }
 
+            return $genre;
         }
-
-        private function saveData(){
-            $arrayToDecode = array();
-
-            $jsonPath = $this->getJsonFilePath();
-
-            foreach ($this->genreList as $genre){
-                $valueArray['id'] = $genre->getId();
-                $valueArray['name'] = $genre->getName();
-
-                array_push($arrayToDecode, $valueArray);
-            }
-            $jsonContent = json_encode($arrayToDecode, JSON_PRETTY_PRINT);
-            file_put_contents($jsonPath, $jsonContent);
-        }
-
-        private function getJsonFilePath(){
-
-            $initialPath = "Data/genres.json";
-            if(file_exists($initialPath)){
-                $jsonFilePath = $initialPath;
-            }else{
-                $jsonFilePath = "../".$initialPath;
-            }
-
-            return $jsonFilePath;
-        }
-
-
-
 
     }
 

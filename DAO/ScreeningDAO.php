@@ -209,17 +209,20 @@
 
         public function getFinishHourScreening($idRoom, $date){
 
-            $query = "CALL Screenings_GetFinishHoueScreening (?,?)";
-
-            $parameters["date"] = $date;
+            $query = "CALL Screenings_GetFinishHourScreening (?,?)";
+            
             $parameters["id_room"] = $idRoom;
+            $parameters["date"] = $date;
             
             $this->connection = Connection::GetInstance();
 
             $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 
-            if ($result != NULL){
-                foreach($result as $row){
+            $screening = NULL;
+
+            foreach($result as $row){
+
+                if($row['id'] !=NULL){
                     $screening = new Screening();
                     $roomDao = new RoomDAO();
                     $movieDao = new MovieDAO();
@@ -232,11 +235,9 @@
                     $screening->setRoom($roomDao->getById($row['id_room']));
                     $screening->setMovie($movieDao->getById($row['id_movie']));
                 }
-
-                return $screening;
-            }else{
-                return NULL;
             }
+
+            return $screening;
 
         }
 

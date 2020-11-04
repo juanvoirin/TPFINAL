@@ -8,6 +8,7 @@
     use DAO\LanguagesDAO as LanguagesDAO;
     use DAO\Connection as Connection;
     use DAO\QueryType as QueryType;
+    use Models\Genre as Genre;
 
 
     class MovieDAO implements IMovieDAO {
@@ -28,7 +29,7 @@
                     $movie->setId($row->getId());
                     $movie->setPoster_path($row->getPoster_path());
                     $movie->setOriginal_language($row->getOriginal_language());
-                    $movie->setGenres(1); //ARREGLAR CON NUEVO DAO Y NUEVA TABLA DE GENRES.
+                    $movie->setGenres($row->getGenres());
                     $movie->setTitle($row->getTitle());
                     $movie->setOverview($row->getOverview());
                     $movie->setRelease_date($row->getRelease_date());
@@ -50,12 +51,14 @@
 
             $this->moviesList = array();
 
+            $genreDao = new GenreDAO();
+
             foreach ($result as $row){
                 $movie = new Movie();
                 $movie->setId($row['id']);
                 $movie->setPoster_path($row['poster_path']);
                 $movie->setOriginal_language($row['original_language']);
-                $movie->setGenres(1); //ARREGLAR CON NUEVO DAO Y NUEVA TABLA DE GENRES.
+                $movie->setGenres($genreDao->getByIdMovie($movie->getId()));
                 $movie->setTitle($row['title']);
                 $movie->setOverview($row['overview']);
                 $movie->setRelease_date($row['release_date']);
@@ -80,12 +83,14 @@
 
             $this->moviesList = array();
 
+            $genreDao = new GenreDAO();
+
             foreach ($result as $row){
                 $movie = new Movie();
                 $movie->setId($row['id']);
                 $movie->setPoster_path($row['poster_path']);
                 $movie->setOriginal_language($row['original_language']);
-                $movie->setGenres(1); //ARREGLAR CON NUEVO DAO Y NUEVA TABLA DE GENRES.
+                $movie->setGenres($genreDao->getByIdMovie($movie->getId()));
                 $movie->setTitle($row['title']);
                 $movie->setOverview($row['overview']);
                 $movie->setRelease_date($row['release_date']);
@@ -109,12 +114,14 @@
 
             $this->moviesList = array();
 
+            $genreDao = new GenreDAO();
+
             foreach ($result as $row){
                 $movie = new Movie();
                 $movie->setId($row['id']);
                 $movie->setPoster_path($row['poster_path']);
                 $movie->setOriginal_language($row['original_language']);
-                $movie->setGenres(1); //ARREGLAR CON NUEVO DAO Y NUEVA TABLA DE GENRES.
+                $movie->setGenres($genreDao->getByIdMovie($movie->getId()));
                 $movie->setTitle($row['title']);
                 $movie->setOverview($row['overview']);
                 $movie->setRelease_date($row['release_date']);
@@ -138,12 +145,14 @@
 
             $movie = NULL;
 
+            $genreDao = new GenreDAO();
+
             foreach ($result as $row){
                 $movie = new Movie();
                 $movie->setId($row['id']);
                 $movie->setPoster_path($row['poster_path']);
                 $movie->setOriginal_language($row['original_language']);
-                $movie->setGenres(1); //ARREGLAR CON NUEVO DAO Y NUEVA TABLA DE GENRES.
+                $movie->setGenres($genreDao->getByIdMovie($movie->getId()));
                 $movie->setTitle($row['title']);
                 $movie->setOverview($row['overview']);
                 $movie->setRelease_date($row['release_date']);
@@ -165,12 +174,14 @@
 
             $this->moviesList = array();
 
+            $genreDao = new GenreDAO();
+
             foreach ($result as $row){
                 $movie = new Movie();
                 $movie->setId($row['id']);
                 $movie->setPoster_path($row['poster_path']);
                 $movie->setOriginal_language($row['original_language']);
-                $movie->setGenres(1); //ARREGLAR CON NUEVO DAO Y NUEVA TABLA DE GENRES.
+                $movie->setGenres($genreDao->getByIdMovie($movie->getId()));
                 $movie->setTitle($row['title']);
                 $movie->setOverview($row['overview']);
                 $movie->setRelease_date($row['release_date']);
@@ -194,12 +205,14 @@
 
             $this->moviesList = array();
 
+            $genreDao = new GenreDAO();
+
             foreach ($result as $row){
                 $movie = new Movie();
                 $movie->setId($row['id']);
                 $movie->setPoster_path($row['poster_path']);
                 $movie->setOriginal_language($row['original_language']);
-                $movie->setGenres(1); //ARREGLAR CON NUEVO DAO Y NUEVA TABLA DE GENRES.
+                $movie->setGenres($genreDao->getByIdMovie($movie->getId()));
                 $movie->setTitle($row['title']);
                 $movie->setOverview($row['overview']);
                 $movie->setRelease_date($row['release_date']);
@@ -247,7 +260,7 @@
 
         public function add(Movie $movie){
             
-            $query = "CALL Movies_Add(?,?,?,?,?,?,?,?)";
+            $query = "CALL Movies_Add(?,?,?,?,?,?,?)";
  
             $parameters["id"] = $movie->getId();
             $parameters["title"] = $movie->getTitle();
@@ -255,16 +268,16 @@
             $parameters["original_language"] = $movie->getOriginal_language();
             $parameters["overview"] = $movie->getOverview();
             $parameters["release_date"] = $movie->getRelease_date();
-            $parameters["id_genre"] = 1; //ARREGLAR CON NUEVO DAO Y NUEVA TABLA DE GENRES.
             $parameters["runtime"] = $movie->getRuntime();
-
-            $genreDao = new GenreDAO();
-
-            
 
             $this->connection = Connection::GetInstance();
 
             $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+
+            $genreDao = new GenreDAO();
+            foreach($movie->getGenres() as $genre){
+                $genreDao->add($genre, $movie->getId());
+            }
 
         }
 
@@ -320,13 +333,21 @@
 
             $language = new LanguagesDAO();
 
-            $genreDao = new GenreDAO();
-
             $movieNew = new Movie();
             $movieNew->setId($movie["id"]);
             $movieNew->setPoster_path($this->linkImage.$movie["poster_path"]);
             $movieNew->setOriginal_language($language->getByCode($movie["original_language"]));
-            $movieNew->setGenres($genreDao->getGenreById($movie["genres"]));
+            
+            $genresMovie = array();
+            foreach($movie['genres'] as $genreAPI){
+                $genre = new Genre();
+                $genre->setName($genreAPI['name']);
+                $genre->setId($genreAPI['id']);
+
+                array_push($genresMovie, $genre);
+            }
+
+            $movieNew->setGenres($genresMovie);
             $movieNew->setTitle($movie["original_title"]);
             $movieNew->setOverview($movie["overview"]);
             $movieNew->setRelease_date($movie["release_date"]);

@@ -34,11 +34,11 @@
           <table class="table table-bordered ">
             <thead class="thead-dark">
               <tr>
-                <th>#</th>
-                <th>Cinema Name</th>
-                <th>Address</th>
-                <th>Owner</th>
-                <th>Rooms</th>
+                <th style="text-align: center">#</th>
+                <th style="text-align: center">Cinema Name</th>
+                <th style="text-align: center">Address</th>
+                <th style="text-align: center">Owner</th>
+                <th style="text-align: center">Rooms</th>
                 <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator") { ?>
                 <th style="text-align: center">Delete</th>
                 <th style="text-align: center">Update</th>
