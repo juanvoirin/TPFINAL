@@ -13,7 +13,7 @@
         <h1 class="display-2">Movies in rooms now<br></h1>
         <h5 class="">Sort by</h5>
         <div class="btn-group">
-          <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" disabled>Date</button>
+          <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Date</button>
           <div class="dropdown-menu">
             <form action="<?php echo FRONT_ROOT ?>Movie/showListByDate" method="GET" class="dropdown-item">
               <div class="form-group"> <input type="date" class="form-control" placeholder="Date" name="date" id="date"></div>
@@ -22,7 +22,7 @@
           </div>
         </div>
         <div class="btn-group">
-          <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" disabled>Genre</button>
+          <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Genre</button>
           <div class="dropdown-menu"> 
             <?php
             foreach($genreList as $genre) { ?>
@@ -49,20 +49,21 @@
             <li class="list-group-item">Género: <?php //echo $movie->getGenresString(); ?></li>
             <li class="list-group-item">Original Language: <?php echo $movie->getOriginal_language(); ?> </li>
             <li class="list-group-item">Release Date: <?php echo $movie->getRelease_date(); ?> </li>
+            <li class="list-group-item">Runtime: <?php echo $movie->getRuntime();  ?> min. </li>
           </ul>
           <?php if(isset($_SESSION["type"])){  ?>
           <div class="card-body mx-auto">
             <?php if($_SESSION["type"] == "administrator") { ?>
               <a href="<?php echo  FRONT_ROOT."Screening/deleteMovie?idMovie=".$movie->getID(); ?>"> 
                 <button href="details-purchase.php" class="btn btn-primary" disabled>Eliminar</button> 
-              </a>
-            <?php } else { ?>
-            <a href="<?php echo  FRONT_ROOT."Screening/showScreeningDetails?idMovie=".$movie->getID(); ?>"> 
-              <button href="details-purchase.php" class="btn btn-primary" disabled>Buy tickets!</button> 
+              </a> <!-- Agregar boton para tambien ver mas funciones -->
+            <?php } else{ ?>
+            <a href="<?php echo  FRONT_ROOT."Screening/showListScreeningsIdMovie?idMovie=".$movie->getID(); ?>"> 
+              <button href="details-purchase.php" class="btn btn-primary">Screenings</button> 
             </a>
             <?php } ?>
           </div>
-            <?php } ?>
+            <?php } ?>   
         </div>
       </div>
       <?php } ?> <!-- Final de la tarjeta -->

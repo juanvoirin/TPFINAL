@@ -7,8 +7,11 @@
     use DAO\MovieDAO as MovieDAO;
     use Models\Screening as Screening;
     use DAO\GenreDAO as GenreDAO;
+use DateInterval;
+use DatePeriod;
+use DateTime;
 
-    class ScreeningController
+class ScreeningController
     {
 
         public function index()
@@ -34,6 +37,16 @@
 
             require_once(VIEWS_PATH."user-list-screenings.php");
         }
+
+        public function showListScreeningsIdMovie($idMovie){
+
+            $screeningDao = new ScreeningDAO();
+            $screeningList = $screeningDao->getByIdMovie($idMovie);
+
+            require_once(VIEWS_PATH."user-list.screenings.php");
+
+        }
+
 
         public function showFormScreening($idMovie){
 
@@ -103,16 +116,53 @@
 
             date_default_timezone_set("America/Argentina/Buenos_Aires");//ESTO MODIFICA EL TIMEZON QUE USA LA PAGINA
 
-            $time = date("H:i:00",time());//ESTO OBTIENE LA HORA ACTUAL
+            $star = '14:00';
+            $finish = '23:00';
+
+            $hourInicio = new DateTime($star);
+            $hourFinal = new DateTime($finish);
+            $hourFinal = $hourFinal->modify('+15 minutes');
+
+            $rangoHours = new DatePeriod($hourInicio, new DateInterval('PT15M'), $hourFinal);
 
             $timeList = array();
 
-            array_push($timeList, $time);//ACA SE DEBERIAN AGREGAR LAS HORAS POSIBLES PARA AGREGAR LA FUNCION
+           /* $screeningDAO = new ScreeningDAO();
+            
+            $screeningBefore = new Screening();
+            $screeningBefore = $screeningDAO->getFinishHourScreening($idRoom, $date); // TRAE LA FUNCION CON LA HORA DE INICIO MAXIMA DE ESE DIA Y SALA
 
-            //POR EL MOMENTO DEJEMOS EL TIEMPO ASI, CUANDO TERMINES BASE DE DATOS ARREGLAMOS ESTO
-            //ENTRE LOS DOS QUE NO ES NADA FACIL
+            
 
-            //Llamar funcion API p/ saber runtime. ESTO NOS VA A SERVIR PARA LAS RESTRICCIONES DE HORA ACA.
+            if($screeningBefore != NULL){
+                $runtime = $screeningBefore->getRuntime() + 15;
+                $hours = floor($runtime / 60);
+                $minutes = floor($runtime - ($hours * 60));
+            
+                $hourReferences = new DateTime($screeningBefore->getTime());
+                $hourReferences->modify('+$hours');
+                $hourReferences->modify(('+$minutes'));
+                
+                if($hourReferences > $hourInicio){
+                    $rangoHours = new DatePeriod($hourReferences, new DateInterval('PT15M'), $hourFinal);
+                    foreach($rangoHours as $hour){
+               
+                        array_push($timeList, $hour->format("H:i"));
+                    }
+                }
+
+            }else{
+                foreach($rangoHours as $hour){
+               
+                    array_push($timeList, $hour->format("H:i"));
+                }
+            } CUANDO SE ACTUALICE LA BASE DE DATOS SACAR ESTE COMENTARIO Y EJECUTAR   */ 
+
+            foreach($rangoHours as $hour){
+               
+                array_push($timeList, $hour->format("H:i"));
+            } // MIENTRAS TANTO SE EJECUTA ESTO QUE DEVUELVE UN ARREGLO DE HORARIOS CON INTERVALOS DE 15 MINUTOS DESDE LAS 14 A LAS 23. YA PROBADO
+
 
             require_once(VIEWS_PATH."adm-form-screenings-time.php");
         }

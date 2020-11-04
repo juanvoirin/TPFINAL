@@ -67,6 +67,65 @@
             return $this->moviesList;
         }
 
+        
+        public function getMovieWithScreeningByDate($date)
+        {
+            $query = "CALL Movies_GetMoviesWithScreeningsByDate(?)";
+
+            $parameters["date"] = $date;
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+            $this->moviesList = array();
+
+            foreach ($result as $row){
+                $movie = new Movie();
+                $movie->setId($row['id']);
+                $movie->setPoster_path($row['poster_path']);
+                $movie->setOriginal_language($row['original_language']);
+                $movie->setGenres(1); //ARREGLAR CON NUEVO DAO Y NUEVA TABLA DE GENRES.
+                $movie->setTitle($row['title']);
+                $movie->setOverview($row['overview']);
+                $movie->setRelease_date($row['release_date']);
+                $movie->setRuntime($row['runtime']);
+
+                array_push($this->moviesList, $movie);
+            }
+        
+            return $this->moviesList;
+        }
+
+        public function getMovieWithScreeningByGenre($id_genre)
+        {
+            $query = "CALL Movies_GetMoviesWithScreeningsByGenre(?)";
+
+            $parameters["id_genre"] = $id_genre;
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+            $this->moviesList = array();
+
+            foreach ($result as $row){
+                $movie = new Movie();
+                $movie->setId($row['id']);
+                $movie->setPoster_path($row['poster_path']);
+                $movie->setOriginal_language($row['original_language']);
+                $movie->setGenres(1); //ARREGLAR CON NUEVO DAO Y NUEVA TABLA DE GENRES.
+                $movie->setTitle($row['title']);
+                $movie->setOverview($row['overview']);
+                $movie->setRelease_date($row['release_date']);
+                $movie->setRuntime($row['runtime']);
+
+                array_push($this->moviesList, $movie);
+            }
+        
+            return $this->moviesList;
+        }
+
         public function getById($id)
         {   
             $query = "CALL Movies_GetById(?)";

@@ -59,9 +59,9 @@
 
             try{
                 $this->roomDao->add($room);
-            }catch{
+            }catch{}
                 
-            }
+            
             
             $this->showRooms($idCinema);
         }
