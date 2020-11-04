@@ -488,10 +488,10 @@ DELIMITER $$
 
 CREATE PROCEDURE Genre_Add (IN id INT, IN `name` VARCHAR(50))
 BEGIN
-INSERT INTO genres
-    (genres.id, genres.name)
-VALUES 
-    (`id`, `name`);
+    INSERT INTO genres
+        (genres.id, genres.name)
+    VALUES 
+        (`id`, `name`);
 END$$
 
 DELIMITER ;

@@ -16,7 +16,7 @@
         private $tableName = "screenings";
 
 
-        public function getCinemaByDateAndMovie($idMovie, $date, $idOwner){
+        public function getCinemaByDateAndMovie($idMovie, $date){
             
             $query = "CALL Screenings_GetCinemaByDateAndMovie (?,?)";
 
@@ -218,8 +218,11 @@
 
             $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 
-            if ($result != NULL){
-                foreach($result as $row){
+            $screening = NULL;
+
+            foreach($result as $row){
+
+                if($row['id'] !=NULL){
                     $screening = new Screening();
                     $roomDao = new RoomDAO();
                     $movieDao = new MovieDAO();
@@ -232,11 +235,9 @@
                     $screening->setRoom($roomDao->getById($row['id_room']));
                     $screening->setMovie($movieDao->getById($row['id_movie']));
                 }
-
-                return $screening;
-            }else{
-                return NULL;
             }
+
+            return $screening;
 
         }
 

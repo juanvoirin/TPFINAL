@@ -178,6 +178,7 @@ class ScreeningController
             if($movie == NULL){
                 $movie = $movieDao->getByIdAPI($idMovie);
                 $movieDao->add($movie);
+                $movie = $movieDao->getById($idMovie);
             }
             
             $cinemaDao = new CinemaDAO();

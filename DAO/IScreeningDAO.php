@@ -6,7 +6,7 @@
 
     interface IScreeningDAO
     {
-        function getCinemaByDateAndMovie($idMovie, $date, $idOwner);
+        function getCinemaByDateAndMovie($idMovie, $date);
         function getById($id);
         function getByRoom($idRoom);
         function getAll();

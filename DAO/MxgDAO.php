@@ -12,7 +12,7 @@
 
         public function add($idMovie, $idGenre){
 
-            $query = "CALL moviesXgenres_Add";
+            $query = "CALL moviesXgenres_Add(?,?)";
 
             $parameters["id_movie"] = $idMovie;
             $parameters["id_genre"] = $idGenre;
@@ -39,7 +39,7 @@
 
         public function getIdGenresByIdMovie($idMovie){
 
-            $query = "CALL Mxg_GetGenresByIdMovie";
+            $query = "CALL Mxg_GetGenresByIdMovie(?)";
 
             $parameters["idMovie"] = $idMovie;
 
