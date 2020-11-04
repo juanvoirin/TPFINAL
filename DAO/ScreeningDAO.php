@@ -16,7 +16,7 @@
         private $tableName = "screenings";
 
 
-        public function getCinemaByDateAndMovie($idMovie, $date){
+        public function getCinemaByDateAndMovie($idMovie, $date, $idOwner){
             
             $query = "CALL Screenings_GetCinemaByDateAndMovie (?,?)";
 
@@ -209,10 +209,10 @@
 
         public function getFinishHourScreening($idRoom, $date){
 
-            $query = "CALL Screenings_GetFinishHoueScreening (?,?)";
-
-            $parameters["date"] = $date;
+            $query = "CALL Screenings_GetFinishHourScreening (?,?)";
+            
             $parameters["id_room"] = $idRoom;
+            $parameters["date"] = $date;
             
             $this->connection = Connection::GetInstance();
 

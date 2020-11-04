@@ -23,7 +23,7 @@ include_once('nav-user.php');
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="idCinema" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">DATE</label>
+                        <label for="idCinema" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">CINEMA</label>
                         <div class="col-sm-9">
                             <select class="form-control" id="idCinema" placeholder="idCinema" name="idCinema">
                                 <?php foreach($cinemasList as $cinema){

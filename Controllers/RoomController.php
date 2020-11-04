@@ -57,11 +57,7 @@
             $room->setPrice($price);
             $room->setCinema($cinemaDao->getById($idCinema));
 
-            try{
-                $this->roomDao->add($room);
-            }catch{}
-                
-            
+            $this->roomDao->add($room);
             
             $this->showRooms($idCinema);
         }
@@ -98,9 +94,7 @@
             $room->setPrice($price);
             $room->setCinema($cinemaDao->getById($idCinema));
 
-            try{
-                $this->roomDao->update($room);
-            }catch{}
+            $this->roomDao->update($room);
 
             $this->showRooms($idCinema);
 

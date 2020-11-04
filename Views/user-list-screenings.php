@@ -24,12 +24,12 @@
           <table class="table table-bordered ">
             <thead class="thead-dark">
               <tr>
-                <th>#</th>
-                <th>Movie</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Cinema</th>
-                <th>Room</th>
+                <th style="text-align: center">#</th>
+                <th style="text-align: center">Movie</th>
+                <th style="text-align: center">Date</th>
+                <th style="text-align: center">Time</th>
+                <th style="text-align: center">Cinema</th>
+                <th style="text-align: center">Room</th>
                 <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator") { ?>
                 <th style="text-align: center">Delete</th>
                 <?php } ?>

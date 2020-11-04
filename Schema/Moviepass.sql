@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS `users`
     `pass` VARCHAR(50) NOT NULL,
     `type` VARCHAR(20) NOT NULL,
     `name` VARCHAR(50) NOT NULL,
-    CONSTRAINT `PK_Users` PRIMARY KEY (`id`)
-    CONSTRAINT unq_email unique(`email`)
+    CONSTRAINT `PK_Users` PRIMARY KEY (`id`),
+    CONSTRAINT unq_email_user unique(`email`)
 )Engine=InnoDB;
     
 CREATE TABLE IF NOT EXISTS `cinemas`
@@ -19,15 +19,15 @@ CREATE TABLE IF NOT EXISTS `cinemas`
     `address` VARCHAR (50),
     `owner` INT NOT NULL,
     CONSTRAINT `pk_cinema` PRIMARY KEY (`id`),
-    CONSTRAINT unq_name unique (`name`),
-    CONSTRAINT unq_adrress unique (`address`),
+    CONSTRAINT unq_name_cinema unique (`name`),
+    CONSTRAINT unq_adrress_cinema unique (`address`),
     CONSTRAINT fk_user_cinema FOREIGN KEY (`owner`) REFERENCES users(`id`)
 )Engine=InnoDB;
     
 CREATE TABLE IF NOT EXISTS rooms
 (
 	`id` INT NOT NULL auto_increment,
-    `name` VARCHAR(50),
+    `name` VARCHAR(50) NOT NULL,
     `price` INT NOT NULL,
     `capacity` INT NOT NULL, 
     `id_cinema` INT NOT NULL,
@@ -37,14 +37,13 @@ CREATE TABLE IF NOT EXISTS rooms
         
 CREATE TABLE IF NOT EXISTS movies 
 (
-	`id` INT NOT NULL,
+	`id` INT NOT NULL auto_increment,
     `title` VARCHAR(100) NOT NULL,
     `poster_path` VARCHAR(500),
     original_language VARCHAR (50),
     `overview` VARCHAR (500) NOT NULL,
     `release_date` date,
-    `id_genre` INT NOT NULL,
-    `runtime` INT,
+    `runtime` INT NOT NULL,
     CONSTRAINT pk_movie PRIMARY KEY (`id`)
 )Engine=InnoDB;
         
@@ -76,7 +75,8 @@ CREATE TABLE IF NOT EXISTS credit_cias
 (
 	`id` INT NOT NULL auto_increment,
     `name` VARCHAR(50),
-    CONSTRAINT pk_credit_cia PRIMARY KEY (`id`)
+    CONSTRAINT pk_credit_cia PRIMARY KEY (`id`),
+    CONSTRAINT unq_name_credit_cias unique (`name`)
 )Engine=InnoDB;
         
 CREATE TABLE IF NOT EXISTS bill
@@ -98,7 +98,8 @@ CREATE TABLE IF NOT EXISTS genres
 (
     `id` INT NOT NULL,
     `name` VARCHAR(50),
-    CONSTRAINT pk_id_genre PRIMARY KEY (`id`)
+    CONSTRAINT pk_id_genre PRIMARY KEY (`id`),
+    CONSTRAINT unq_name_genre unique (`name`)
 )Engine=InnoDB;
 
 CREATE TABLE IF NOT EXISTS moviesXgenres
@@ -432,12 +433,12 @@ DROP PROCEDURE IF EXISTS `Movies_Add`;
 
 DELIMITER $$
 
-CREATE PROCEDURE Movies_Add (IN `id` INT, IN `title` VARCHAR(100), IN `poster_path` VARCHAR(500), IN `original_language` VARCHAR(50), IN `overview` VARCHAR(500), iN `release_date` date, IN `id_genre` INT, IN `runtime` INT)
+CREATE PROCEDURE Movies_Add (IN `id` INT, IN `title` VARCHAR(100), IN `poster_path` VARCHAR(500), IN `original_language` VARCHAR(50), IN `overview` VARCHAR(500), iN `release_date` date, IN `runtime` INT)
 BEGIN
     INSERT INTO movies
-        (movies.id, movies.title, movies.poster_path, movies.original_language, movies.overview, movies.release_date, movies.id_genre, movies.runtime)
+        (movies.id, movies.title, movies.poster_path, movies.original_language, movies.overview, movies.release_date, movies.runtime)
     VALUES
-        (`id`, `title`, `poster_path`, `original_language`,`overview`, release_date, id_genre, runtime);
+        (`id`, `title`, `poster_path`, `original_language`,`overview`, release_date, runtime);
 END$$
 
 DELIMITER ;
@@ -448,7 +449,7 @@ DELIMITER $$
 
 CREATE PROCEDURE Movies_GetById (IN id INT)
 BEGIN
-    SELECT movies.id as `id`, movies.title as `title`, movies.poster_path as `poster_path`, movies.original_language as `original_language`, movies.overview as `overview`, movies.release_date as `release_date`, movies.id_genre as `id_genre`, movies.runtime as `runtime`
+    SELECT movies.id as `id`, movies.title as `title`, movies.poster_path as `poster_path`, movies.original_language as `original_language`, movies.overview as `overview`, movies.release_date as `release_date`, movies.runtime as `runtime`
     FROM movies
     WHERE movies.id = `id`;
 END$$
@@ -461,7 +462,7 @@ DELIMITER $$
 
 CREATE PROCEDURE Movies_GetByDate (IN `date` INT)
 BEGIN
-    SELECT movies.id as `id`, movies.title as `title`, movies.poster_path as `poster_path`, movies.original_language as `original_language`, movies.overview as `overview`, movies.release_date as `release_date`, movies.id_genre as `id_genre`, movies.runtime as `runtime`
+    SELECT movies.id as `id`, movies.title as `title`, movies.poster_path as `poster_path`, movies.original_language as `original_language`, movies.overview as `overview`, movies.release_date as `release_date`, movies.runtime as `runtime`
     FROM movies
     WHERE movies.release_date = `date` ;
 END$$
@@ -543,7 +544,7 @@ DELIMITER $$
 
 CREATE PROCEDURE Movies_GetMoviesWithScreenings ()
 BEGIN
-    select movies.id as `id`, movies.title as `title`, movies.poster_path as `poster_path`, movies.original_language as `original_language`, movies.overview as `overview`, movies.release_date as `release_date`, movies.id_genre as `id_genre`, movies.runtime as `runtime`
+    select movies.id as `id`, movies.title as `title`, movies.poster_path as `poster_path`, movies.original_language as `original_language`, movies.overview as `overview`, movies.release_date as `release_date`, movies.runtime as `runtime`
     FROM screenings
     INNER JOIN movies
     ON screenings.id_movie = movies.id
@@ -558,12 +559,12 @@ DELIMITER $$
 
 CREATE PROCEDURE Movies_GetMoviesWithScreeningsByDate (IN `date` date)
 BEGIN
-    select movies.id as `id`, movies.title as `title`, movies.poster_path as `poster_path`, movies.original_language as `original_language`, movies.overview as `overview`, movies.release_date as `release_date`, movies.id_genre as `id_genre`, movies.runtime as `runtime`
+    select movies.id as `id`, movies.title as `title`, movies.poster_path as `poster_path`, movies.original_language as `original_language`, movies.overview as `overview`, movies.release_date as `release_date`, movies.runtime as `runtime`
     FROM screenings
     INNER JOIN movies
     ON screenings.id_movie = movies.id
-    group by movies.id
-    WHERE screening.date = `date`;
+    WHERE screenings.date = `date`
+    group by movies.id;
 END$$
 
 DELIMITER ;
@@ -578,8 +579,8 @@ BEGIN
     FROM screenings
     INNER JOIN movies
     ON screenings.id_movie = movies.id
-    group by movies.id
-    WHERE movie.id_genre = genre;
+    WHERE movie.id_genre = genre
+    group by movies.id;
 END$$
 
 DELIMITER ;
@@ -588,14 +589,11 @@ DROP PROCEDURE IF EXISTS `Screenings_GetFinishHourScreening`;
 
 DELIMITER $$
 
-CREATE PROCEDURE Screenings_GetFinishHourScreening (IN id_room INT, IN `date` date )
+CREATE PROCEDURE Screenings_GetFinishHourScreening (IN id_room INT, IN `date` date)
 BEGIN 
- SELECT screenings.id as `id`, screenings.date as `date`, MAX(screenings.time as `time`), screenings.runtime as `runtime`, screenings.sold as `sold`, screenings.id_room as `id_room`, screenings.id_movie as `id_movie`
+	select screenings.id as `id`, screenings.date as `date`, MAX(screenings.time) as `time`, screenings.runtime as `runtime`, screenings.sold as `sold`, screenings.id_room as `id_room`, screenings.id_movie as `id_movie`
     FROM screenings
-    JOIN rooms
-    ON (rooms.id = screenings.id_room)
     WHERE (screenings.id_room = id_room) AND (screenings.date = `date`);
 END$$
 
 DELIMITER ;
-

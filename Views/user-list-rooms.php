@@ -21,11 +21,11 @@
           <table class="table table-bordered ">
             <thead class="thead-dark">
               <tr>
-                <th>#</th>
-                <th>Room Name</th>
-                <th>Capacity</th>
-                <th>Ticket Price</th>
-                <?php if($_SESSION["type"] == "administrator") { ?>
+                <th style="text-align: center">#</th>
+                <th style="text-align: center">Room Name</th>
+                <th style="text-align: center">Capacity</th>
+                <th style="text-align: center">Ticket Price</th>
+                <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator") { ?>
                 <th style="text-align: center">Delete</th>
                 <th style="text-align: center">Update</th>
                 <?php } ?>
@@ -43,7 +43,7 @@
                 <td style="vertical-align: middle"><?php echo $room->getCapacity(); ?></td>
                 <td style="vertical-align: middle"><?php echo $room->getPrice(); ?></td>
                 <td style="text-align: center">
-                  <?php { ?>
+                  <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator" && $_SESSION["loggedUser"] == $cinema->getOwner()->getEmail()) { ?>
                     <a href="<?php echo FRONT_ROOT."Room/deleteRoom?id=".$room->getId()."&idcinema=".$room->getCinema()->getId();?>" class="btn btn-danger">Delete</a>
                   <?php } ?>
                 </td>
@@ -55,7 +55,7 @@
               </tr>
             </tbody>
           </table>
-          <?php if($_SESSION["type"] == "administrator") { ?>
+          <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator" && $_SESSION["loggedUser"] == $cinema->getOwner()->getEmail()) { ?>
             <a href="<?php echo FRONT_ROOT."Room/showAddRoom?idCinema=".$cinema->getId();?>" class="btn btn-primary btn-lg btn-block">Add</a>
             <?php } ?>
         </div>

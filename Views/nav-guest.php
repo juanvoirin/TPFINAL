@@ -10,6 +10,7 @@
       </a>
       <ul class="navbar-nav mx-auto">
         <li class="nav-item"> <a class="nav-link" href="<?php echo  FRONT_ROOT."Cinema/showListViewAll";?>">Cinemas</a> </li>
+        <li class="nav-item"> <a class="nav-link" href="<?php echo  FRONT_ROOT."Screening/showListView";?>">Screenings</a> </li>
       </ul>
       <ul class="navbar-nav">
         <li class="nav-item"> <a class="nav-link" href="<?php echo  FRONT_ROOT."Home/showLoginView "?>">Log in</a> </li>

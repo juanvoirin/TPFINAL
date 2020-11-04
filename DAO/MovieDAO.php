@@ -247,7 +247,7 @@
 
         public function add(Movie $movie){
             
-            $query = "CALL Movies_Add(?,?,?,?,?,?,?,?)";
+            $query = "CALL Movies_Add(?,?,?,?,?,?,?)";
  
             $parameters["id"] = $movie->getId();
             $parameters["title"] = $movie->getTitle();
@@ -255,7 +255,7 @@
             $parameters["original_language"] = $movie->getOriginal_language();
             $parameters["overview"] = $movie->getOverview();
             $parameters["release_date"] = $movie->getRelease_date();
-            $parameters["id_genre"] = 1; //ARREGLAR CON NUEVO DAO Y NUEVA TABLA DE GENRES.
+            //$parameters["id_genre"] = 1; //ARREGLAR CON NUEVO DAO Y NUEVA TABLA DE GENRES.
             $parameters["runtime"] = $movie->getRuntime();
 
             $genreDao = new GenreDAO();
