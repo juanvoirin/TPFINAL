@@ -36,7 +36,7 @@ class ScreeningController
             require_once(VIEWS_PATH."home.php");
         }
 
-        public function showListView(){
+        public function showListView($message = ""){
             
             try{
                 $screeningDao = new ScreeningDAO();
