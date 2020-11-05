@@ -102,34 +102,47 @@
             return $this->moviesList;
         }
 
-        public function getMovieWithScreeningByGenre($id_genre)
+        public function getMoviesByGenre($id_genre)
         {
-            $query = "CALL Movies_GetMoviesWithScreeningsByGenre(?)";
+            $mxgDAO = new MxgDAO();
 
-            $parameters["id_genre"] = $id_genre;
-
-            $this->connection = Connection::GetInstance();
-
-            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+            $result = $mxgDAO->getMoviesByIdgenre($id_genre);
 
             $this->moviesList = array();
 
-            $genreDao = new GenreDAO();
-
-            foreach ($result as $row){
-                $movie = new Movie();
-                $movie->setId($row['id']);
-                $movie->setPoster_path($row['poster_path']);
-                $movie->setOriginal_language($row['original_language']);
-                $movie->setGenres($genreDao->getByIdMovie($movie->getId()));
-                $movie->setTitle($row['title']);
-                $movie->setOverview($row['overview']);
-                $movie->setRelease_date($row['release_date']);
-                $movie->setRuntime($row['runtime']);
-
-                array_push($this->moviesList, $movie);
+            if($result != NULL){
+                foreach($result as $row){
+                    
+                    $movie = new Movie();
+                    $movie = $this->getById($row['id_movie']);
+    
+                    array_push($this->moviesList, $movie);
+                }
             }
+            
         
+            return $this->moviesList; 
+        }
+
+        public function GetMoviesWithScreeningsByIdGenre($id_genre){
+
+            $this->moviesList = array();
+
+            $result = $this->getMoviesByGenre($id_genre);
+
+            $screeningDao = new ScreeningDAO();
+
+            if($result != NULL){
+                foreach($result as $row){
+                    $screenings = $screeningDao->getByIdMovie($row['id']);
+                    if($screenings != NULL){
+
+                        array_push($this->moviesList, $row['id']);
+
+                    }
+                }
+            }
+
             return $this->moviesList;
         }
 

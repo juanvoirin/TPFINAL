@@ -33,7 +33,7 @@
 
             $this->movieDao = new MovieDAO();
             $movieList = array ();
-            $movieList = $this->movieDao->getMovieWithScreeningByGenre($idGenre);
+            $movieList = $this->movieDao->GetMoviesWithScreeningsByIdGenre($idGenre);
             
             require_once(VIEWS_PATH."home.php");
         }

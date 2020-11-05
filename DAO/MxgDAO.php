@@ -7,8 +7,9 @@
     use Models\Movie as movie;
     use Models\genre as genre;
     use DAO\IMxgDAO as IMxgDAO;
+use Models\Mxg;
 
-    class MxgDAO implements IMxgDAO {
+class MxgDAO implements IMxgDAO {
 
         public function add($idMovie, $idGenre){
 
@@ -23,17 +24,30 @@
 
         }
 
-         public function getMoviesByIdgenre($id){
+         public function getMoviesByIdgenre($id_genre){
 
-            $query = "CALL GetMoviesByIdGenre";
+            $query = "CALL Mxg_GetMoviesByIdGenre(?)";
 
-            $parameters ["id_genre"] = $id;
+            $parameters ["id_genre"] = $id_genre;
 
             $this->connection = Connection::GetInstance();
 
             $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 
-            //Funcion para que traiga Movies por id de genero, pero creo que la planteo mal.
+            $this->mxgList = array();
+
+            if($result != NULL){
+                foreach($result as $row){
+                    $mxg = new Mxg();
+                    $mxg->setId_movie($row['id_movie']);
+                    $mxg->setId_genre($row['id_genre']);
+
+                    array_push($this->mxgList, $mxg);
+                }
+
+            }
+
+            return $this->mxgList;
 
         }
 
