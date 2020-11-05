@@ -5,6 +5,11 @@
 <header>
   <title>Log in</title>
 </header>
+<?php if(str_word_count($message) > 0){ ?>
+  <div class="alert alert-warning" role="alert" style="margin-bottom: 0;">
+      <strong><?php echo $message; ?></strong>
+  </div>
+<?php } ?>
 <div class="p-5 text-center" style="width:100%; height: 78vh; background-image: url('<?php echo IMG_PATH."background.jpg"?>'); background-size:cover;">
   <div class="container">
     <div class="row">

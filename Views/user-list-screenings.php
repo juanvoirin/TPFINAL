@@ -7,6 +7,11 @@
   }
 ?>
 
+<?php if(str_word_count($message) > 0){ ?>
+  <div class="alert alert-warning" role="alert" style="margin-bottom: 0;">
+      <strong><?php echo $message; ?></strong>
+  </div>
+<?php } ?>
 <div class="mt-5">
   <div class="container">
     <div class="row">
