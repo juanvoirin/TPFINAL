@@ -55,7 +55,7 @@
             }
         }
 
-        public function showAddRoom($idCinema){
+        public function showAddRoom($idCinema, $message = ""){
             
             try{
                 $cinemaDao = new CinemaDAO();
@@ -75,17 +75,21 @@
             try{
                 $this->roomDao = new RoomDAO();
 
-                $cinemaDao = new CinemaDAO();
+                if($this->roomDao->existsName($idCinema, $name) == 0){
+                    $cinemaDao = new CinemaDAO();
 
-                $room = new Room();
-                $room->setName($name);
-                $room->setCapacity($capacity);
-                $room->setPrice($price);
-                $room->setCinema($cinemaDao->getById($idCinema));
+                    $room = new Room();
+                    $room->setName($name);
+                    $room->setCapacity($capacity);
+                    $room->setPrice($price);
+                    $room->setCinema($cinemaDao->getById($idCinema));
 
-                $this->roomDao->add($room);
-                
-                $this->showRooms($idCinema, "Sala agregada correctamente.");
+                    $this->roomDao->add($room);
+                    
+                    $this->showRooms($idCinema, "Sala agregada correctamente.");
+                }else{
+                    $this->showAddRoom($idCinema, "Ya existe una sala con ese nombre.");
+                }
 
             }catch(Exception $e){
                 $this->showRooms($idCinema, "Ocurrio un error al agregar la sala.");

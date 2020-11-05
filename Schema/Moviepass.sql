@@ -265,6 +265,19 @@ END$$
 
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `Rooms_ExistsRoomInCinema`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Rooms_ExistsRoomInCinema (IN `name` VARCHAR(50), IN idCinema INT)
+BEGIN
+    SELECT COUNT(rooms.id) as `cantidad`
+    FROM rooms
+    WHERE (rooms.id_cinema = idCinema AND rooms.name = `name`);
+END$$
+
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `Users_GetByEmail`;
 
 DELIMITER $$
