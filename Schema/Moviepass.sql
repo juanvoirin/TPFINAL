@@ -621,7 +621,8 @@ BEGIN
     FROM screenings
     JOIN rooms
     ON (rooms.id = screenings.id_room)
-    WHERE (screenings.id_room = id ) AND (screenings.date = `date`);
+    WHERE (screenings.id_room = id ) AND (screenings.date = `date`)
+    ORDER BY screenings.time;
 END$$
 
 DELIMITER ;
