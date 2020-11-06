@@ -7,6 +7,7 @@
     use DAO\UserDAO as UserDAO;
     use Models\Screening as Screening;
     use DAO\IScreeningDAO as IScreeningDAO;
+    use DateTime;
 
 
     class ScreeningDAO implements IScreeningDAO 
@@ -111,7 +112,6 @@
             }
             return $this->screeningsList;
             
-
         }
 
         public function getByRoomAndDate($idRoom, $date){
@@ -126,7 +126,7 @@
 
             $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 
-            $this->screeningsList = array();
+            $screeningsList = array();
 
             $roomDao = new RoomDAO();
 
@@ -142,9 +142,9 @@
                 $screening->setRoom($roomDao->getById($row['id_room']));
                 $screening->setMovie($movieDao->getById($row['id_movie']));
 
-                array_push($this->screeningsList, $screening);
+                array_push($screeningsList, $screening);
             }
-            return $this->screeningsList;
+            return $screeningsList;
             
         }
 

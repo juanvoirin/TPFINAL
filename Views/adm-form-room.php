@@ -11,7 +11,7 @@ include_once('nav-user.php');
 <div class="py-5 text-center" style="background-image: url('<?php echo IMG_PATH."background.jpg"?>'); background-size:cover;">
     <div class="container">
         <div class="row">
-        <div class="mx-auto col-md-6 col-10 bg-white p-5">
+        <div class="mx-auto col-md-6 col-10 bg-white pb-3 pr-5 pl-5 pt-4">
         <h1 class="mb-4">Data Room<br></h1>
         <form action="<?php echo FRONT_ROOT ?>Room/addRoom" method="post">
           <div class="form-group row">
@@ -40,8 +40,12 @@ include_once('nav-user.php');
               <input type="number" min="0" class="form-control" placeholder="TicketPrice" name="ticketprice" id="ticketprice">
             </div>
           </div>
-          
-          <button type="submit" class="btn btn-primary">Add Room<br></button>
+          <div class ="m-3">
+            <button type="submit" class="btn btn-primary">Add Room<br></button>
+          </div>
+          <div>
+            <a href="<?php echo FRONT_ROOT."Room/showRooms?idCinema=".$cinema->getId();?>" class="btn btn-outline-secondary"><strong>Back To Form Date</strong></a>
+          </div>
         </form>
       </div>
     </div>

@@ -2,6 +2,11 @@
 include_once('header.php');
 include_once('nav-user.php');
 ?>
+<?php if(isset($message) && str_word_count($message) > 0){ ?>
+  <div class="alert alert-danger text-center" role="alert" style="margin-bottom: 0;">
+      <strong><?php echo $message; ?></strong>
+  </div>
+<?php } ?>
 <div class="py-5 text-center" style="background-image: url('<?php echo IMG_PATH."background.jpg"?>'); background-size:cover;">
     <div class="container">
         <div class="row">
@@ -41,13 +46,13 @@ include_once('nav-user.php');
                     <div class="form-group row">
                         <label for="time" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">TIME</label>
                         <div class="col-sm-9">
-                            <input type= "time" class="form-control" id="time" placeholder="time" name="time" >
+                            <input type= "time" class="form-control" id="time" placeholder="time" name="time" min="12:00">
                         </div>
                     </div>
                     <div class="m-3">
                         <button type="submit" class="btn btn-primary btn-lg" name="btnNext">Add</button>
                     </div>
-                    <div >
+                    <div>
                         <a href="<?php echo FRONT_ROOT."Screening/showFormScreening?idMovie=".$movie->getId();?>" class="btn btn-outline-secondary"><strong>Back To Form Date</strong></a>
                     </div>
                 </form>
