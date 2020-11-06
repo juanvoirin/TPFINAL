@@ -114,6 +114,40 @@
 
         }
 
+        public function getByRoomAndDate($idRoom, $date){
+
+            $query = "CALL Screenings_GetByIdRoomAndDate(?, ?)";
+
+            $parameters["idRoom"] = $idRoom;
+
+            $parameters["date"] = $date;
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+            $this->screeningsList = array();
+
+            $roomDao = new RoomDAO();
+
+            $movieDao = new MovieDAO();
+
+            foreach($result as $row){
+                $screening = new Screening();
+                $screening->setId($row['id']);
+                $screening->setDate($row['date']);
+                $screening->setTime($row['time']);
+                $screening->setRuntime($row['runtime']);
+                $screening->setSold($row['sold']);
+                $screening->setRoom($roomDao->getById($row['id_room']));
+                $screening->setMovie($movieDao->getById($row['id_movie']));
+
+                array_push($this->screeningsList, $screening);
+            }
+            return $this->screeningsList;
+            
+        }
+
         public function getAll()
         {
             $this->screeningsList = array();
