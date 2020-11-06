@@ -108,21 +108,20 @@
 
             $result = $mxgDAO->getMoviesByIdgenre($id_genre);
 
-            $this->moviesList = array();
+            $resultList = array();
         
             if($result != NULL){
                 foreach($result as $row){
 
                     $movie = $this->getById($row->getId_movie());
-                    array_push($this->moviesList, $movie);
-                    
+                    array_push($resultList, $movie);
                 }
             }
             
-            return $this->moviesList; 
+            return $resultList; 
         }
 
-        public function GetMoviesWithScreeningsByIdGenre($id_genre){
+        public function getMoviesWithScreeningsByIdGenre($id_genre){
 
             $this->moviesList = array();
 
@@ -287,8 +286,10 @@
 
             $genreDao = new GenreDAO();
             foreach($movie->getGenres() as $genre){
-                $genreId = $genreDao->getGenreById($genre->getId());
-                if($genreId != NULL){
+                echo $genre->getId();
+                $genreById = $genreDao->getGenreByIdDB($genre->getId());
+                echo $genreById()->getId();
+                if($genreById != NULL){
                     $mxgDao = new MxgDAO();
                     $mxgDao->add($movie->getId(), $genre->getId());
                     
