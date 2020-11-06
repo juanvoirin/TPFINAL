@@ -6,7 +6,12 @@
   include_once('nav-user.php');
  }
 ?>
-<div class="pt-5 pb-1">
+<?php if(str_word_count($message) > 0){ ?>
+  <div class="alert alert-warning" role="alert" style="margin-bottom: 0;">
+      <strong><?php echo $message; ?></strong>
+  </div>
+<?php } ?>
+<div class="pb-1">
   <div class="container">
     <div class="row">
       <div class="col-md-12">
@@ -34,7 +39,7 @@
     </div>
   </div>
 </div>
-<div class="py-5">
+<div class="py-2">
   <div class="container">
     <div class="row">
       <?php foreach($movieList as $movie) { ?> <!-- Comienzo de tarjeta -->
