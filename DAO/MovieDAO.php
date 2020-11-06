@@ -109,18 +109,16 @@
             $result = $mxgDAO->getMoviesByIdgenre($id_genre);
 
             $this->moviesList = array();
-
+        
             if($result != NULL){
                 foreach($result as $row){
-                    
-                    $movie = new Movie();
-                    $movie = $this->getById($row['id_movie']);
-    
+
+                    $movie = $this->getById($row->getId_movie());
                     array_push($this->moviesList, $movie);
+                    
                 }
             }
             
-        
             return $this->moviesList; 
         }
 
@@ -134,10 +132,10 @@
 
             if($result != NULL){
                 foreach($result as $row){
-                    $screenings = $screeningDao->getByIdMovie($row['id']);
+                    $screenings = $screeningDao->getByIdMovie($row->getId());
                     if($screenings != NULL){
 
-                        array_push($this->moviesList, $row['id']);
+                        array_push($this->moviesList, $row);
 
                     }
                 }
@@ -206,7 +204,7 @@
             return $this->moviesList;
         } 
 
-        public function getByGenreBD($genre)
+        /*public function getByGenreBD($genre)
         {   
             $query = "CALL Movies_GetByGenre(?)";
 
@@ -235,7 +233,7 @@
             }
         
             return $this->moviesList;
-        } 
+        } */
 
         public function getByDate($release_date){
             $this->getMoviesAPI();
@@ -289,7 +287,15 @@
 
             $genreDao = new GenreDAO();
             foreach($movie->getGenres() as $genre){
-                $genreDao->add($genre, $movie->getId());
+                $genreId = $genreDao->getGenreById($genre->getId());
+                if($genreId != NULL){
+                    $mxgDao = new MxgDAO();
+                    $mxgDao->add($movie->getId(), $genre->getId());
+                    
+                }else{
+                    $genreDao->add($genre, $movie->getId());
+
+                }
             }
 
         }
