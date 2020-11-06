@@ -2,6 +2,12 @@
 include_once('header.php');
 include_once('nav-user.php');
 ?>
+
+<?php if(str_word_count($message) > 0){ ?>
+  <div class="alert alert-danger text-center" role="alert" style="margin-bottom: 0;">
+      <strong><?php echo $message; ?></strong>
+  </div>
+<?php } ?>
 <div class="py-5 text-center" style="background-image: url('<?php echo IMG_PATH."background.jpg"?>'); background-size:cover;">
     <div class="container">
         <div class="row">
@@ -35,10 +41,6 @@ include_once('nav-user.php');
             </div>
           </div>
           
-          <!--<div class="form-group"> <input type="number" class="form-control" readonly="readonly" placeholder="IdCinema" name="IdCinema" id="IdCinema" value="<?php echo $idCinema; ?>"> </div>
-          <div class="form-group"> <input type="text" class="form-control" placeholder="Name" name="name" id="name"> </div>
-          <div class="form-group"> <input type="number" class="form-control" placeholder="Capacity" name="capacity" id="capacity"> </div>
-          <div class="form-group"> <input type="text" class="form-control" placeholder="TicketPrice" name="ticketprice" id="ticketprice"> </div>-->
           <button type="submit" class="btn btn-primary">Add Room<br></button>
         </form>
       </div>

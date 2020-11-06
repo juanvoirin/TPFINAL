@@ -7,6 +7,11 @@
   }
 ?>
 
+<?php if(str_word_count($message) > 0){ ?>
+  <div class="alert alert-warning text-center" role="alert" style="margin-bottom: 0;">
+      <strong><?php echo $message; ?></strong>
+  </div>
+<?php } ?>
 <div class="mt-5">
   <div class="container">
     <div class="row">
@@ -24,12 +29,12 @@
           <table class="table table-bordered ">
             <thead class="thead-dark">
               <tr>
-                <th>#</th>
-                <th>Movie</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Cinema</th>
-                <th>Room</th>
+                <th style="text-align: center">#</th>
+                <th style="text-align: center">Movie</th>
+                <th style="text-align: center">Date</th>
+                <th style="text-align: center">Time</th>
+                <th style="text-align: center">Cinema</th>
+                <th style="text-align: center">Room</th>
                 <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator") { ?>
                 <th style="text-align: center">Delete</th>
                 <?php } ?>

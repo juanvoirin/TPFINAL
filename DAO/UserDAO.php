@@ -21,11 +21,12 @@
             $this->connection = Connection::GetInstance();
             $result = $this->connection->Execute($query,$parameters , QueryType::StoredProcedure);
 
-            $user = new User();
-
+            $user = NULL;
 
             foreach ($result as $row){
                 
+                $user = new User();
+
                 $user->setId($row['id']);
                 $user->setName($row['name']);
                 $user->setEmail($row['email']);

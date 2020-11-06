@@ -6,7 +6,12 @@
   include_once('nav-user.php');
  }
 ?>
-<div class="pt-5 pb-1">
+<?php if(str_word_count($message) > 0){ ?>
+  <div class="alert alert-warning" role="alert" style="margin-bottom: 0;">
+      <strong><?php echo $message; ?></strong>
+  </div>
+<?php } ?>
+<div class="pb-1">
   <div class="container">
     <div class="row">
       <div class="col-md-12">
@@ -34,11 +39,11 @@
     </div>
   </div>
 </div>
-<div class="py-5">
+<div class="py-2">
   <div class="container">
     <div class="row">
       <?php foreach($movieList as $movie) { ?> <!-- Comienzo de tarjeta -->
-      <div class="col-md-4 mb-5" style="">
+      <div class="col-md-4 mb-5">
         <div class="card">
           <img class="card-img-top" src="<?php echo $movie->getPoster_path(); ?>" alt="Card image cap">
           <div class="card-body mx-auto">
@@ -49,20 +54,21 @@
             <li class="list-group-item">Género: <?php echo $movie->getGenresString(); ?></li>
             <li class="list-group-item">Original Language: <?php echo $movie->getOriginal_language(); ?> </li>
             <li class="list-group-item">Release Date: <?php echo $movie->getRelease_date(); ?> </li>
+            <li class="list-group-item">Runtime: <?php echo $movie->getRuntime();  ?> min. </li>
           </ul>
           <?php if(isset($_SESSION["type"])){  ?>
           <div class="card-body mx-auto">
             <?php if($_SESSION["type"] == "administrator") { ?>
               <a href="<?php echo  FRONT_ROOT."Screening/deleteMovie?idMovie=".$movie->getID(); ?>"> 
-                <button href="details-purchase.php" class="btn btn-primary">Eliminar</button> 
-              </a>
-            <?php } else { ?>
-            <a href="<?php echo  FRONT_ROOT."Screening/showScreeningDetails?idMovie=".$movie->getID(); ?>"> 
-              <button href="details-purchase.php" class="btn btn-primary">Buy tickets!</button> 
+                <button href="details-purchase.php" class="btn btn-primary" disabled>Eliminar</button> 
+              </a> <!-- Agregar boton para tambien ver mas funciones -->
+            <?php } else{ ?>
+            <a href="<?php echo  FRONT_ROOT."Screening/showListScreeningsIdMovie?idMovie=".$movie->getID(); ?>"> 
+              <button href="details-purchase.php" class="btn btn-primary">Screenings</button> 
             </a>
             <?php } ?>
           </div>
-            <?php } ?>
+            <?php } ?>   
         </div>
       </div>
       <?php } ?> <!-- Final de la tarjeta -->

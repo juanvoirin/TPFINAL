@@ -42,6 +42,24 @@
             return $this->roomsList;
         }
 
+        public function existsName($idCinema, $name){
+
+            $query = "CALL Rooms_ExistsRoomInCinema(?, ?)";
+
+            $parameters["name"] = $name;
+            $parameters["idCinema"] = $idCinema;
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+            foreach($result as $result1){
+                $return = $result1["cantidad"];
+            }
+
+            return $return;
+        }
+
         public function add(Room $room){
 
             $query = "CALL Rooms_Add(?, ?, ?, ?)";

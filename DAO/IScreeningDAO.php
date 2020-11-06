@@ -13,3 +13,4 @@
         function add(Screening $screening);
         function deleteById($id);
     }
+?>

@@ -7,6 +7,7 @@
     use DAO\GenreDAO as GenreDAO;
     use DAO\UserDAO as UserDAO;
     use Controllers\HomeController as HomeController;
+    use \Exception as Exception;
 
     class UserController {
 
@@ -14,45 +15,74 @@
         private $genreDao;
         private $movieDao;
 
-        public function index(){
+        public function index($message = ""){
+                
+            try{
+                $genreDao = new GenreDAO();
+
+                $genreList = array();
+                $genreList = $genreDao->getAll();
+                
+                $movieDao = new MovieDAO();
+
+                $movieList = array();
+                $movieList = $movieDao->getMovieWithScreening();
+
+            }catch(Exception $e){
+                if(str_word_count($message) < 1){
+                    $message = "No fue posible establecer una conexion con la Base de Datos.";
+                }
+            }
+
             require_once(VIEWS_PATH."login.php");
         }
 
-        public function showHomeView(){
-            $this->genreDao = new GenreDAO();
-
-            $genreList = array();
-            $genreList = $this->genreDao->getAll();
+        public function showHomeView($message = ""){
             
-            $this->movieDao = new MovieDAO();
+            try{
+                $this->genreDao = new GenreDAO();
 
-            $movieList = array();
-            $movieList = $this->movieDao->getAllAPI();
+                $genreList = array();
+                $genreList = $this->genreDao->getAll();
+                
+                $this->movieDao = new MovieDAO();
+
+                $movieList = array();
+                $movieList = $this->movieDao->getMovieWithScreening();
+
+            }catch(Exception $e){
+                $message = "No fue posible establecer una conexion con la Base de Datos.";
+            }
 
             require_once(VIEWS_PATH."home.php");
         }
 
         public function login($email, $pass){
             
-            $this->userDao = new UserDAO();
-            $user = $this->userDao->getByEmail($email);
+            try{
 
-            if($user == null){
-                echo "<script> if(confirm('Verifique que el email sea correcto.'));";
-                echo "window.location = '../index.php';</script>";
-            }else{
-                if($user->getPass() == $pass){
-                    $_SESSION["loggedUser"] = $user->getEmail();
-                    $_SESSION["userName"] = $user->getName();
-                    $_SESSION["type"] = $user->getType();
-                    $this->showHomeView();
+                $this->userDao = new UserDAO();
+                $user = $this->userDao->getByEmail($email);
+
+                if($user == null){
+                    $message = "Verifique que el email sea correcto.";
+                    $this->index($message);
                 }else{
-                    echo "<script> if(confirm('Verifique que la contraseña sea correcta.'));";
-                    echo "window.location = '../index.php';</script>";
+                    if($user->getPass() == $pass){
+                        $_SESSION["loggedUser"] = $user->getEmail();
+                        $_SESSION["userName"] = $user->getName();
+                        $_SESSION["type"] = $user->getType();
+                        $this->showHomeView();
+                    }else{
+                        $message = "Verifique que la contraseña sea correcta.";
+                        $this->index($message);
+                    }
                 }
+                $this->showHomeView();
+
+            }catch(Exception $e){
+                $this->index("No fue posible establecer una conexion con la Base de Datos.");
             }
-            $home = new HomeController();
-            $home->showHomeView();
         }
 
         public function logout(){
@@ -69,10 +99,17 @@
             $user->setPass($pass);
             $user->setType("user");
 
-            $this->userDao = new UserDAO();
-            $this->userDao->add($user);
+            try{
+                
+                $this->userDao = new UserDAO();
+                $this->userDao->add($user);
+
+            }catch(Exception $e){
+                $message = "Ocurrio un error al registrar el usuario.";
+            }
 
             require_once(VIEWS_PATH."login.php");
         }
 
     }
+?>
