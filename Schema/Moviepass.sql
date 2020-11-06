@@ -482,7 +482,7 @@ END$$
 
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `Movies_GetByGenre`;
+/*DROP PROCEDURE IF EXISTS `Movies_GetByGenre`;
 
 DELIMITER $$
 
@@ -493,7 +493,7 @@ BEGIN
     WHERE movies.id_genre = genre ;
 END$$
 
-DELIMITER ;
+DELIMITER ;*/
 
 DROP PROCEDURE IF EXISTS `Genre_Add`;
 
@@ -582,7 +582,7 @@ END$$
 
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `Movies_GetMoviesWithScreeningsByGenre`;
+/*DROP PROCEDURE IF EXISTS `Movies_GetMoviesWithScreeningsByGenre`;
 
 DELIMITER $$
 
@@ -596,7 +596,7 @@ BEGIN
     group by movies.id;
 END$$
 
-DELIMITER ;
+DELIMITER ;*/
 
 DROP PROCEDURE IF EXISTS `Screenings_GetFinishHourScreening`;
 
@@ -607,6 +607,19 @@ BEGIN
 	select screenings.id as `id`, screenings.date as `date`, MAX(screenings.time) as `time`, screenings.runtime as `runtime`, screenings.sold as `sold`, screenings.id_room as `id_room`, screenings.id_movie as `id_movie`
     FROM screenings
     WHERE (screenings.id_room = id_room) AND (screenings.date = `date`);
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Mxg_GetMoviesByIdGenre`;
+
+DELIMITER $$
+
+CREATE PROCEDURE Mxg_GetMoviesByIdGenre(IN id INT)
+BEGIN
+    select moviesXgenres.id_movie as id_movie, moviesXgenres.id_genre as id_genre
+    FROM moviesXgenres
+    WHERE (moviesXgenres.id_genre = id);
 END$$
 
 DELIMITER ;

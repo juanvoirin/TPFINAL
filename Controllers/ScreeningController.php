@@ -65,7 +65,7 @@ class ScreeningController
         }
 
 
-        public function showFormScreening($idMovie){
+        public function showFormScreening($idMovie, $message = ""){
 
             try{
                 $movieDao = new MovieDAO();
@@ -120,16 +120,19 @@ class ScreeningController
                     
                 if($fecha_entrada > $fecha_actual)
                 {
-                    $idCinema = $screeningDao->getCinemaByDateAndMovie($idMovie, $date);
+                    $screeningInDate = $screeningDao->getCinemaByDateAndMovie($idMovie, $date);
                 
-                    if($idCinema==NULL){
+                    if($screeningInDate==NULL){
                         $cinemasList = $cinemaDao->getByOwnerId($userDao->getByEmail($_SESSION["loggedUser"])->getId());
                         require_once(VIEWS_PATH."adm-form-screenings-cinemas.php");
                     }else{
-                        $this->showFormScreeningSelectRoom($idMovie, $date, $idCinema->getRoom()->getCinema()->getId());
+                        if($screeningInDate->getRoom()->getCinema()->getOwner()->getEmail() == $_SESSION["loggedUser"]){
+                            $this->showFormScreeningTime($idMovie, $date, $screeningInDate->getRoom()->getCinema()->getId(), $screeningInDate->getRoom()->getId());
+                        }else{
+                            $this->showFormScreening($idMovie, "Ya hay un cine reproduciendo esa pelicula en este mismo dia.");
+                        }
                     }
-                }else
-                {
+                }else{
                     $this->showFormScreening($idMovie);
                 }
 

@@ -7,7 +7,7 @@
   }
 ?>
 
-<?php if(str_word_count($message) > 0){ ?>
+<?php if(isset($message) && str_word_count($message) > 0){ ?>
   <div class="alert alert-warning text-center" role="alert" style="margin-bottom: 0;">
       <strong><?php echo $message; ?></strong>
   </div>

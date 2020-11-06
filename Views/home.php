@@ -6,7 +6,7 @@
   include_once('nav-user.php');
  }
 ?>
-<?php if(str_word_count($message) > 0){ ?>
+<?php if(isset($message) && str_word_count($message) > 0){ ?>
   <div class="alert alert-warning" role="alert" style="margin-bottom: 0;">
       <strong><?php echo $message; ?></strong>
   </div>
@@ -59,13 +59,13 @@
           <?php if(isset($_SESSION["type"])){  ?>
           <div class="card-body mx-auto">
             <?php if($_SESSION["type"] == "administrator") { ?>
-              <a href="<?php echo  FRONT_ROOT."Screening/deleteMovie?idMovie=".$movie->getID(); ?>"> 
-                <button href="details-purchase.php" class="btn btn-primary" disabled>Eliminar</button> 
+              <a href="<?php echo  FRONT_ROOT."Screening/showListScreeningsIdMovie?idMovie=".$movie->getID(); ?>"> 
+                <button href="details-purchase.php" class="btn btn-primary">Screenings</button> 
               </a> <!-- Agregar boton para tambien ver mas funciones -->
             <?php } else{ ?>
-            <a href="<?php echo  FRONT_ROOT."Screening/showListScreeningsIdMovie?idMovie=".$movie->getID(); ?>"> 
-              <button href="details-purchase.php" class="btn btn-primary">Screenings</button> 
-            </a>
+              <a href="<?php echo  FRONT_ROOT."Screening/showListScreeningsIdMovie?idMovie=".$movie->getID(); ?>"> 
+                <button href="details-purchase.php" class="btn btn-primary">Screenings</button> 
+              </a>
             <?php } ?>
           </div>
             <?php } ?>   

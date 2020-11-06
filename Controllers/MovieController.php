@@ -43,7 +43,7 @@
 
                 $this->movieDao = new MovieDAO();
                 $movieList = array ();
-                $movieList = $this->movieDao->getMovieWithScreeningByGenre($idGenre);
+                $movieList = $this->movieDao->getMoviesWithScreeningsByIdGenre($idGenre);
             
             }catch(Exception $e){
                 $message = "No fue posible establecer una conexion con la Base de Datos.";
