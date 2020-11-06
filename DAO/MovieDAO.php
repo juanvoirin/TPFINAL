@@ -329,7 +329,7 @@
             return $this->moviesList;
         }
 
-        private function getRuntimeAPI($id){
+        public function getRuntimeAPI($id){
 
             $linkDetails = "https://api.themoviedb.org/3/movie/";
 

@@ -41,15 +41,11 @@ include_once('nav-user.php');
                     <div class="form-group row">
                         <label for="time" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">TIME</label>
                         <div class="col-sm-9">
-                            <select class="form-control" id="time" placeholder="time" name="time">
-                                <?php foreach($timeList as $time){ ?>
-                                    <option value="<?php echo $time;?>"><?php echo $time; ?></option>
-                                <?php } ?>
-                            </select>
+                            <input type= "time" class="form-control" id="time" placeholder="time" name="time" >
                         </div>
                     </div>
                     <div class="m-3">
-                        <button type="submit" class="btn btn-primary btn-lg" name="btnNext">Next</button>
+                        <button type="submit" class="btn btn-primary btn-lg" name="btnNext">Add</button>
                     </div>
                     <div >
                         <a href="<?php echo FRONT_ROOT."Screening/showFormScreening?idMovie=".$movie->getId();?>" class="btn btn-outline-secondary"><strong>Back To Form Date</strong></a>

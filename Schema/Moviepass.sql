@@ -265,19 +265,6 @@ END$$
 
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `Rooms_ExistsRoomInCinema`;
-
-DELIMITER $$
-
-CREATE PROCEDURE Rooms_ExistsRoomInCinema (IN `name` VARCHAR(50), IN idCinema INT)
-BEGIN
-    SELECT COUNT(rooms.id) as `cantidad`
-    FROM rooms
-    WHERE (rooms.id_cinema = idCinema AND rooms.name = `name`);
-END$$
-
-DELIMITER ;
-
 DROP PROCEDURE IF EXISTS `Users_GetByEmail`;
 
 DELIMITER $$
@@ -623,3 +610,19 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Screenings_GetByIdRoomAndDate` ;
+
+DELIMITER $$ 
+
+CREATE PROCEDURE Screenings_GetByIdRoomAndDate (IN id INT, IN `date` date)
+BEGIN   
+    SELECT screenings.id as `id`, screenings.date as `date`, screenings.time as `time`, screenings.runtime as `runtime`, screenings.sold as `sold`, screenings.id_room as `id_room`, screenings.id_movie as `id_movie`
+    FROM screenings
+    JOIN rooms
+    ON (rooms.id = screenings.id_room)
+    WHERE (screenings.id_room = id ) AND (screenings.date = `date`);
+END$$
+
+DELIMITER ;
+
