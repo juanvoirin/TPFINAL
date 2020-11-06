@@ -286,9 +286,7 @@
 
             $genreDao = new GenreDAO();
             foreach($movie->getGenres() as $genre){
-                echo $genre->getId();
                 $genreById = $genreDao->getGenreByIdDB($genre->getId());
-                echo $genreById()->getId();
                 if($genreById != NULL){
                     $mxgDao = new MxgDAO();
                     $mxgDao->add($movie->getId(), $genre->getId());

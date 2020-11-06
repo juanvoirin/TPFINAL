@@ -45,6 +45,7 @@
             <li class="list-group-item">Género: <?php echo $movie->getGenresString(); ?></li>
             <li class="list-group-item">Original Language: <?php echo $movie->getOriginal_language(); ?> </li>
             <li class="list-group-item">Release Date: <?php echo $movie->getRelease_date(); ?> </li>
+            <li class="list-group-item">Runtime: <?php echo $movie->getRuntime();  ?> min. </li>
           </ul>
           <?php if($_SESSION["type"]== "administrator"){  ?>
           <div class="card-body mx-auto">

@@ -163,7 +163,7 @@ class ScreeningController
             }
         }
 
-        public function showFormScreeningTime($idMovie, $date, $idCinema, $idRoom){
+        public function showFormScreeningTime($idMovie, $date, $idCinema, $idRoom, $message = ""){
             
             try{
                 $movieDao = new MovieDAO();
@@ -180,58 +180,6 @@ class ScreeningController
 
                 date_default_timezone_set("America/Argentina/Buenos_Aires");//ESTO MODIFICA EL TIMEZON QUE USA LA PAGINA
 
-                
-
-                /*$star = '14:00';
-                $finish = '23:00';
-
-                $hourInicio = new DateTime($star);
-                $hourFinal = new DateTime($finish);
-                $hourFinal = $hourFinal->modify('+15 minutes');
-
-                $rangoHours = new DatePeriod($hourInicio, new DateInterval('PT15M'), $hourFinal);
-
-                $timeList = array();
-
-                $screeningDAO = new ScreeningDAO();
-                
-                $screeningBefore = new Screening();
-                $screeningBefore = $screeningDAO->getFinishHourScreening($idRoom, $date); // TRAE LA FUNCION CON LA HORA DE INICIO MAXIMA DE ESE DIA Y SALA
-
-                
-
-                if($screeningBefore != NULL){
-                    $runtime = $screeningBefore->getRuntime() + 15;
-                    $hours = floor($runtime / 60);
-                    $minutes = floor($runtime - ($hours * 60));
-                
-                    $hourReferences = new DateTime($screeningBefore->getTime());
-                    $hourReferences->modify('+'.$hours." hour");
-                    $hourReferences->modify(('+'.$minutes." minutes"));
-                    
-                    if($hourReferences > $hourInicio){
-                        $rangoHours = new DatePeriod($hourReferences, new DateInterval('PT15M'), $hourFinal);
-                        foreach($rangoHours as $hour){
-                
-                            array_push($timeList, $hour->format("H:i"));
-                        }
-                    }
-
-                }else{
-                    foreach($rangoHours as $hour){
-                
-                        array_push($timeList, $hour->format("H:i"));
-                    }
-                }
-
-                /*foreach($rangoHours as $hour){
-                
-                    array_push($timeList, $hour->format("H:i"));
-                } // MIENTRAS TANTO SE EJECUTA ESTO QUE DEVUELVE UN ARREGLO DE HORARIOS CON INTERVALOS DE 15 MINUTOS DESDE LAS 14 A LAS 23. YA PROBADO
-                */
-
-
-
                 require_once(VIEWS_PATH."adm-form-screenings-time.php");
             
             }catch(Exception $e){
@@ -239,78 +187,118 @@ class ScreeningController
             }
         }
 
-        public function addScreening($idMovie, $date, $idCinema, $idRoom, $time){
-
+        private function checkTime($time, $idRoom, $date, $idMovie){
             $screeningDAO = new ScreeningDAO();
             $screenings = $screeningDAO->getByRoomAndDate($idRoom, $date);
+            $result = TRUE;
 
-            if($screenings != NULL){
-                foreach($screenings as list($row, $rowPlus)){
-                    $runtime = $row->getRuntime() + 15 ;
-                    $hours = floor($runtime / 60);
-                    $minutes = floor($runtime - ($hours * 60));
+            $timeActual = new datetime($time);
 
-                    $hourfinish = new datetime ($row->getTime());
-                    $hourfinish->modify('+'.$hours." hour");
-                    $hourfinish->modify('+'.$minutes."minutes");
+            //Busca la funcion anterior y posterior si las hay. Si hay una funcion en el mismo horario cambia el resultado.
+            if(count($screenings) > 0){
+                $passed = FALSE;
 
-                    if($hourfinish < $time){
-                        if($rowPlus != NULL){
-                            $movieDao = new MovieDAO();
-                            $movieDao = $movieDao->getRuntimeAPI($idMovie) + 15;
+                foreach($screenings as $row){
+                    $timeScreening = new datetime($row->getTime());
 
-                            $hours2 = floor($movieDao /60);
-                            $minutes2 = floor($movieDao - ($hours2 * 60));
-
-                            $timeReferences = $time ;
-                            $timeReferences = new DateTime($time);
-                            $timeReferences->modify('+'.$hours2." hour");
-                            $timeReferences->modify('+'.$minutes2."minutes");
-
-                            if($timeReferences < $rowPlus->getTime()){
-                                try{
-                                    $movieDao = new MovieDAO();
-                                    $movie = $movieDao->getById($idMovie);
-                                    if($movie == NULL){
-                                        $movie = $movieDao->getByIdAPI($idMovie);
-                                        $movieDao->add($movie);
-                                        $movie = $movieDao->getById($idMovie);
-                                    }
-                                    
-                                    $cinemaDao = new CinemaDAO();
-                                    $cinema = $cinemaDao->getById($idCinema);
-                    
-                                    $roomDao = new RoomDAO();
-                                    $room = $roomDao->getById($idRoom);
-                    
-                                    $screeningDao = new ScreeningDAO();
-                    
-                                    $screening = new Screening();
-                                    $screening->setDate($date);
-                                    $screening->setTime($time);
-                                    $screening->setRuntime($movie->getRuntime());
-                                    $screening->setRoom($room);
-                                    $screening->setMovie($movie);
-                    
-                                    $screeningDao->add($screening);
-                    
-                                    $this->showListView();
-                                
-                                }catch(Exception $e){
-                                    $this->showListView("No fue posible establecer una conexion con la Base de Datos.");
-                                }
-                            }else {
-                                $this->showFormScreening($idMovie,"No es posible agregar la función en el horario seleccionado");
-                            }
+                    if($timeScreening < $timeActual){
+                        $anterior = $row;
+                    }else{
+                        if($timeScreening > $timeActual && $passed == FALSE){
+                            $posterior = $row;
+                            $passed = TRUE;
+                        }else{
+                            $result = FALSE;
                         }
-                    }else {
-                        $this->showFormScreening($idMovie,"No es posible agregar la función en el horario seleccionado");
                     }
                 }
             }
 
+            //Si hay una funcion anterior corrobora el horario.
+            if(isset($anterior) && $result == TRUE){
+                
+                $runtime = $anterior->getRuntime() + 15 ;
+                $hours = floor($runtime / 60);
+                $minutes = floor($runtime - ($hours * 60));
 
-           
+                $hourFinishAnterior = new datetime ($anterior->getTime());
+                $hourFinishAnterior->modify('+'.$hours." hour");
+                $hourFinishAnterior->modify('+'.$minutes."minutes");
+
+                if($hourFinishAnterior < $timeActual){
+                    $result = TRUE;
+                }else{
+                    $result = FALSE;
+                }
+            }
+
+            //Si hay una funcion posterior corrobora el horario.
+            if(isset($posterior) && $result == TRUE){
+
+                $hourStartPosterior = new datetime ($posterior->getTime());
+
+                $movieDao = new MovieDAO();
+
+                $runtimeActual = $movieDao->getRuntimeAPI($idMovie) + 15 ;
+                $hoursActual = floor($runtimeActual / 60);
+                $minutesActual = floor($runtimeActual - ($hours * 60));
+
+                $hourFinishActual = new datetime ($time);
+                $hourFinishActual->modify('+'.$hoursActual." hour");
+                $hourFinishActual->modify('+'.$minutesActual."minutes");
+
+                if($hourStartPosterior > $hourFinishActual){
+                    $result = TRUE;
+                }else{
+                    $result = FALSE;
+                }
+            }
+
+            return $result;
+        }
+
+        public function addScreening($idMovie, $date, $idCinema, $idRoom, $time){
+
+            try{
+
+                if($this->checkTime($time, $idRoom, $date, $idMovie)){
+
+                    $movieDao = new MovieDAO();
+                    $movie = $movieDao->getById($idMovie);
+
+                    if($movie == NULL){
+                        $movie = $movieDao->getByIdAPI($idMovie);
+                        $movieDao->add($movie);
+                        $movie = $movieDao->getById($idMovie);
+                    }
+                                    
+                    $cinemaDao = new CinemaDAO();
+                    $cinema = $cinemaDao->getById($idCinema);                        
+
+                    $roomDao = new RoomDAO();
+                    $room = $roomDao->getById($idRoom);
+                        
+                    $screeningDao = new ScreeningDAO();
+                
+                    $screening = new Screening();
+                    $screening->setDate($date);
+                    $screening->setTime($time);
+                    $screening->setRuntime($movie->getRuntime());
+                    $screening->setRoom($room);
+                    $screening->setMovie($movie);
+                    
+                    $screeningDao->add($screening);
+                    
+                    $this->showListView();                            
+                                    
+                }else {
+                    $this->showFormScreeningTime($idMovie, $date, $idCinema, $idRoom, "No es posible agregar la función en el horario seleccionado");
+                }
+
+            }catch(Exception $e){
+                $this->showListView("No fue posible establecer una conexion con la Base de Datos.");
+            }
+
         }
 
         public function deleteScreening($id){
