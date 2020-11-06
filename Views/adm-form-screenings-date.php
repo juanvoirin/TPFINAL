@@ -2,6 +2,12 @@
 include_once('header.php');
 include_once('nav-user.php');
 ?>
+
+<?php if(isset($message) && str_word_count($message) > 0){ ?>
+  <div class="alert alert-danger text-center" role="alert" style="margin-bottom: 0;">
+      <strong><?php echo $message; ?></strong>
+  </div>
+<?php } ?>
 <div class="py-5 text-center" style="background-image: url('<?php echo IMG_PATH."background.jpg"?>'); background-size:cover;">
     <div class="container">
         <div class="row">

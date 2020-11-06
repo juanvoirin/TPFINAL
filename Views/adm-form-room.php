@@ -3,7 +3,7 @@ include_once('header.php');
 include_once('nav-user.php');
 ?>
 
-<?php if(str_word_count($message) > 0){ ?>
+<?php if(isset($message) && str_word_count($message) > 0){ ?>
   <div class="alert alert-danger text-center" role="alert" style="margin-bottom: 0;">
       <strong><?php echo $message; ?></strong>
   </div>

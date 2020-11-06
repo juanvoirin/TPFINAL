@@ -619,7 +619,7 @@ CREATE PROCEDURE Mxg_GetMoviesByIdGenre(IN id INT)
 BEGIN
     select moviesXgenres.id_movie as id_movie, moviesXgenres.id_genre as id_genre
     FROM moviesXgenres
-    WHERE (moviesXgenres.id_genre = id)
+    WHERE (moviesXgenres.id_genre = id);
 END$$
 
 DELIMITER ;

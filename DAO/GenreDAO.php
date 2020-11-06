@@ -104,6 +104,8 @@
 
             $this->connection = Connection::GetInstance();
 
+            $genre = NULL;
+
             $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 
             foreach($result as $row){
