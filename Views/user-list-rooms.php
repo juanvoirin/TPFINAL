@@ -62,8 +62,15 @@
             </tbody>
           </table>
           <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator" && $_SESSION["loggedUser"] == $cinema->getOwner()->getEmail()) { ?>
+            <div class="card-body mx-auto">
             <a href="<?php echo FRONT_ROOT."Room/showAddRoom?idCinema=".$cinema->getId();?>" class="btn btn-primary btn-lg btn-block">Add</a>
+            </div>
             <?php } ?>
+        </div>
+        <div>
+          <div class="card-body mx-auto">
+          <a href="<?php echo FRONT_ROOT."Cinema/showListViewAll" ?>" class="btn btn-outline-secondary"><strong>Back To Cinemas</strong></a>
+          </div>
         </div>
       </div>
     </div>

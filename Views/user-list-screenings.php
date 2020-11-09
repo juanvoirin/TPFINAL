@@ -37,7 +37,7 @@
                 <th>Room</th>
                 <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator") { ?>
                 <th style="text-align: center">Delete</th>
-                <?php } else { ?>
+                <?php } if(isset($_SESSION["type"]) && $_SESSION["type"] == "user") { ?>
                   <th style="text-align: center">Tickets</th>
                 <?php } ?>
               </tr>
@@ -59,19 +59,26 @@
                     <td style="text-align: center">
                         <?php if($_SESSION["loggedUser"] == $screening->getRoom()->getCinema()->getOwner()->getEmail()){ ?>
                             <a href="<?php echo FRONT_ROOT."Screening/deleteScreening?id=".$screening->getId();?>" class="btn btn-danger">Delete</a>
+                        <?php } else { ?>
+                            <td style="text-align: center">
+                            <a class="btn btn-primary">Buy!</a>
                         <?php } ?>
                     </td>
-                <?php }else { ?>
-                  <td style="text-align: center">
-                  <a class="btn btn-primary">Buy!</a>
-                <?php } ?>
+                <?php }?>
               </tr>
               <?php } ?>
             </tbody>
           </table>
           <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator") { ?>
+            <div class="card-body mx-auto">
             <a href="<?php echo FRONT_ROOT."Movie/showAddView";?>" class="btn btn-primary btn-lg btn-block">Add</a>
+            </div>
           <?php } ?>
+            <div>
+              <div class="card-body mx-auto">
+              <a href="<?php echo FRONT_ROOT."Movie/showListView" ?>" class="btn btn-outline-secondary"><strong>Back To Movies</strong></a>
+              </div>
+            </div>
         </div>
       </div>
     </div>
