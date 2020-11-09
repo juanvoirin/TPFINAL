@@ -1,9 +1,17 @@
 <?php 
-  require_once("validate-session.php");
   include_once('header.php');
-  include_once('nav-user.php');
+  if(!isset($_SESSION["type"])){
+    include_once('nav-guest.php');
+   }else{
+    include_once('nav-user.php');
+  }
 ?>
 
+<?php if(isset($message) && str_word_count($message) > 0){ ?>
+  <div class="alert alert-warning text-center" role="alert" style="margin-bottom: 0;">
+      <strong><?php echo $message; ?></strong>
+  </div>
+<?php } ?>
 <div class="mt-5">
   <div class="container">
     <div class="row">
@@ -15,19 +23,28 @@
 </div>
 <div class="py-5">
   <div class="container">
+    <div class="mb-2">
+      <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator") { ?>
+        <?php if($all == true){ ?>
+          <a href="<?php echo FRONT_ROOT."Cinema/showListViewByOwner";?>" class="btn btn-outline-success">See mine</a>
+          <a href="<?php echo FRONT_ROOT."Cinema/showListViewAll";?>" class="btn btn-success disabled">See all</a>
+        <?php }else { ?>
+          <a href="<?php echo FRONT_ROOT."Cinema/showListViewByOwner";?>" class="btn btn-success disabled">See mine</a>
+          <a href="<?php echo FRONT_ROOT."Cinema/showListViewAll";?>" class="btn btn-outline-success">See all</a>
+      <?php } } ?>
+    </div>
     <div class="row">
       <div class="col-md-12">
         <div class="table-responsive">
           <table class="table table-bordered ">
             <thead class="thead-dark">
               <tr>
-                <th>#</th>
-                <th>Cinema Name</th>
-                <th>Capacity</th>
-                <th>Address</th>
-                <th>Ticket Price</th>
-                <th>Owner</th>
-                <?php if($_SESSION["type"] == "administrator") { ?>
+                <th style="text-align: center">#</th>
+                <th style="text-align: center">Cinema Name</th>
+                <th style="text-align: center">Address</th>
+                <th style="text-align: center">Owner</th>
+                <th style="text-align: center">Rooms</th>
+                <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator") { ?>
                 <th style="text-align: center">Delete</th>
                 <th style="text-align: center">Update</th>
                 <?php } ?>
@@ -42,26 +59,30 @@
               <tr>
                 <th style="vertical-align: middle"><?php echo $count; ?></th>
                 <td style="vertical-align: middle"><?php echo $cinema->getName(); ?></td>
-                <td style="vertical-align: middle"><?php echo $cinema->getCapacity(); ?></td>
                 <td style="vertical-align: middle"><?php echo $cinema->getAddress(); ?></td>
-                <td style="vertical-align: middle"><?php echo $cinema->getPrice(); ?></td>
-                <td style="vertical-align: middle"><?php echo $cinema->getOwner(); ?></td>
+                <td style="vertical-align: middle"><?php echo $cinema->getOwner()->getName(); ?></td>
                 <td style="text-align: center">
-                  <?php if($_SESSION["type"] == "administrator" && $_SESSION["userName"] == $cinema->getOwner()) { ?>
+                  <a href="<?php echo FRONT_ROOT."Room/showRooms?id=".$cinema->getId();?>" class="btn btn-primary">Rooms</a>
+                </td>
+                <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator") { ?>
+                <td style="text-align: center">
+                  <?php if($_SESSION["loggedUser"] == $cinema->getOwner()->getEmail()){ ?>
                     <a href="<?php echo FRONT_ROOT."Cinema/deleteCinema?id=".$cinema->getId();?>" class="btn btn-danger">Delete</a>
                   <?php } ?>
                 </td>
                 <td style="text-align: center">
-                  <?php if($_SESSION["type"] == "administrator" && $_SESSION["userName"] == $cinema->getOwner()) { ?>  
+                  <?php if($_SESSION["loggedUser"] == $cinema->getOwner()->getEmail()){ ?>
                     <a href="<?php echo FRONT_ROOT."Cinema/updateToFormCinema?id=".$cinema->getId();?>" class="btn btn-warning">Update</a>
-                  <?php } } ?>
+                  <?php } ?>
                 </td>
+                <?php } ?>
               </tr>
+              <?php } ?>
             </tbody>
           </table>
-          <?php if($_SESSION["type"] == "administrator") { ?>
+          <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator") { ?>
             <a href="<?php echo FRONT_ROOT."Cinema/addCinemaForm";?>" class="btn btn-primary btn-lg btn-block">Add</a>
-            <?php } ?>
+          <?php } ?>
         </div>
       </div>
     </div>

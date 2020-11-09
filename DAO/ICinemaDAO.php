@@ -2,12 +2,17 @@
 
     namespace DAO;
     
+    use Models\Cinema as Cinema;
+
     interface ICinemaDAO 
     {
-        function getByName($name);
-        function getByOwner($owner);
-        function add($name, $capacity, $address, $price, $owner);
+        function getByOwnerId($owner);
+        function getById($id);
+        function add(Cinema $cinema);
         function getAll();
+        function deleteById($id);
+        function update(Cinema $cinema);
+        
     }
 
 ?>

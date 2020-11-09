@@ -1,222 +1,136 @@
 <?php
 
-namespace DAO;
+    namespace DAO;
 
-use Models\Cinema as Cinema;
-use DAO\ICinemaDAO as ICinemaDAO;
+    use Models\Cinema as Cinema;
+    use DAO\ICinemaDAO as ICinemaDAO;
+    use DAO\Connection as Connection;
+    use DAO\QueryType as QueryType;
+    use DAO\UserDAO as UserDAO;
 
 
-class CinemaDAO implements ICinemaDAO {
+    class CinemaDAO implements ICinemaDAO
+    {
 
-    private $cinemasList = array();
+        private $cinemasList = array();
+        private $connection;
+        private $tableName = "cinemas";
 
-    public function getByName($name) {
-        
-        $this->retrieveData();
 
-        $cinemas = array();
+        public function getByOwnerId($ownerId)
+        {
+            
+            $query = "CALL Cinemas_GetByOwnerId(?)";
 
-        foreach ($this->cinemasList as $row){
-            if($name == $row->getName()){
+            $parameters["ownerId"] = $ownerId;
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+            $this->cinemasList = array();
+
+            $userDao = new UserDAO();
+
+            foreach ($result as $row){
                 $cinema = new Cinema();
-                $cinema->setId($row->getId());
-                $cinema->setName($row->getName());
-                $cinema->setCapacity($row->getCapacity());
-                $cinema->setAddress($row->getAddress());
-                $cinema->setPrice($row->getPrice());
-                $cinema->setOwner($row->getOwner());
+                $cinema->setId($row['id']);
+                $cinema->setName($row['name']);
+                $cinema->setAddress($row['address']);
+                $cinema->setOwner($userDao->getById($row['owner']));
 
-                array_push($cinemas, $cinema);
+                array_push($this->cinemasList, $cinema);
             }
+            return $this->cinemasList;
         }
-        return $cinemas;
-    }
 
-    public function getByOwner($owner) {
-        
-        $this->retrieveData();
+        public function getById($id)
+        {
 
-        $cinemas = array();
+            $query = "CALL Cinemas_GetById(?)";
 
-        foreach ($this->cinemasList as $row){
-            if($owner == $row->getOwner()){
-                $cinema = new Cinema();
-                $cinema->setId($row->getId());
-                $cinema->setName($row->getName());
-                $cinema->setCapacity($row->getCapacity());
-                $cinema->setAddress($row->getAddress());
-                $cinema->setPrice($row->getPrice());
-                $cinema->setOwner($row->getOwner());
+            $parameters["id"] = $id;
 
-                array_push($cinemas, $cinema);
-            }
-        }
-        return $cinemas;
-    }
+            $this->connection = Connection::GetInstance();
 
-    public function getById($id){
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 
-        $this->retrieveData();
-
-        $cinema = new Cinema();
-
-        foreach ($this->cinemasList as $row){
-            if($id == $row->getId()){
-                $cinema->setId($row->getId());
-                $cinema->setName($row->getName());
-                $cinema->setCapacity($row->getCapacity());
-                $cinema->setAddress($row->getAddress());
-                $cinema->setPrice($row->getPrice());
-                $cinema->setOwner($row->getOwner());
-
-            }
-        }
-        return $cinema;
-    }
-
-    public function getAll(){
-
-        $this->retrieveData();
-
-        return $this->cinemasList;
-
-    }
-
-    public function add($name, $capacity, $address, $price, $owner){
-        $cinema = new Cinema();
-        $cinema->setName($name);
-        $cinema->setCapacity($capacity);
-        $cinema->setAddress($address);
-        $cinema->setPrice($price);
-        $cinema->setOwner($owner);
-        $cinema->setId($this->createIdCinema());
-        
-        $this->retrieveData();
-
-        array_push($this->cinemasList, $cinema);
-        
-        $this->saveData();
-    }
-
-    public function deleteById($id){
-        $this->retrieveData();
-
-        $cinemas = array();
-
-        foreach($this->cinemasList as $row){
-            if($id != $row->getId()){
-                $cinema = new Cinema ();
-                $cinema->setId($row->getId());
-                $cinema->setName($row->getName());
-                $cinema->setCapacity($row->getCapacity());
-                $cinema->setAddress($row->getAddress());
-                $cinema->setPrice($row->getPrice());
-                $cinema->setOwner($row->getOwner());
-
-                array_push($cinemas, $cinema);
-            }
-        }
-        $this->cinemasList = $cinemas;
-        $this->saveData();
-        
-    }
-
-    public function update($id, $name, $capacity, $address, $price, $owner){
-        $this->retrieveData();
-
-        $cinemas = array();
-
-         foreach($this->cinemasList as $row){
-             if($id == $row->getId()){
-                $cinema = new Cinema ();
-                $cinema->setId($id);
-                $cinema->setName($name);
-                $cinema->setCapacity($capacity);
-                $cinema->setAddress($address);
-                $cinema->setPrice($price);
-                $cinema->setOwner($owner);
-
-                array_push($cinemas, $cinema);
-             }else{
-                $cinema = new Cinema ();
-                $cinema->setId($row->getId());
-                $cinema->setName($row->getName());
-                $cinema->setCapacity($row->getCapacity());
-                $cinema->setAddress($row->getAddress());
-                $cinema->setPrice($row->getPrice());
-                $cinema->setOwner($row->getOwner());
-
-                array_push($cinemas, $cinema);
-             }
-         }
-         $this->cinemasList = $cinemas;
-         $this->saveData();
-    }
-
-    private function createIdCinema(){
-        $this->retrieveData();
-
-        $newId = 0;
-
-        foreach($this->cinemasList as $cinema){
-            $newId = $cinema->getId();
-        }
-        $newId ++;
-        return $newId;
-    }
-
-    private function retrieveData(){
-        $this->cinemasList = array();
-
-        $jsonPath = $this->getJsonFilePath();
-
-        $jsonContent = file_get_contents($jsonPath);
-        
-        $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
-
-        foreach ($arrayToDecode as $row) {
             $cinema = new Cinema();
-            $cinema->setId($row['id']);
-            $cinema->setName($row['name']);
-            $cinema->setCapacity($row['capacity']);
-            $cinema->setAddress($row['address']);
-            $cinema->setPrice($row['price']);
-            $cinema->setOwner($row['owner']);
 
-            array_push($this->cinemasList, $cinema);
-        }
-    }
+            $userDao = new UserDAO();
 
-    private function saveData(){
-        $arrayToEncode = array();
-
-        $jsonPath = $this->getJsonFilePath();
-
-        foreach ($this->cinemasList as $cinema) {
-            $valueArray['id'] = $cinema->getId();
-            $valueArray['name'] = $cinema->getName();
-            $valueArray['capacity'] = $cinema->getCapacity();
-            $valueArray['address'] = $cinema->getAddress();
-            $valueArray['price'] = $cinema->getPrice();
-            $valueArray['owner'] = $cinema->getOwner();
-
-            array_push($arrayToEncode, $valueArray);
-
-        }
-        $jsonContent = json_encode($arrayToEncode, JSON_PRETTY_PRINT);
-        file_put_contents($jsonPath, $jsonContent);
-    }
-
-    private function getJsonFilePath(){
-
-        $initialPath = "Data/cinemas.json";
-        if(file_exists($initialPath)){
-            $jsonFilePath = $initialPath;
-        }else{
-            $jsonFilePath = "../".$initialPath;
+            foreach ($result as $row){
+                $cinema->setId($row['id']);
+                $cinema->setName($row['name']);
+                $cinema->setAddress($row['address']);
+                $cinema->setOwner($userDao->getById($row['owner']));
+            }
+            return $cinema;
         }
 
-        return $jsonFilePath;
+        public function getAll()
+        {
+            $this->cinemasList = array();
+
+            $query = "CALL Cinemas_GetAll()";
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
+
+            $userDao = new UserDAO();
+        
+            foreach($result as $row){
+                $cinema = new Cinema();
+                $cinema->setId($row['id']);
+                $cinema->setName($row['name']);
+                $cinema->setAddress($row['address']);
+                $cinema->setOwner($userDao->getById($row['owner']));
+
+                array_push($this->cinemasList, $cinema);
+            }
+
+            return $this->cinemasList;
+        }
+
+        public function add(Cinema $cinema)
+        {
+            
+            $query = "CALL Cinemas_Add(?, ?, ?)";
+            
+            $parameters["name"] = $cinema->getName();
+            $parameters["address"] = $cinema->getAddress();
+            $parameters["owner"] = $cinema->getOwner()->getId();
+            
+            $this->connection = Connection::GetInstance();
+
+            $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+        }
+
+        public function deleteById($id)
+        {
+            $query = "CALL Cinemas_Delete(?)";
+
+            $parameters["id"] = $id;
+            
+            $this->connection = Connection::GetInstance();
+
+            $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+
+        }
+
+        public function update(Cinema $cinema){
+            
+            $query = "CALL Cinemas_Update(?, ?, ?)";
+
+            $parameters["id"] = $cinema->getId();
+            $parameters["name"] = $cinema->getName();
+            $parameters["address"] = $cinema->getAddress();
+
+            $this->connection = Connection::GetInstance();
+
+            $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+        }
+
     }
-}
 ?>
