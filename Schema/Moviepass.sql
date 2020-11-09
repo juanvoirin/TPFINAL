@@ -627,3 +627,43 @@ END$$
 
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `Tickets_Add` ;
+
+DELIMITER $$ 
+
+CREATE PROCEDURE Tickets_Add (IN idScreening INT, IN idUser INT)
+BEGIN
+    INSERT INTO tickets
+        (tickets.id_screening, tickets.id_user)
+    VALUES
+        (`idScreening`, `idUser`);
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Tickets_GetByUser` ;
+
+DELIMITER $$ 
+
+CREATE PROCEDURE Tickets_GetByUser (IN idUser INT)
+BEGIN   
+    SELECT tickets.id as `id`, tickets.id_user as `idUser`, tickets.id_screening as `idScreening`
+    FROM tickets
+    WHERE tickets.id_user = idUser
+    ORDER BY tickets.id_screening;
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Tickets_GetAvailability` ;
+
+DELIMITER $$ 
+
+CREATE PROCEDURE Tickets_GetAvailability (IN idScreening INT)
+BEGIN   
+    SELECT COUNT(tickets.id) as `quantity`
+    FROM tickets
+    WHERE tickets.id_screening = idScreening;
+END$$
+
+DELIMITER ;

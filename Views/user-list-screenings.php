@@ -67,7 +67,7 @@
                 <?php }?>
                 <?php if(isset($_SESSION["type"]) && $_SESSION["type"] != "administrator"){ ?>
                   <td style="text-align: center">
-                  <a class="btn btn-primary">Buy!</a>
+                  <a href="<?php echo FRONT_ROOT."Ticket/addTicketForm?idScreening=".$screening->getId(); ?>"class="btn btn-primary">Buy!</a>
                 <?php } ?>
               </tr>
               <?php } ?>
