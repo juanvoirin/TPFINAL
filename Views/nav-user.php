@@ -21,7 +21,7 @@
           <!--<li class="nav-item"> <a class="nav-link" href="<?php //echo  /*FRONT_ROOT."Purchase/showRevenueView";*/ FRONT_ROOT."Movie/showListView";?>">Revenue</a> </li>-->
         <?php } else { ?>
           <li class="nav-item"> <a class="nav-link" href="<?php echo  /*FRONT_ROOT."Purchase/showListView";*/ FRONT_ROOT."Screening/showListView";?>">Screenings</a> </li>
-          <li class="nav-item"> <a class="nav-link" href="<?php echo  FRONT_ROOT."Tickets/showListViewByUser"; ?>">Tickets</a> </li>
+          <li class="nav-item"> <a class="nav-link" href="<?php echo  FRONT_ROOT."Ticket/showListViewByUser"; ?>">Tickets</a> </li>
         <?php } ?>
       </ul>
       <ul class="navbar-nav">

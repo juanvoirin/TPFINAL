@@ -112,7 +112,7 @@
         public function updateToFormRoom($id, $idCinema){
 
             try{
-
+                
                 $this->roomDao = new RoomDAO();
                 $room = $this->roomDao->GetByid($id);
 
@@ -131,18 +131,22 @@
             try{
                 $this->roomDao = new RoomDAO();
 
-                $cinemaDao = new CinemaDAO;
+                if($this->roomDao->existsName($idCinema, $name) == 0){
+                    $cinemaDao = new CinemaDAO;
 
-                $room = new Room();
-                $room->setId($id);
-                $room->setName($name);
-                $room->setCapacity($capacity);
-                $room->setPrice($price);
-                $room->setCinema($cinemaDao->getById($idCinema));
+                    $room = new Room();
+                    $room->setId($id);
+                    $room->setName($name);
+                    $room->setCapacity($capacity);
+                    $room->setPrice($price);
+                    $room->setCinema($cinemaDao->getById($idCinema));
 
-                $this->roomDao->update($room);
+                    $this->roomDao->update($room);
 
-                $this->showRooms($idCinema, "Sala actualizada correctamente.");
+                    $this->showRooms($idCinema, "Sala actualizada correctamente.");
+                }else{
+                    $this->showRooms($idCinema, "Ya existe una sala con ese nombre.");
+                }
 
             }catch(Exception $e){
                 $this->showRooms($idCinema, "Ocurrio un error al actualizar la sala.");
