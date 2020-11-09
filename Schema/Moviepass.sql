@@ -542,12 +542,13 @@ DROP PROCEDURE IF EXISTS `Movies_GetMoviesWithScreenings`;
 
 DELIMITER $$
 
-CREATE PROCEDURE Movies_GetMoviesWithScreenings ()
+CREATE PROCEDURE Movies_GetMoviesWithScreenings (IN `dateNow` date)
 BEGIN
     select movies.id as `id`, movies.title as `title`, movies.poster_path as `poster_path`, movies.original_language as `original_language`, movies.overview as `overview`, movies.release_date as `release_date`, movies.runtime as `runtime`
     FROM screenings
     INNER JOIN movies
     ON screenings.id_movie = movies.id
+    WHERE screenings.date >= `dateNow`
     group by movies.id;
 END$$
 

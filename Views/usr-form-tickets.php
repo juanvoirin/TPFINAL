@@ -15,7 +15,7 @@ include_once('nav-user.php');
         <h1 class="mb-4">Data Ticket<br></h1>
         <form action="<?php echo FRONT_ROOT ?>Ticket/addTicket" method="post">
           <div class="form-group row">
-            <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">ID</label>
+            <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">Movie</label>
             <div class="col-sm-9">
               <select class="form-control" id="idScreening" readonly placeholder="idScreening" name="idScreening">
                 <option value="<?php echo $screening->getId();?>"><?php echo $screening->getMovie()->getTitle(); ?></option>

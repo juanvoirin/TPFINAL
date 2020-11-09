@@ -43,11 +43,13 @@
 
         public function getMovieWithScreening()
         {
-            $query = "CALL Movies_GetMoviesWithScreenings()";
+            $query = "CALL Movies_GetMoviesWithScreenings(?)";
+
+            $parameters["dateNow"] = date("Y-m-d");
 
             $this->connection = Connection::GetInstance();
 
-            $result = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 
             $this->moviesList = array();
 
