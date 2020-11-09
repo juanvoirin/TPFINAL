@@ -4,9 +4,8 @@
     class Ticket {
 
         private $id;
-        private $idUser;
-        private$idScreening;
-        //elimino date por que ya trae la fecha desde la funcion.
+        private $user;
+        private $screening;
 
         public function setId($id){
             $this->id = $id;
@@ -16,20 +15,20 @@
             return $this->id;
         }
 
-        public function setIdUser($idUser){
-            $this->idUser = $idUser;
+        public function setUser(User $user){
+            $this->user = $user;
         }
 
-        public function getIdUser(){
-            return $this->idUser;
+        public function getUser(){
+            return $this->user;
         }
 
-        public function setIdScreening($idScreening){
-            $this->idScreening = $idScreening;
+        public function setScreening(Screening $screening){
+            $this->screening = $screening;
         }
 
-        public function getIdScreening(){
-            return $this->idScreening;
+        public function getScreening(){
+            return $this->screening;
         }
 
     }
