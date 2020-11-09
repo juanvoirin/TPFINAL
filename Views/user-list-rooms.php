@@ -48,8 +48,8 @@
               <tr>
                 <th style="vertical-align: middle"><?php echo $count; ?></th>
                 <td style="vertical-align: middle"><?php echo $room->getName(); ?></td>
-                <td style="vertical-align: middle"><?php echo $room->getCapacity(); ?></td>
-                <td style="vertical-align: middle"><?php echo $room->getPrice(); ?></td>
+                <td style="vertical-align: middle"><?php echo $room->getCapacity(); ?> Seats </td>
+                <td style="vertical-align: middle"> $ <?php echo $room->getPrice(); ?></td>
                 <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator" && $_SESSION["loggedUser"] == $cinema->getOwner()->getEmail()) { ?>
                 <td style="text-align: center">
                   <a href="<?php echo FRONT_ROOT."Room/deleteRoom?id=".$room->getId()."&idcinema=".$room->getCinema()->getId();?>" class="btn btn-danger">Delete</a>
@@ -62,8 +62,15 @@
             </tbody>
           </table>
           <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator" && $_SESSION["loggedUser"] == $cinema->getOwner()->getEmail()) { ?>
+            <div class="card-body mx-auto">
             <a href="<?php echo FRONT_ROOT."Room/showAddRoom?idCinema=".$cinema->getId();?>" class="btn btn-primary btn-lg btn-block">Add</a>
+            </div>
             <?php } ?>
+        </div>
+        <div>
+          <div class="card-body mx-auto">
+          <a href="<?php echo FRONT_ROOT."Cinema/showListViewAll" ?>" class="btn btn-outline-secondary"><strong>Back To Cinemas</strong></a>
+          </div>
         </div>
       </div>
     </div>

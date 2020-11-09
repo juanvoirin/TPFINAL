@@ -7,11 +7,11 @@
     <div class="row">
       <div class="col-md-12">
         <h1 class="display-2">Movies available to add<br></h1>
-        <h5 class="">Sort by</h5>
+        <!-- <h5 class="">Sort by</h5>
         <div class="btn-group">
           <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Date</button>
           <div class="dropdown-menu">
-            <form action="<?php echo FRONT_ROOT ?>Movie/showListByDate" method="GET" class="dropdown-item">
+            <form action="<?php //echo FRONT_ROOT ?>Movie/showListByDate" method="GET" class="dropdown-item">
               <div class="form-group"> <input type="date" class="form-control" placeholder="Date" name="date" id="date"></div>
               <button type="submit" class="btn btn-secondary btn-block">Go<br></button>
             </form>
@@ -20,13 +20,13 @@
         <div class="btn-group">
           <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Genre</button>
           <div class="dropdown-menu"> 
-            <?php
-            foreach($genreList as $genre) { ?>
-            <a class="dropdown-item" href="<?php echo FRONT_ROOT."Movie/showListByGenre?idGenre=".$genre->getId();?>"><?php echo $genre->getName(); ?><br></a>
-            <?php } ?>
+            /*<?php /*
+            foreach($genreList as $genre) { */?>
+            <a class="dropdown-item" href="<?php //echo FRONT_ROOT."Movie/showListByGenre?idGenre=".$genre->getId();?>"><?php // echo $genre->getName(); ?><br></a>
+            <?php //} ?>
           </div>
         </div>
-      </div>
+      </div>--> 
     </div>
   </div>
 </div>
