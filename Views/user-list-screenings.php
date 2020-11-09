@@ -33,6 +33,7 @@
                 <th>Movie</th>
                 <th>Date</th>
                 <th>Time</th>
+                <th>Runtime</th>
                 <th>Cinema</th>
                 <th>Room</th>
                 <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator") { ?>
@@ -53,7 +54,8 @@
                 <th style="vertical-align: middle"><?php echo $count; ?></th>
                 <td style="vertical-align: middle"><?php echo $screening->getMovie()->getTitle(); ?></td>
                 <td style="vertical-align: middle"><?php echo $screening->getDate(); ?></td>
-                <td style="vertical-align: middle"><?php echo $screening->getTime(); ?></td>
+                <td style="vertical-align: middle"><?php echo $screening->getTime(); ?> Hs</td>
+                <td style="vertical-align: middle"><?php echo $screening->getRuntime(); ?> Min.</td>
                 <td style="vertical-align: middle"><?php echo $screening->getRoom()->getCinema()->getName(); ?></td>
                 <td style="vertical-align: middle"><?php echo $screening->getRoom()->getName(); ?></td>
                 <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator") { ?>
