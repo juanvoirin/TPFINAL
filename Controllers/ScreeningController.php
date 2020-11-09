@@ -257,6 +257,91 @@ class ScreeningController
             return $result;
         }
 
+        //HORA TEST
+        private function checkTime2($time, $idRoom, $date, $idMovie){
+            $screeningDAO = new ScreeningDAO();
+
+            $fechaAnterior = date("Y-m-d",strtotime($date."- 1 days"));
+            $fechaPosterior = date("Y-m-d",strtotime($date."+ 1 days"));
+
+            $screenings = array();
+            foreach($screeningDAO->getByRoomAndDate($idRoom, $fechaAnterior) as $row){
+                array_push($screenings, $row);
+            }
+            foreach($screeningDAO->getByRoomAndDate($idRoom, $date) as $row){
+                array_push($screenings, $row);
+            }
+            foreach($screeningDAO->getByRoomAndDate($idRoom, $fechaPosterior) as $row){
+                array_push($screenings, $row);
+            }
+
+            $result = TRUE;
+
+            $timeActual = new datetime($time);
+
+            //Busca la funcion anterior y posterior si las hay. Si hay una funcion en el mismo horario cambia el resultado.
+            if(count($screenings) > 0){
+                $passed = FALSE;
+
+                foreach($screenings as $row){
+                    $timeScreening = new datetime($row->getTime());
+
+                    if($timeScreening < $timeActual){
+                        $anterior = $row;
+                    }else{
+                        if($timeScreening > $timeActual && $passed == FALSE){
+                            $posterior = $row;
+                            $passed = TRUE;
+                        }else{
+                            $result = FALSE;
+                        }
+                    }
+                }
+            }
+
+            //Si hay una funcion anterior corrobora el horario.
+            if(isset($anterior) && $result == TRUE){
+                
+                $runtime = $anterior->getRuntime() + 15 ;
+                $hours = floor($runtime / 60);
+                $minutes = floor($runtime - ($hours * 60));
+
+                $hourFinishAnterior = new datetime ($anterior->getTime());
+                $hourFinishAnterior->modify('+'.$hours." hour");
+                $hourFinishAnterior->modify('+'.$minutes."minutes");
+
+                if(strtotime($hourFinishAnterior->format('Y-m-d H:i:s')) < strtotime($timeActual->format('Y-m-d H:i:s'))){
+                    $result = TRUE;
+                }else{
+                    $result = FALSE;
+                }
+            }
+
+            //Si hay una funcion posterior corrobora el horario.
+            if(isset($posterior) && $result == TRUE){
+
+                $hourStartPosterior = new datetime ($posterior->getTime());
+
+                $movieDao = new MovieDAO();
+
+                $runtimeActual = $movieDao->getRuntimeAPI($idMovie) + 15 ;
+                $hoursActual = floor($runtimeActual / 60);
+                $minutesActual = floor($runtimeActual - ($hoursActual * 60));
+
+                $hourFinishActual = new datetime ($time);
+                $hourFinishActual->modify('+'.$hoursActual." hour");
+                $hourFinishActual->modify('+'.$minutesActual."minutes");
+
+                if(strtotime($hourStartPosterior->format('Y-m-d H:i:s')) > strtotime($hourFinishActual->format('Y-m-d H:i:s'))){
+                    $result = TRUE;
+                }else{
+                    $result = FALSE;
+                }
+            }
+
+            return $result;
+        }
+
         public function addScreening($idMovie, $date, $idCinema, $idRoom, $time){
 
             try{
