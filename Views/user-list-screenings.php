@@ -33,11 +33,13 @@
                 <th>Movie</th>
                 <th>Date</th>
                 <th>Time</th>
+                <th>Runtime</th>
                 <th>Cinema</th>
                 <th>Room</th>
                 <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator") { ?>
                 <th style="text-align: center">Delete</th>
-                <?php } else { ?>
+                <?php } ?>
+                <?php if(isset($_SESSION["type"]) && $_SESSION["type"] != "administrator") { ?>
                   <th style="text-align: center">Tickets</th>
                 <?php } ?>
               </tr>
@@ -52,7 +54,8 @@
                 <th style="vertical-align: middle"><?php echo $count; ?></th>
                 <td style="vertical-align: middle"><?php echo $screening->getMovie()->getTitle(); ?></td>
                 <td style="vertical-align: middle"><?php echo $screening->getDate(); ?></td>
-                <td style="vertical-align: middle"><?php echo $screening->getTime(); ?></td>
+                <td style="vertical-align: middle"><?php echo $screening->getTime(); ?> Hs</td>
+                <td style="vertical-align: middle"><?php echo $screening->getRuntime(); ?> Min.</td>
                 <td style="vertical-align: middle"><?php echo $screening->getRoom()->getCinema()->getName(); ?></td>
                 <td style="vertical-align: middle"><?php echo $screening->getRoom()->getName(); ?></td>
                 <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator") { ?>
@@ -61,7 +64,8 @@
                             <a href="<?php echo FRONT_ROOT."Screening/deleteScreening?id=".$screening->getId();?>" class="btn btn-danger">Delete</a>
                         <?php } ?>
                     </td>
-                <?php }else { ?>
+                <?php }?>
+                <?php if(isset($_SESSION["type"]) && $_SESSION["type"] != "administrator"){ ?>
                   <td style="text-align: center">
                   <a class="btn btn-primary">Buy!</a>
                 <?php } ?>
@@ -70,8 +74,15 @@
             </tbody>
           </table>
           <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator") { ?>
+            <div class="card-body mx-auto">
             <a href="<?php echo FRONT_ROOT."Movie/showAddView";?>" class="btn btn-primary btn-lg btn-block">Add</a>
+            </div>
           <?php } ?>
+            <div>
+              <div class="card-body mx-auto">
+              <a href="<?php echo FRONT_ROOT."Movie/showListView" ?>" class="btn btn-outline-secondary"><strong>Back To Movies</strong></a>
+              </div>
+            </div>
         </div>
       </div>
     </div>

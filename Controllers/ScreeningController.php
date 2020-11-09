@@ -241,7 +241,7 @@ class ScreeningController
 
                 $runtimeActual = $movieDao->getRuntimeAPI($idMovie) + 15 ;
                 $hoursActual = floor($runtimeActual / 60);
-                $minutesActual = floor($runtimeActual - ($hours * 60));
+                $minutesActual = floor($runtimeActual - ($hoursActual * 60));
 
                 $hourFinishActual = new datetime ($time);
                 $hourFinishActual->modify('+'.$hoursActual." hour");
