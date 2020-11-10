@@ -68,36 +68,41 @@ class ScreeningController
         public function showFormScreening($idMovie, $message = ""){
 
             try{
-                $movieDao = new MovieDAO();
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                    $movieDao = new MovieDAO();
 
-                $movie = $movieDao->getByIdAPI($idMovie);
+                    $movie = $movieDao->getByIdAPI($idMovie);
 
-                $userDao = new UserDAO();
-                $idOwner = $userDao->getByEmail($_SESSION["loggedUser"])->getId();
+                    $userDao = new UserDAO();
+                    $idOwner = $userDao->getByEmail($_SESSION["loggedUser"])->getId();
 
-                $cinemaDao = new CinemaDAO();
-                $arrayCinemas = $cinemaDao->getByOwnerId($idOwner);
+                    $cinemaDao = new CinemaDAO();
+                    $arrayCinemas = $cinemaDao->getByOwnerId($idOwner);
 
-                $return = FALSE;
+                    $return = FALSE;
 
-                if(count($arrayCinemas)>0){
-                    $roomDao = new RoomDAO();
-                    foreach($arrayCinemas as $cinema){
-                        if(count($roomDao->getByCinemaId($cinema->getId())) > 0){
-                            $return = TRUE;
+                    if(count($arrayCinemas)>0){
+                        $roomDao = new RoomDAO();
+                        foreach($arrayCinemas as $cinema){
+                            if(count($roomDao->getByCinemaId($cinema->getId())) > 0){
+                                $return = TRUE;
+                            }
                         }
+                        if(!$return){
+                            $message = "No hay salas disponibles para crear una funcion.";
+                        }
+                    }else{
+                        $message = "No hay cines disponibles para crear una funcion.";
                     }
-                    if(!$return){
-                        $message = "No hay salas disponibles para crear una funcion.";
-                    }
-                }else{
-                    $message = "No hay cines disponibles para crear una funcion.";
-                }
 
-                if($return){
-                    require_once(VIEWS_PATH."adm-form-screenings-date.php");
+                    if($return){
+                        require_once(VIEWS_PATH."adm-form-screenings-date.php");
+                    }else{
+                        $this->index($message);
+                    }
+
                 }else{
-                    $this->index($message);
+                    $this->index();
                 }
 
             }catch(Exception $e){
@@ -108,32 +113,37 @@ class ScreeningController
         public function showFormScreeningSelectCinema($idMovie, $date){
 
             try{    
-                $screeningDao = new ScreeningDAO();
-                $cinemaDao = new CinemaDAO();
-                $movieDao = new MovieDAO();
-                $userDao = new UserDAO();
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
 
-                $movie = $movieDao->getByIdAPI($idMovie);
+                    $screeningDao = new ScreeningDAO();
+                    $cinemaDao = new CinemaDAO();
+                    $movieDao = new MovieDAO();
+                    $userDao = new UserDAO();
 
-                $fecha_actual = strtotime(date("d-m-Y"));
-                $fecha_entrada = strtotime($date);
+                    $movie = $movieDao->getByIdAPI($idMovie);
+
+                    $fecha_actual = strtotime(date("d-m-Y"));
+                    $fecha_entrada = strtotime($date);
+                        
+                    if($fecha_entrada > $fecha_actual)
+                    {
+                        $screeningInDate = $screeningDao->getCinemaByDateAndMovie($idMovie, $date);
                     
-                if($fecha_entrada > $fecha_actual)
-                {
-                    $screeningInDate = $screeningDao->getCinemaByDateAndMovie($idMovie, $date);
-                
-                    if($screeningInDate==NULL){
-                        $cinemasList = $cinemaDao->getByOwnerId($userDao->getByEmail($_SESSION["loggedUser"])->getId());
-                        require_once(VIEWS_PATH."adm-form-screenings-cinemas.php");
-                    }else{
-                        if($screeningInDate->getRoom()->getCinema()->getOwner()->getEmail() == $_SESSION["loggedUser"]){
-                            $this->showFormScreeningTime($idMovie, $date, $screeningInDate->getRoom()->getCinema()->getId(), $screeningInDate->getRoom()->getId());
+                        if($screeningInDate==NULL){
+                            $cinemasList = $cinemaDao->getByOwnerId($userDao->getByEmail($_SESSION["loggedUser"])->getId());
+                            require_once(VIEWS_PATH."adm-form-screenings-cinemas.php");
                         }else{
-                            $this->showFormScreening($idMovie, "Ya hay un cine reproduciendo esa pelicula en este mismo dia.");
+                            if($screeningInDate->getRoom()->getCinema()->getOwner()->getEmail() == $_SESSION["loggedUser"]){
+                                $this->showFormScreeningTime($idMovie, $date, $screeningInDate->getRoom()->getCinema()->getId(), $screeningInDate->getRoom()->getId());
+                            }else{
+                                $this->showFormScreening($idMovie, "Ya hay un cine reproduciendo esa pelicula en este mismo dia.");
+                            }
                         }
+                    }else{
+                        $this->showFormScreening($idMovie);
                     }
                 }else{
-                    $this->showFormScreening($idMovie);
+                    $this->index();
                 }
 
             }catch(Exception $e){
@@ -144,19 +154,23 @@ class ScreeningController
         public function showFormScreeningSelectRoom($idMovie, $date, $idCinema){
                 
             try{
-                $movieDao = new MovieDAO();
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                    $movieDao = new MovieDAO();
 
-                $movie = $movieDao->getByIdAPI($idMovie);
+                    $movie = $movieDao->getByIdAPI($idMovie);
 
-                $cinemaDao = new CinemaDAO();
+                    $cinemaDao = new CinemaDAO();
 
-                $cinema = $cinemaDao->getById($idCinema);
-                
-                $roomDao = new RoomDAO();
-                
-                $roomList = $roomDao->getByCinemaId($idCinema);
+                    $cinema = $cinemaDao->getById($idCinema);
+                    
+                    $roomDao = new RoomDAO();
+                    
+                    $roomList = $roomDao->getByCinemaId($idCinema);
 
-                require_once(VIEWS_PATH."adm-form-screenings-rooms.php");
+                    require_once(VIEWS_PATH."adm-form-screenings-rooms.php");
+                }else{
+                    $this->index();
+                }
 
             }catch(Exception $e){
                 $this->showListView("No fue posible establecer una conexion con la Base de Datos.");
@@ -166,21 +180,25 @@ class ScreeningController
         public function showFormScreeningTime($idMovie, $date, $idCinema, $idRoom, $message = ""){
             
             try{
-                $movieDao = new MovieDAO();
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                    $movieDao = new MovieDAO();
 
-                $movie = $movieDao->getByIdAPI($idMovie);
+                    $movie = $movieDao->getByIdAPI($idMovie);
 
-                $cinemaDao = new CinemaDAO();
+                    $cinemaDao = new CinemaDAO();
 
-                $cinema = $cinemaDao->getById($idCinema);
-                
-                $roomDao = new RoomDAO();
+                    $cinema = $cinemaDao->getById($idCinema);
+                    
+                    $roomDao = new RoomDAO();
 
-                $room = $roomDao->getById($idRoom);
+                    $room = $roomDao->getById($idRoom);
 
-                date_default_timezone_set("America/Argentina/Buenos_Aires");//ESTO MODIFICA EL TIMEZON QUE USA LA PAGINA
+                    date_default_timezone_set("America/Argentina/Buenos_Aires");//ESTO MODIFICA EL TIMEZON QUE USA LA PAGINA
 
-                require_once(VIEWS_PATH."adm-form-screenings-time.php");
+                    require_once(VIEWS_PATH."adm-form-screenings-time.php");
+                }else{
+                    $this->index();
+                }
             
             }catch(Exception $e){
                 $this->showListView("No fue posible establecer una conexion con la Base de Datos.");
@@ -257,6 +275,91 @@ class ScreeningController
             return $result;
         }
 
+        //HORA TEST
+        private function checkTime2($time, $idRoom, $date, $idMovie){
+            $screeningDAO = new ScreeningDAO();
+
+            $fechaAnterior = date("Y-m-d",strtotime($date."- 1 days"));
+            $fechaPosterior = date("Y-m-d",strtotime($date."+ 1 days"));
+
+            $screenings = array();
+            foreach($screeningDAO->getByRoomAndDate($idRoom, $fechaAnterior) as $row){
+                array_push($screenings, $row);
+            }
+            foreach($screeningDAO->getByRoomAndDate($idRoom, $date) as $row){
+                array_push($screenings, $row);
+            }
+            foreach($screeningDAO->getByRoomAndDate($idRoom, $fechaPosterior) as $row){
+                array_push($screenings, $row);
+            }
+
+            $result = TRUE;
+
+            $timeActual = new datetime($time);
+
+            //Busca la funcion anterior y posterior si las hay. Si hay una funcion en el mismo horario cambia el resultado.
+            if(count($screenings) > 0){
+                $passed = FALSE;
+
+                foreach($screenings as $row){
+                    $timeScreening = new datetime($row->getTime());
+
+                    if($timeScreening < $timeActual){
+                        $anterior = $row;
+                    }else{
+                        if($timeScreening > $timeActual && $passed == FALSE){
+                            $posterior = $row;
+                            $passed = TRUE;
+                        }else{
+                            $result = FALSE;
+                        }
+                    }
+                }
+            }
+
+            //Si hay una funcion anterior corrobora el horario.
+            if(isset($anterior) && $result == TRUE){
+                
+                $runtime = $anterior->getRuntime() + 15 ;
+                $hours = floor($runtime / 60);
+                $minutes = floor($runtime - ($hours * 60));
+
+                $hourFinishAnterior = new datetime ($anterior->getTime());
+                $hourFinishAnterior->modify('+'.$hours." hour");
+                $hourFinishAnterior->modify('+'.$minutes."minutes");
+
+                if(strtotime($hourFinishAnterior->format('Y-m-d H:i:s')) < strtotime($timeActual->format('Y-m-d H:i:s'))){
+                    $result = TRUE;
+                }else{
+                    $result = FALSE;
+                }
+            }
+
+            //Si hay una funcion posterior corrobora el horario.
+            if(isset($posterior) && $result == TRUE){
+
+                $hourStartPosterior = new datetime ($posterior->getTime());
+
+                $movieDao = new MovieDAO();
+
+                $runtimeActual = $movieDao->getRuntimeAPI($idMovie) + 15 ;
+                $hoursActual = floor($runtimeActual / 60);
+                $minutesActual = floor($runtimeActual - ($hoursActual * 60));
+
+                $hourFinishActual = new datetime ($time);
+                $hourFinishActual->modify('+'.$hoursActual." hour");
+                $hourFinishActual->modify('+'.$minutesActual."minutes");
+
+                if(strtotime($hourStartPosterior->format('Y-m-d H:i:s')) > strtotime($hourFinishActual->format('Y-m-d H:i:s'))){
+                    $result = TRUE;
+                }else{
+                    $result = FALSE;
+                }
+            }
+
+            return $result;
+        }
+
         public function addScreening($idMovie, $date, $idCinema, $idRoom, $time){
 
             try{
@@ -294,6 +397,8 @@ class ScreeningController
                     }else {
                         $this->showFormScreeningTime($idMovie, $date, $idCinema, $idRoom, "No es posible agregar la función en el horario seleccionado");
                     }
+                }else{
+                    $this->index();
                 }
 
             }catch(Exception $e){
@@ -310,6 +415,8 @@ class ScreeningController
                     $this->screeningDao->deleteById($id);
 
                     $this->showListView();
+                }else{
+                    $this->index();
                 }
 
             }catch(Exception $e){
