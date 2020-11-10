@@ -69,26 +69,27 @@
         public function addTicket($idScreening, $quantity){
 
             try{
+                if(isset($_SESSION["type"]) && $_SESSION["type"] != "administrator"){
+                    $ticketDao = new TicketDAO();
+                    $userDao = new UserDAO();
+                    $screeningDao = new ScreeningDAO();
 
-                $ticketDao = new TicketDAO();
-                $userDao = new UserDAO();
-                $screeningDao = new ScreeningDAO();
+                    $ticket = new Ticket();
+                    $ticket->setScreening($screeningDao->getById($idScreening));
+                    $ticket->setUser($userDao->getByEmail($_SESSION["loggedUser"]));
 
-                $ticket = new Ticket();
-                $ticket->setScreening($screeningDao->getById($idScreening));
-                $ticket->setUser($userDao->getByEmail($_SESSION["loggedUser"]));
+                    $i = 0;
 
-                $i = 0;
+                    while($i < $quantity){
+                        $ticketDao->add($ticket);
+                        $i++;
+                    }
 
-                while($i < $quantity){
-                    $ticketDao->add($ticket);
-                    $i++;
-                }
-
-                if($quantity > 1){
-                    $this->showListViewByUser("Tickets comprados correctamente.");
-                }else{
-                    $this->showListViewByUser("Ticket comprado correctamente.");
+                    if($quantity > 1){
+                        $this->showListViewByUser("Tickets comprados correctamente.");
+                    }else{
+                        $this->showListViewByUser("Ticket comprado correctamente.");
+                    }
                 }
 
             }catch(Exception $e){
