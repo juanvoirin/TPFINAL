@@ -58,11 +58,15 @@
         public function showAddRoom($idCinema, $message = ""){
             
             try{
-                $cinemaDao = new CinemaDAO();
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                    $cinemaDao = new CinemaDAO();
 
-                $cinema = $cinemaDao->getById($idCinema);
+                    $cinema = $cinemaDao->getById($idCinema);
 
-                require_once(VIEWS_PATH."adm-form-room.php");
+                    require_once(VIEWS_PATH."adm-form-room.php");
+                }else{
+                    $this->index();
+                }
 
             }catch(Exception $e){
                 $this->showRooms($idCinema, "Ocurrio un error en la redireccion al formulario de una nueva sala.");
@@ -73,22 +77,26 @@
         public function addRoom($idCinema, $name, $capacity, $price){
             
             try{
-                $this->roomDao = new RoomDAO();
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                    $this->roomDao = new RoomDAO();
 
-                if($this->roomDao->existsName($idCinema, $name) == 0){
-                    $cinemaDao = new CinemaDAO();
+                    if($this->roomDao->existsName($idCinema, $name) == 0){
+                        $cinemaDao = new CinemaDAO();
 
-                    $room = new Room();
-                    $room->setName($name);
-                    $room->setCapacity($capacity);
-                    $room->setPrice($price);
-                    $room->setCinema($cinemaDao->getById($idCinema));
+                        $room = new Room();
+                        $room->setName($name);
+                        $room->setCapacity($capacity);
+                        $room->setPrice($price);
+                        $room->setCinema($cinemaDao->getById($idCinema));
 
-                    $this->roomDao->add($room);
+                        $this->roomDao->add($room);
                     
-                    $this->showRooms($idCinema, "Sala agregada correctamente.");
+                        $this->showRooms($idCinema, "Sala agregada correctamente.");
+                    }else{
+                        $this->showAddRoom($idCinema, "Ya existe una sala con ese nombre.");
+                    }  
                 }else{
-                    $this->showAddRoom($idCinema, "Ya existe una sala con ese nombre.");
+                    $this->index();
                 }
 
             }catch(Exception $e){
@@ -99,10 +107,14 @@
         public function deleteRoom($id, $idCinema){
 
             try{
-                $this->roomDao = new RoomDao();
-                $this->roomDao->deleteById($id);
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                    $this->roomDao = new RoomDao();
+                    $this->roomDao->deleteById($id);
                 
-                $this->showRooms($idCinema, "Sala eliminada correctamente.");
+                    $this->showRooms($idCinema, "Sala eliminada correctamente.");
+                }else{
+                    $this->index();
+                }
 
             }catch(Exception $e){
                 $this->showRooms($idCinema, "Ocurrio un error al eliminar la sala.");
@@ -112,14 +124,17 @@
         public function updateToFormRoom($id, $idCinema){
 
             try{
-                
-                $this->roomDao = new RoomDAO();
-                $room = $this->roomDao->GetByid($id);
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                    $this->roomDao = new RoomDAO();
+                    $room = $this->roomDao->GetByid($id);
 
-                $cinemaDao = new CinemaDAO();
-                $cinema = $cinemaDao->getById($idCinema);
+                    $cinemaDao = new CinemaDAO();
+                    $cinema = $cinemaDao->getById($idCinema);
 
-                require_once(VIEWS_PATH."adm-update-form-rooms.php");
+                    require_once(VIEWS_PATH."adm-update-form-rooms.php");
+                }else{
+                    $this->index();
+                }
 
             }catch(Exception $e){
                 $this->showRooms($idCinema, "Ocurrio un error en la redireccion al formulario de actualizacion de la sala.");
@@ -129,23 +144,27 @@
         public function updateRoom($id, $name, $capacity, $price, $idCinema){
 
             try{
-                $this->roomDao = new RoomDAO();
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                     $this->roomDao = new RoomDAO();
 
-                if($this->roomDao->existsName($idCinema, $name) == 0){
-                    $cinemaDao = new CinemaDAO;
+                    if($this->roomDao->existsName($idCinema, $name) == 0){
+                         $cinemaDao = new CinemaDAO;
 
-                    $room = new Room();
-                    $room->setId($id);
-                    $room->setName($name);
-                    $room->setCapacity($capacity);
-                    $room->setPrice($price);
-                    $room->setCinema($cinemaDao->getById($idCinema));
+                        $room = new Room();
+                        $room->setId($id);
+                        $room->setName($name);
+                        $room->setCapacity($capacity);
+                        $room->setPrice($price);
+                        $room->setCinema($cinemaDao->getById($idCinema));
 
-                    $this->roomDao->update($room);
+                        $this->roomDao->update($room);
 
-                    $this->showRooms($idCinema, "Sala actualizada correctamente.");
+                        $this->showRooms($idCinema, "Sala actualizada correctamente.");
+                    }else{
+                        $this->showRooms($idCinema, "Ya existe una sala con ese nombre.");
+                    }
                 }else{
-                    $this->showRooms($idCinema, "Ya existe una sala con ese nombre.");
+                    $this->index();
                 }
 
             }catch(Exception $e){

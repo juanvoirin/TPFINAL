@@ -97,18 +97,21 @@
         public function showAddView(){
 
             try{
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                    $this->genreDao = new GenreDAO();
 
-                $this->genreDao = new GenreDAO();
+                    $genreList = array();
+                    $genreList = $this->genreDao->getAll();
 
-                $genreList = array();
-                $genreList = $this->genreDao->getAll();
+                    $this->movieDao = new MovieDAO();
 
-                $this->movieDao = new MovieDAO();
+                    $movieList = array();
+                    $movieList = $this->movieDao->getAllAPI();
 
-                $movieList = array();
-                $movieList = $this->movieDao->getAllAPI();
-
-                require_once(VIEWS_PATH."adm-add-movies.php");
+                    require_once(VIEWS_PATH."adm-add-movies.php");
+                }else{
+                    $this->index();
+                }
             
             }catch(Exception $e){
                 $this->showListView("Ocurrio un error al traer las peliculas de la API.");
