@@ -37,10 +37,14 @@
         public function showListViewByUser($message = ""){
 
             try{
-                $ticketDao = new TicketDAO();
-                $userDao = new UserDAO();
+                if(isset($_SESSION["type"]) && $_SESSION["type"] != "administrator"){
+                    $ticketDao = new TicketDAO();
+                    $userDao = new UserDAO();
 
-                $ticketsList = $ticketDao->getByUser($userDao->getByEmail($_SESSION["loggedUser"])->getId());
+                    $ticketsList = $ticketDao->getByUser($userDao->getByEmail($_SESSION["loggedUser"])->getId());
+                }else{
+                    $this->index();
+                }
 
             }catch(Exception $e){
                 $message = "No fue posible establecer una conexion con la Base de Datos.";
@@ -52,14 +56,17 @@
         public function addTicketForm($idScreening){
 
             try{
+                if(isset($_SESSION["type"]) && $_SESSION["type"] != "administrator"){
+                    $screeningDao = new ScreeningDAO();
+                    $ticketDao = new TicketDAO();
 
-                $screeningDao = new ScreeningDAO();
-                $ticketDao = new TicketDAO();
-
-                $screening = $screeningDao->getById($idScreening);
-                $ticketAvailability = ($screening->getRoom()->getCapacity()) - ($ticketDao->getAvailability($screening->getId()));
-                
-                require_once(VIEWS_PATH."usr-form-tickets.php");
+                    $screening = $screeningDao->getById($idScreening);
+                    $ticketAvailability = ($screening->getRoom()->getCapacity()) - ($ticketDao->getAvailability($screening->getId()));
+                    
+                    require_once(VIEWS_PATH."usr-form-tickets.php");
+                }else{
+                    $this->index();
+                }
 
             }catch(Exception $e){
                 $this->showListViewByUser("Ocurrio un error en la redireccion hacia el formulario para un nuevo ticket.");
@@ -90,6 +97,8 @@
                     }else{
                         $this->showListViewByUser("Ticket comprado correctamente.");
                     }
+                }else{
+                    $this->index();
                 }
 
             }catch(Exception $e){

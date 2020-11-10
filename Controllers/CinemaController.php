@@ -56,14 +56,18 @@
         public function showListViewByOwner(){
 
             try{
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
 
-                $all = FALSE;
-                
-                $userDao = new UserDAO();
+                    $all = FALSE;
+                    
+                    $userDao = new UserDAO();
 
-                $this->cinemaDao = new CinemaDAO();
-                $cinemasListAll = array();
-                $cinemasListAll = $this->cinemaDao->getByOwnerId($userDao->getByEmail($_SESSION["loggedUser"])->getId());
+                    $this->cinemaDao = new CinemaDAO();
+                    $cinemasListAll = array();
+                    $cinemasListAll = $this->cinemaDao->getByOwnerId($userDao->getByEmail($_SESSION["loggedUser"])->getId());
+                }else{
+                    $this->index();
+                }
 
             }catch(Exception $e){
                 $message = "No fue posible establecer una conexion con la Base de Datos.";
@@ -75,8 +79,12 @@
         public function addCinemaForm(){
 
             try{
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
                 
-                require_once(VIEWS_PATH."adm-form-cinemas.php");
+                    require_once(VIEWS_PATH."adm-form-cinemas.php");
+                }else{
+                    $this->index();
+                }
 
             }catch(Exception $e){
                 $this->showListViewAll("Ocurrio un error en la redireccion hacia el formulario para un nuevo cinema.");
@@ -98,8 +106,9 @@
                     $this->cinemaDao->add($cinema);
 
                     $this->showListViewAll("Cinema agregado correctamente.");
+                }else{
+                    $this->index();
                 }
-                
 
             }catch(Exception $e){
                 $this->showListViewAll("Ocurrio un error al intentar agregar el nuevo cinema.");
@@ -114,6 +123,8 @@
                     $this->cinemaDao->deleteById($id);
 
                     $this->showListViewAll("Cinema eliminado correctamente.");
+                }else{
+                    $this->index();
                 }
 
             }catch(Exception $e){
@@ -129,6 +140,8 @@
                     $cinema = $this->cinemaDao->getById($id);
                 
                     require_once(VIEWS_PATH."adm-update-form-cinemas.php");
+                }else{
+                    $this->index();
                 }
 
             }catch(Exception $e){
@@ -156,6 +169,8 @@
                     $this->updateCinema($id, $name, $address, $idOwner);
 
                     $this->showListViewAll("Cine actualizado correctamente.");
+                }else{
+                    $this->index();
                 }
 
             }catch(Exception $e){

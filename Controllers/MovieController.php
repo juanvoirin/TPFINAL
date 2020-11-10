@@ -109,6 +109,8 @@
                     $movieList = $this->movieDao->getAllAPI();
 
                     require_once(VIEWS_PATH."adm-add-movies.php");
+                }else{
+                    $this->index();
                 }
             
             }catch(Exception $e){

@@ -64,6 +64,8 @@
                     $cinema = $cinemaDao->getById($idCinema);
 
                     require_once(VIEWS_PATH."adm-form-room.php");
+                }else{
+                    $this->index();
                 }
 
             }catch(Exception $e){
@@ -93,7 +95,9 @@
                     }else{
                         $this->showAddRoom($idCinema, "Ya existe una sala con ese nombre.");
                     }  
-                } 
+                }else{
+                    $this->index();
+                }
 
             }catch(Exception $e){
                 $this->showRooms($idCinema, "Ocurrio un error al agregar la sala.");
@@ -108,6 +112,8 @@
                     $this->roomDao->deleteById($id);
                 
                     $this->showRooms($idCinema, "Sala eliminada correctamente.");
+                }else{
+                    $this->index();
                 }
 
             }catch(Exception $e){
@@ -126,6 +132,8 @@
                     $cinema = $cinemaDao->getById($idCinema);
 
                     require_once(VIEWS_PATH."adm-update-form-rooms.php");
+                }else{
+                    $this->index();
                 }
 
             }catch(Exception $e){
@@ -155,6 +163,8 @@
                     }else{
                         $this->showRooms($idCinema, "Ya existe una sala con ese nombre.");
                     }
+                }else{
+                    $this->index();
                 }
 
             }catch(Exception $e){
