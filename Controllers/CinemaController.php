@@ -8,6 +8,7 @@
     use DAO\GenreDAO as GenreDAO;
     use DAO\MovieDAO as MovieDAO;
     use \Exception as Exception;
+    
 
     class CinemaController
     {
@@ -85,18 +86,20 @@
         public function addCinema($name, $address){
 
             try{
-
-                $userDao = new UserDAO();
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                    $userDao = new UserDAO();
                 
-                $cinema = new Cinema();
-                $cinema->setName($name);
-                $cinema->setAddress($address);
-                $cinema->setOwner($userDao->getByEmail($_SESSION["loggedUser"]));
+                    $cinema = new Cinema();
+                    $cinema->setName($name);
+                    $cinema->setAddress($address);
+                    $cinema->setOwner($userDao->getByEmail($_SESSION["loggedUser"]));
 
-                $this->cinemaDao = new CinemaDAO();
-                $this->cinemaDao->add($cinema);
+                    $this->cinemaDao = new CinemaDAO();
+                    $this->cinemaDao->add($cinema);
 
-                $this->showListViewAll("Cinema agregado correctamente.");
+                    $this->showListViewAll("Cinema agregado correctamente.");
+                }
+                
 
             }catch(Exception $e){
                 $this->showListViewAll("Ocurrio un error al intentar agregar el nuevo cinema.");
@@ -106,11 +109,12 @@
         public function deleteCinema($id){
             
             try{
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                    $this->cinemaDao = new CinemaDAO();
+                    $this->cinemaDao->deleteById($id);
 
-                $this->cinemaDao = new CinemaDAO();
-                $this->cinemaDao->deleteById($id);
-
-                $this->showListViewAll("Cinema eliminado correctamente.");
+                    $this->showListViewAll("Cinema eliminado correctamente.");
+                }
 
             }catch(Exception $e){
                 $this->showListViewAll("Ocurrio un error al eliminar el cinema seleccionado.");
@@ -120,11 +124,12 @@
         public function updateToFormCinema($id){
 
             try{
-
-                $this->cinemaDao = new CinemaDAO();
-                $cinema = $this->cinemaDao->getById($id);
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                    $this->cinemaDao = new CinemaDAO();
+                    $cinema = $this->cinemaDao->getById($id);
                 
-                require_once(VIEWS_PATH."adm-update-form-cinemas.php");
+                    require_once(VIEWS_PATH."adm-update-form-cinemas.php");
+                }
 
             }catch(Exception $e){
                 $this->showListViewAll("Ocurrio un error en la redireccion para actualizar el cinema.");
@@ -134,22 +139,24 @@
         public function updateCinema($id, $name, $address, $idOwner){
             
             try{
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                    
+                    $this->cinemaDao = new CinemaDAO();
 
-                $this->cinemaDao = new CinemaDAO();
+                    $userDao = new UserDAO();
 
-                $userDao = new UserDAO();
+                    $cinema = new Cinema();
+                    $cinema->setId($id);
+                    $cinema->setName($name);
+                    $cinema->setAddress($address);
+                    $cinema->setOwner($userDao->getById($idOwner));
 
-                $cinema = new Cinema();
-                $cinema->setId($id);
-                $cinema->setName($name);
-                $cinema->setAddress($address);
-                $cinema->setOwner($userDao->getById($idOwner));
+                    $this->cinemaDao->update($cinema);
 
-                $this->cinemaDao->update($cinema);
+                    $this->updateCinema($id, $name, $address, $idOwner);
 
-                $this->updateCinema($id, $name, $address, $idOwner);
-
-                $this->showListViewAll("Cine actualizado correctamente.");
+                    $this->showListViewAll("Cine actualizado correctamente.");
+                }
 
             }catch(Exception $e){
                 $this->showListViewAll("Ocurrio un error al intentar actualizar el cinema.");

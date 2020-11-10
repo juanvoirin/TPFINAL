@@ -345,39 +345,40 @@ class ScreeningController
         public function addScreening($idMovie, $date, $idCinema, $idRoom, $time){
 
             try{
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                    if($this->checkTime($time, $idRoom, $date, $idMovie)){
 
-                if($this->checkTime($time, $idRoom, $date, $idMovie)){
-
-                    $movieDao = new MovieDAO();
-                    $movie = $movieDao->getById($idMovie);
-
-                    if($movie == NULL){
-                        $movie = $movieDao->getByIdAPI($idMovie);
-                        $movieDao->add($movie);
+                        $movieDao = new MovieDAO();
                         $movie = $movieDao->getById($idMovie);
-                    }
-                                    
-                    $cinemaDao = new CinemaDAO();
-                    $cinema = $cinemaDao->getById($idCinema);                        
 
-                    $roomDao = new RoomDAO();
-                    $room = $roomDao->getById($idRoom);
-                        
-                    $screeningDao = new ScreeningDAO();
-                
-                    $screening = new Screening();
-                    $screening->setDate($date);
-                    $screening->setTime($time);
-                    $screening->setRuntime($movie->getRuntime());
-                    $screening->setRoom($room);
-                    $screening->setMovie($movie);
-                    
-                    $screeningDao->add($screening);
-                    
-                    $this->showListView();                            
+                        if($movie == NULL){
+                            $movie = $movieDao->getByIdAPI($idMovie);
+                            $movieDao->add($movie);
+                            $movie = $movieDao->getById($idMovie);
+                        }
                                     
-                }else {
-                    $this->showFormScreeningTime($idMovie, $date, $idCinema, $idRoom, "No es posible agregar la función en el horario seleccionado");
+                        $cinemaDao = new CinemaDAO();
+                        $cinema = $cinemaDao->getById($idCinema);                        
+
+                        $roomDao = new RoomDAO();
+                        $room = $roomDao->getById($idRoom);
+                        
+                        $screeningDao = new ScreeningDAO();
+                
+                        $screening = new Screening();
+                        $screening->setDate($date);
+                        $screening->setTime($time);
+                        $screening->setRuntime($movie->getRuntime());
+                        $screening->setRoom($room);
+                        $screening->setMovie($movie);
+                    
+                        $screeningDao->add($screening);
+                    
+                        $this->showListView();                            
+                                    
+                    }else {
+                        $this->showFormScreeningTime($idMovie, $date, $idCinema, $idRoom, "No es posible agregar la función en el horario seleccionado");
+                    }
                 }
 
             }catch(Exception $e){
@@ -389,10 +390,12 @@ class ScreeningController
         public function deleteScreening($id){
                 
             try{
-                $this->screeningDao = new ScreeningDAO();
-                $this->screeningDao->deleteById($id);
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                    $this->screeningDao = new ScreeningDAO();
+                    $this->screeningDao->deleteById($id);
 
-                $this->showListView();
+                    $this->showListView();
+                }
 
             }catch(Exception $e){
                 $this->showListView("No fue posible establecer una conexion con la Base de Datos.");
