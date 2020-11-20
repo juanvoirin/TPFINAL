@@ -8,6 +8,7 @@
     use DAO\MovieDAO as MovieDAO;
     use DAO\ScreeningDAO as ScreeningDAO;
     use DAO\UserDAO as UserDAO;
+    use DAO\RoomDAO as RoomDAO;
     use \Exception as Exception;
 
     class TicketController
@@ -32,6 +33,33 @@
             }
 
             require_once(VIEWS_PATH."home.php");
+        }
+
+        public function showListViewMoviesByOwner($message = ""){
+
+            try{
+                $list = array();
+
+                $screeningDao = new ScreeningDAO();
+                $userDao = new UserDAO();
+                $roomDao = new RoomDAO();
+                $movieDao = new MovieDAO();
+
+                $screeningList = $screeningDao->getByOwner($userDao->getByEmail($_SESSION["loggedUser"])->getId());
+                
+                foreach($screeningList as $screening){
+                    $array["movie"] = $screening->getMovie();
+                    $array["sold"] = $screening->getSold();
+                    $array["remaining"] = $screening->getRoom()->getCapacity() - $screening->getSold();
+
+                    array_push($list, $array);
+                }
+
+            }catch(Exception $e){
+                $message = "No fue posible establecer una conexion con la Base de Datos.";
+            }
+
+            require_once(VIEWS_PATH."adm-list-tickets-movies.php");
         }
 
         public function showListViewByUser($message = ""){
@@ -91,6 +119,8 @@
                         $ticketDao->add($ticket);
                         $i++;
                     }
+                    
+                    $screeningDao->sumSoldScreening($idScreening, $quantity);
 
                     if($quantity > 1){
                         $this->showListViewByUser("Tickets comprados correctamente.");

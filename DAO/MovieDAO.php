@@ -45,7 +45,9 @@
         {
             $query = "CALL Movies_GetMoviesWithScreenings(?)";
 
-            $parameters["dateNow"] = date("Y-m-d");
+            $date = date("Y-m-d");
+
+            $parameters["dateNow"] = $date;
 
             $this->connection = Connection::GetInstance();
 
@@ -78,6 +80,8 @@
             $query = "CALL Movies_GetMoviesWithScreeningsByDate(?)";
 
             $parameters["date"] = $date;
+
+            echo $date;
 
             $this->connection = Connection::GetInstance();
 
