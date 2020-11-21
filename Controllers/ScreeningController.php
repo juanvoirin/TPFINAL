@@ -205,7 +205,7 @@ class ScreeningController
             }
         }
 
-        private function checkTime($time, $idRoom, $date, $idMovie){
+        /*private function checkTime($time, $idRoom, $date, $idMovie){
             $screeningDAO = new ScreeningDAO();
             $screenings = $screeningDAO->getByRoomAndDate($idRoom, $date);
             $result = TRUE;
@@ -273,7 +273,7 @@ class ScreeningController
             }
 
             return $result;
-        }
+        }*/
 
         //HORA TEST
         private function checkTime2($time, $idRoom, $date, $idMovie){
@@ -295,7 +295,7 @@ class ScreeningController
 
             $result = TRUE;
 
-            $timeActual = new datetime($time);
+            $timeActual = new datetime($date.$time);
 
             //Busca la funcion anterior y posterior si las hay. Si hay una funcion en el mismo horario cambia el resultado.
             if(count($screenings) > 0){
@@ -324,7 +324,7 @@ class ScreeningController
                 $hours = floor($runtime / 60);
                 $minutes = floor($runtime - ($hours * 60));
 
-                $hourFinishAnterior = new datetime ($anterior->getTime());
+                $hourFinishAnterior = new datetime ($anterior->getDate().$anterior->getTime());
                 $hourFinishAnterior->modify('+'.$hours." hour");
                 $hourFinishAnterior->modify('+'.$minutes."minutes");
 
@@ -364,7 +364,7 @@ class ScreeningController
 
             try{
                 if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
-                    if($this->checkTime($time, $idRoom, $date, $idMovie)){
+                    if($this->checkTime2($time, $idRoom, $date, $idMovie)){
 
                         $movieDao = new MovieDAO();
                         $movie = $movieDao->getById($idMovie);

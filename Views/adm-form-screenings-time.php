@@ -46,7 +46,7 @@ include_once('nav-user.php');
                     <div class="form-group row">
                         <label for="time" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">TIME</label>
                         <div class="col-sm-9">
-                            <input type= "time" class="form-control" id="time" placeholder="time" name="time" min="04:00">
+                            <input type= "time" class="form-control" id="time" placeholder="time" name="time" >
                         </div>
                     </div>
                     <div class="m-3">
