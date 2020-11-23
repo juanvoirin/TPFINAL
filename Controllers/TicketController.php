@@ -8,7 +8,6 @@
     use DAO\MovieDAO as MovieDAO;
     use DAO\ScreeningDAO as ScreeningDAO;
     use DAO\UserDAO as UserDAO;
-    use DAO\RoomDAO as RoomDAO;
     use \Exception as Exception;
 
     class TicketController
@@ -40,17 +39,66 @@
             try{
                 $list = array();
 
-                $screeningDao = new ScreeningDAO();
+                $ticketDao = new TicketDAO();
                 $userDao = new UserDAO();
-                $roomDao = new RoomDAO();
-                $movieDao = new MovieDAO();
+                $screeningDao = new ScreeningDAO();
 
-                $screeningList = $screeningDao->getByOwner($userDao->getByEmail($_SESSION["loggedUser"])->getId());
-                
-                foreach($screeningList as $screening){
-                    $array["movie"] = $screening->getMovie();
-                    $array["sold"] = $screening->getSold();
-                    $array["remaining"] = $screening->getRoom()->getCapacity() - $screening->getSold();
+                $idUser = $userDao->getByEmail($_SESSION["loggedUser"])->getId();
+
+                $result = $ticketDao->getListMoviesByOwner($idUser);
+
+                foreach($result as $row){
+                    $ticket['movie'] = $row['title'];
+                    $ticket['sold'] = $row['sold'];
+                    $ticket['remaining'] = $screeningDao->getCapacityByMovie($row['idMovie'], $idUser) - $row['sold'];
+    
+                    array_push($list, $ticket);
+                }
+
+            }catch(Exception $e){
+                $message = "No fue posible establecer una conexion con la Base de Datos.";
+            }
+
+            require_once(VIEWS_PATH."adm-list-tickets-movies.php");
+        }
+
+        public function showListViewScreeningsByOwner($message = ""){
+
+            try{
+                $list = array();
+
+                $userDao = new UserDAO();
+                $screeningDao = new ScreeningDAO();
+
+                $idUser = $userDao->getByEmail($_SESSION["loggedUser"])->getId();
+
+                $list = $screeningDao->getByOwner($idUser);
+
+            }catch(Exception $e){
+                $message = "No fue posible establecer una conexion con la Base de Datos.";
+            }
+
+            require_once(VIEWS_PATH."adm-list-tickets-screenings.php");
+        }
+
+        public function showListViewCinemasByOwner($message = ""){
+
+            try{
+                $list = array();
+
+                $userDao = new UserDAO();
+                $screeningDao = new ScreeningDAO();
+                $ticketDao = new TicketDAO();
+
+                $idUser = $userDao->getByEmail($_SESSION["loggedUser"])->getId();
+
+                $listCinemas = $ticketDao->getListCinemasByOwner($idUser);
+
+                foreach($listCinemas as $row){
+                    $array["cinema"] = $row["cinema"];
+                    $array["sold"] = $row["sold"];
+                    $array["remaining"] = ($screeningDao->getCapacityByCinema($row["idCinema"]) - $row["sold"]);
+                    $array["rooms"] = $ticketDao->getListRoomsByCinema($row["idCinema"]);
 
                     array_push($list, $array);
                 }
@@ -59,7 +107,7 @@
                 $message = "No fue posible establecer una conexion con la Base de Datos.";
             }
 
-            require_once(VIEWS_PATH."adm-list-tickets-movies.php");
+            require_once(VIEWS_PATH."adm-list-tickets-cinemas.php");
         }
 
         public function showListViewByUser($message = ""){

@@ -74,5 +74,54 @@
             return $quantity;
         }
 
+        public function getListMoviesByOwner($idOwner)
+        {
+            $query = "CALL Tickets_GetListMoviesByOwner(?)";
+
+            $parameters["idOwner"] = $idOwner;
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+            return $result;
+        }
+
+        public function getListCinemasByOwner($idOwner)
+        {
+            $query = "CALL Tickets_GetListCinemasByOwner(?)";
+
+            $parameters["idOwner"] = $idOwner;
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+            return $result;
+        }
+
+        public function getListRoomsByCinema($idCinema)
+        {
+            $list = array();
+
+            $query = "CALL Tickets_GetListRoomsByCinema(?)";
+
+            $parameters["idCinema"] = $idCinema;
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+            foreach($result as $row){
+                $array["room"] = $row["room"];
+                $array["sold"] = $row["sold"];
+                $array["remaining"] = ($row["capacity"] - $row["sold"]);
+
+                array_push($list, $array);
+            }
+
+            return $list;
+        }
+
     }
 ?>

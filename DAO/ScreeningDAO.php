@@ -317,5 +317,40 @@
 
         }
 
+        public function getCapacityByMovie($idMovie, $idOwner){
+
+            $query = "CALL Screenings_GetCapacityByMovie(?, ?)";
+
+            $parameters["idMovie"] = $idMovie;
+            $parameters["idOwner"] = $idOwner;
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+            foreach($result as $row){
+                $capacity = $row["capacity"];
+            }
+
+            return $capacity;
+        }
+
+        public function getCapacityByCinema($idCinema){
+
+            $query = "CALL Screenings_GetCapacityByCinema(?)";
+
+            $parameters["idCinema"] = $idCinema;
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+            foreach($result as $row){
+                $capacity = $row["capacity"];
+            }
+
+            return $capacity;
+        }
+
     }
 ?>

@@ -21,34 +21,61 @@
   <div class="container">
     <div class="mb-2">
       <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator") { ?>
-          <a href="<?php echo FRONT_ROOT."Ticket/showListViewMoviesByOwner";?>" class="btn btn-success disabled">Movies</a>
+          <a href="<?php echo FRONT_ROOT."Ticket/showListViewMoviesByOwner";?>" class="btn btn-outline-success">Movies</a>
           <a href="<?php echo FRONT_ROOT."Ticket/showListViewScreeningsByOwner";?>" class="btn btn-outline-success">Screenings</a>
-          <a href="<?php echo FRONT_ROOT."Ticket/showListViewCinemasByOwner";?>" class="btn btn-outline-success">Cinemas</a>
+          <a href="<?php echo FRONT_ROOT."Ticket/showListViewCinemasByOwner";?>" class="btn btn-success disabled">Cinemas</a>
       <?php } ?>
     </div>
     <div class="row">
       <div class="col-md-12">
         <div class="table-responsive">
-          <table class="table table-bordered ">
+          <table class="table table-bordered">
             <thead class="thead-dark">
               <tr>
                 <th style="text-align: center">#</th>
-                <th style="text-align: center">Title</th>
+                <th style="text-align: center">Cinema</th>
                 <th style="text-align: center">Sold</th>
                 <th style="text-align: center">Remaining</th>
               </tr>
             </thead>
             <tbody>
               <?php
-              $count = 0;
-              foreach($list as $row) {
-                $count++;
+                $count = 0;
+                foreach($list as $cinema) {
+                  $count++;
               ?>
-              <tr>
+              <tr class="bg-primary text-light text-md-center">
                 <th style="vertical-align: middle"><?php echo $count; ?></th>
-                <td style="vertical-align: middle"><?php echo $row["movie"]; ?></td>
-                <td style="vertical-align: middle"><?php echo $row["sold"]; ?></td>
-                <td style="vertical-align: middle"><?php echo $row["remaining"]; ?></td>
+                <th style="vertical-align: middle"><?php echo $cinema["cinema"]; ?></th>
+                <th style="vertical-align: middle"><?php echo $cinema["sold"]; ?></th>
+                <th style="vertical-align: middle"><?php echo $cinema["remaining"] ?></th>
+              </tr>
+              <tr>
+                <td colspan="4">
+                  <table class="table-sm w-100">
+                    <thead class="thead-light">
+                      <tr>
+                        <th style="text-align: center">Cinema</th>
+                        <th style="text-align: center">Room</th>
+                        <th style="text-align: center">Sold</th>
+                        <th style="text-align: center">Remaining</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php
+                        $count = 0;
+                        foreach($cinema["rooms"] as $room) {
+                      ?>
+                        <tr class="text-md-center">
+                          <th><?php echo $cinema["cinema"]; ?></th>
+                          <th><?php echo $room["room"]; ?></th>
+                          <th><?php echo $room["sold"]; ?></th>
+                          <th><?php echo $room["remaining"]; ?></th>
+                        </tr>
+                      <?php } ?>
+                    </tbody>
+                  </table>
+                </td>
               </tr>
               <?php } ?>
             </tbody>

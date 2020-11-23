@@ -21,8 +21,8 @@
   <div class="container">
     <div class="mb-2">
       <?php if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator") { ?>
-          <a href="<?php echo FRONT_ROOT."Ticket/showListViewMoviesByOwner";?>" class="btn btn-success disabled">Movies</a>
-          <a href="<?php echo FRONT_ROOT."Ticket/showListViewScreeningsByOwner";?>" class="btn btn-outline-success">Screenings</a>
+          <a href="<?php echo FRONT_ROOT."Ticket/showListViewMoviesByOwner";?>" class="btn btn-outline-success">Movies</a>
+          <a href="<?php echo FRONT_ROOT."Ticket/showListViewScreeningsByOwner";?>" class="btn btn-success disabled">Screenings</a>
           <a href="<?php echo FRONT_ROOT."Ticket/showListViewCinemasByOwner";?>" class="btn btn-outline-success">Cinemas</a>
       <?php } ?>
     </div>
@@ -33,7 +33,11 @@
             <thead class="thead-dark">
               <tr>
                 <th style="text-align: center">#</th>
-                <th style="text-align: center">Title</th>
+                <th style="text-align: center">Movie</th>
+                <th style="text-align: center">Date</th>
+                <th style="text-align: center">Time</th>
+                <th style="text-align: center">Cinema</th>
+                <th style="text-align: center">Room</th>
                 <th style="text-align: center">Sold</th>
                 <th style="text-align: center">Remaining</th>
               </tr>
@@ -41,14 +45,18 @@
             <tbody>
               <?php
               $count = 0;
-              foreach($list as $row) {
+              foreach($list as $screening) {
                 $count++;
               ?>
               <tr>
                 <th style="vertical-align: middle"><?php echo $count; ?></th>
-                <td style="vertical-align: middle"><?php echo $row["movie"]; ?></td>
-                <td style="vertical-align: middle"><?php echo $row["sold"]; ?></td>
-                <td style="vertical-align: middle"><?php echo $row["remaining"]; ?></td>
+                <td style="vertical-align: middle"><?php echo $screening->getMovie()->getTitle(); ?></td>
+                <td style="vertical-align: middle"><?php echo $screening->getDate(); ?></td>
+                <td style="vertical-align: middle"><?php echo $screening->getTime(); ?> Hs</td>
+                <td style="vertical-align: middle"><?php echo $screening->getRoom()->getCinema()->getName(); ?></td>
+                <td style="vertical-align: middle"><?php echo $screening->getRoom()->getName(); ?></td>
+                <td style="vertical-align: middle"><?php echo $screening->getSold(); ?></td>
+                <td style="vertical-align: middle"><?php echo ($screening->getRoom()->getCapacity() - $screening->getSold()); ?></td>
               </tr>
               <?php } ?>
             </tbody>

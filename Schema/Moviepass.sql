@@ -616,6 +616,40 @@ END$$
 
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `Screenings_GetCapacityByMovie` ;
+
+DELIMITER $$
+
+CREATE PROCEDURE Screenings_GetCapacityByMovie (IN idMovie INT, IN idOwner INT)
+BEGIN
+    SELECT (SUM(rooms.capacity)) as `capacity`
+    FROM screenings
+    JOIN rooms
+    ON (rooms.id = screenings.id_room)
+    JOIN cinemas
+    ON (cinemas.id = rooms.id_cinema)
+    WHERE (cinemas.owner = idOwner AND screenings.id_movie = idMovie);
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Screenings_GetCapacityByCinema` ;
+
+DELIMITER $$
+
+CREATE PROCEDURE Screenings_GetCapacityByCinema (IN idCinema INT)
+BEGIN
+    SELECT (SUM(rooms.capacity)) as `capacity`
+    FROM screenings
+    JOIN rooms
+    ON (rooms.id = screenings.id_room)
+    JOIN cinemas
+    ON (cinemas.id = rooms.id_cinema)
+    WHERE (cinemas.id = idCinema);
+END$$
+
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `Screenings_SumSoldScreening` ;
 
 DELIMITER $$
@@ -669,3 +703,70 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Tickets_GetListMoviesByOwner` ;
+
+DELIMITER $$
+
+CREATE PROCEDURE Tickets_GetListMoviesByOwner(IN idOwner INT)
+BEGIN
+    SELECT movies.title as `title`, COUNT(tickets.id) as `sold`, movies.id as `idMovie`
+    FROM `tickets`
+    JOIN `screenings`
+    ON (tickets.id_screening = screenings.id)
+    JOIN `movies`
+    ON (screenings.id_movie = movies.id)
+    JOIN `rooms`
+    ON (rooms.id = screenings.id_room)
+    JOIN cinemas
+    ON (cinemas.id = rooms.id_cinema)
+    WHERE (cinemas.owner = `idOwner`)
+    GROUP BY (screenings.id_movie);
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Tickets_GetListCinemasByOwner` ;
+
+DELIMITER $$
+
+CREATE PROCEDURE Tickets_GetListCinemasByOwner(IN idOwner INT)
+BEGIN
+    SELECT cinemas.name as `cinema`, COUNT(tickets.id) as `sold`, cinemas.id as `idCinema`
+    FROM `tickets`
+    JOIN `screenings`
+    ON (tickets.id_screening = screenings.id)
+    JOIN `movies`
+    ON (screenings.id_movie = movies.id)
+    JOIN `rooms`
+    ON (rooms.id = screenings.id_room)
+    JOIN cinemas
+    ON (cinemas.id = rooms.id_cinema)
+    WHERE (cinemas.owner = `idOwner`)
+    GROUP BY (cinemas.id);
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `Tickets_GetListRoomsByCinema` ;
+
+DELIMITER $$
+
+CREATE PROCEDURE Tickets_GetListRoomsByCinema(IN idCinema INT)
+BEGIN
+    SELECT subconsulta.room as `room`, SUM(subconsulta.sold) as `sold`, SUM(subconsulta.capacity) as `capacity`
+    FROM (SELECT rooms.name as `room`, COUNT(tickets.id) as `sold`, rooms.capacity as `capacity`
+        FROM `tickets`
+        JOIN `screenings`
+        ON (tickets.id_screening = screenings.id)
+        JOIN `rooms`
+        ON (rooms.id = screenings.id_room)
+        JOIN cinemas
+        ON (cinemas.id = rooms.id_cinema)
+        WHERE (cinemas.id = `idCinema`)
+        GROUP BY (screenings.id)) as `subconsulta`
+    GROUP BY (subconsulta.room);
+END$$
+
+DELIMITER ;
+
