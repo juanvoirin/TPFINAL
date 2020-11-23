@@ -20,7 +20,15 @@
 
           <!--<li class="nav-item"> <a class="nav-link" href="<?php //echo  FRONT_ROOT."Screening/showListView";?>">Screenings</a> </li>-->
           <li class="nav-item"> <a class="nav-link" href="<?php echo  FRONT_ROOT."Screening/showListViewOwner";?>">Screenings</a> </li>
-          <li class="nav-item"> <a class="nav-link" href="<?php echo  FRONT_ROOT."Ticket/soldTicketsForm";?>">Revenue</a> </li>
+          <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Revenue
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="<?php echo  FRONT_ROOT."Ticket/soldTicketsMovieForm";?>">Revenue for Movie</a>
+          <a class="dropdown-item" href="<?php echo  FRONT_ROOT."Ticket/soldTicketsCinemaForm";?>">Revenue for Cinema</a>
+      </li>
+
           <li class="nav-item"> <a class="nav-link" href="<?php echo  FRONT_ROOT."Ticket/showListViewMoviesByOwner"; ?>">Tickets</a> </li>
 
         <?php } else { ?>

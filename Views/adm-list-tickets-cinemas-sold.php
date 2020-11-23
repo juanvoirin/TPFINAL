@@ -12,7 +12,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <h1 class="display-2">Revenue</h1>
+        <h1 class="display-2">Revenue for Cinema</h1>
       </div>
     </div>
   </div>
@@ -25,7 +25,7 @@
           <table class="table table-bordered ">
             <thead class="thead-dark">
               <tr>
-                <th>Movie</th>
+                <th>Cinema</th>
                 <th>From date</th>
                 <th>Until date</th>
                 <th>Total Sold</th>
@@ -33,7 +33,7 @@
             </thead>
             <tbody>
               <tr>
-                <td style="vertical-align: middle"><?php echo $movie->getTitle(); ?></td>
+                <td style="vertical-align: middle"><?php echo $cinema->getName(); ?></td>
                 <td style="vertical-align: middle"><?php echo $date1; ?></td>
                 <td style="vertical-align: middle"><?php echo $date2; ?></td>
                 <td style="vertical-align: middle">$<?php echo $quantity; ?></td>

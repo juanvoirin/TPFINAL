@@ -4,6 +4,7 @@
 
     use Models\Ticket as Ticket;
     use DAO\TicketDAO as TicketDAO;
+    use DAO\CinemaDAO as CinemaDAO;
     use DAO\GenreDAO as GenreDAO;
     use DAO\MovieDAO as MovieDAO;
     use DAO\ScreeningDAO as ScreeningDAO;
@@ -185,11 +186,15 @@
         }
     
 
-        public function soldTicketsForm(){
+        public function soldTicketsMovieForm(){
 
             try{
                 if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
                     $ticketDao = new TicketDAO();
+                    $movieDao = new MovieDAO();
+
+                    $movieList = array();
+                    $movieList = $movieDao->getMovieWithScreening();
                     
                     require_once(VIEWS_PATH."adm-form-tickets-movies-sold.php");
                 }else{
@@ -209,6 +214,8 @@
 
                     $movie = $movieDao->getById($id_movie);
                     $quantity = $ticketDao->getSoldByIdMovie($id_movie, $date_1, $date_2);
+                    $date1 = $date_1;
+                    $date2 = $date_2;
 
                     require_once(VIEWS_PATH."adm-list-tickets-sold.php");
                 }else{
@@ -218,6 +225,47 @@
                 echo "No fue posible establecer una conexion con la Base de Datos.";
             }
         }
+
+        public function soldTicketsByIdCinema($id_cinema, $date_1, $date_2){
+            try{
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                    $ticketDao = new TicketDAO();
+                    $cinemaDao = new CinemaDAO();
+
+                    $cinema = $cinemaDao->getById($id_cinema);
+                    $quantity = $ticketDao->getSoldByIdCinema($id_cinema, $date_1, $date_2);
+                    $date1 = $date_1;
+                    $date2 = $date_2;
+
+                    require_once(VIEWS_PATH."adm-list-tickets-cinemas-sold.php");
+                }else{
+                    $this->index();
+                }
+            }catch(Exception $e){
+                echo "No fue posible establecer una conexion con la Base de Datos.";
+            }
+        }
+
+        public function soldTicketsCinemaForm(){
+
+            try{
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                    $ticketDao = new TicketDAO();
+                    $cinemaDao = new CinemaDAO();
+                    $userDao = new UserDAO();
+                 
+                    $cinemasList = $cinemaDao->getByOwnerId($userDao->getByEmail($_SESSION["loggedUser"])->getId());
+                    
+                    require_once(VIEWS_PATH."adm-form-tickets-cinema-sold.php");
+                }else{
+                    $this->index();
+                }
+
+            }catch(Exception $e){
+                echo "No es posible realizar la siguiete consulta";
+            }
+        }
+
 
     }
 ?>
