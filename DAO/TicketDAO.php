@@ -16,6 +16,31 @@
         private $tableName = "tickets";
 
 
+        public function getTicketById($idTicket){
+            
+            $ticket = NULL;
+
+            $query = "CALL Tickets_GetById(?)";
+
+            $parameters["idTicket"] = $idTicket;
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+            foreach($result as $row){
+                $userDao = new UserDAO();
+                $screeningDao = new ScreeningDAO();
+
+                $ticket = new Ticket();
+                $ticket->setId($row["id"]);
+                $ticket->setUser($userDao->getById($row["idUser"]));
+                $ticket->setScreening($screeningDao->getById($row["idScreening"]));
+            }
+
+            return $ticket;
+        }
+
         public function getByUser($idUser)
         {
             $ticketsList = array();
@@ -74,7 +99,7 @@
             return $quantity;
         }
 
-       public function getSoldByIdMovie($id_movie, $date_1, $date_2){
+        public function getSoldByIdMovie($id_movie, $date_1, $date_2){
 
             $query = "CALL ScreeningsByIdMovieAndDate(?,?,?)";
 
@@ -106,41 +131,41 @@
                 }
             }
             return $global;
-       }
-
-       public function getSoldByIdCinema($id_cine, $date_1, $date_2){
-
-        $query = "CALL ScreeningsByIdCineAndDate(?,?,?)";
-
-        $parameters["id_cine"] = $id_cine;
-        $parameters["date_1"] = $date_1;
-        $parameters["date_2"] = $date_2;
-
-        $this->connection = Connection::GetInstance();
-
-        $result = $this->connection->Execute($query,$parameters, QueryType::StoredProcedure);
-
-        $price = 0;
-        $id_screening = 0;
-        $quantity = 0;
-        $global = 0;
-
-        if($result != NULL){
-            foreach($result as $row){
-                $id_screening = $row["id_screening"];
-                $price = $row["price"];
-
-                $quantity = $this->getAvailability($id_screening);
-
-                if($quantity != NULL){
-                    $parcial = $price * $quantity;
-                    $global = $global + $parcial;
-                }
-
-            }
         }
-        return $global;
-   }
+
+        public function getSoldByIdCinema($id_cine, $date_1, $date_2){
+
+            $query = "CALL ScreeningsByIdCineAndDate(?,?,?)";
+
+            $parameters["id_cine"] = $id_cine;
+            $parameters["date_1"] = $date_1;
+            $parameters["date_2"] = $date_2;
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query,$parameters, QueryType::StoredProcedure);
+
+            $price = 0;
+            $id_screening = 0;
+            $quantity = 0;
+            $global = 0;
+
+            if($result != NULL){
+                foreach($result as $row){
+                    $id_screening = $row["id_screening"];
+                    $price = $row["price"];
+
+                    $quantity = $this->getAvailability($id_screening);
+
+                    if($quantity != NULL){
+                        $parcial = $price * $quantity;
+                        $global = $global + $parcial;
+                    }
+
+                }
+            }
+            return $global;
+        }
 
         public function getListMoviesByOwner($idOwner)
         {

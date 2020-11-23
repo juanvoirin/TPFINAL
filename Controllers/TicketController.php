@@ -190,11 +190,11 @@
 
             try{
                 if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
-                    $ticketDao = new TicketDAO();
                     $movieDao = new MovieDAO();
+                    $userDao = new UserDAO();
 
                     $movieList = array();
-                    $movieList = $movieDao->getMovieWithScreening();
+                    $movieList = $movieDao->getMovieWithScreeningByOwner($userDao->getByEmail($_SESSION["loggedUser"])->getId());
                     
                     require_once(VIEWS_PATH."adm-form-tickets-movies-sold.php");
                 }else{
@@ -202,7 +202,7 @@
                 }
 
             }catch(Exception $e){
-                echo "No es posible realizar la siguiete consulta";
+                $this->index("No fue posible establecer una conexion con la Base de Datos.");
             }
         }
 
@@ -222,7 +222,7 @@
                     $this->index();
                 }
             }catch(Exception $e){
-                echo "No fue posible establecer una conexion con la Base de Datos.";
+                $this->index("No fue posible establecer una conexion con la Base de Datos.");
             }
         }
 
@@ -242,7 +242,7 @@
                     $this->index();
                 }
             }catch(Exception $e){
-                echo "No fue posible establecer una conexion con la Base de Datos.";
+                $this->index("No fue posible establecer una conexion con la Base de Datos.");
             }
         }
 
@@ -262,10 +262,27 @@
                 }
 
             }catch(Exception $e){
-                echo "No es posible realizar la siguiete consulta";
+                $this->index("No fue posible establecer una conexion con la Base de Datos.");
             }
         }
 
+        public function showQR($idTicket) {
+            
+            try{
+                $ticketDao = new TicketDAO();
+
+                $ticket = $ticketDao->getTicketById($idTicket);
+
+                if($ticket != NULL){
+                    $qrInfo = $ticket->getQrInfo();
+                    require_once(VIEWS_PATH."usr-qr-ticket.php");
+                }else{
+                    $this->index("No fue posible establecer una conexion con la Base de Datos.");
+                }
+            }catch(Exception $e){
+                $this->index("No fue posible establecer una conexion con la Base de Datos.");
+            }
+		}
 
     }
 ?>
