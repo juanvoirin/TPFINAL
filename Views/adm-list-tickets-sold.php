@@ -31,7 +31,7 @@
             </thead>
             <tbody>
               <tr>
-                <td style="vertical-align: middle"><?php echo $tickets->getScreening()->getMovie()->getTitle(); ?></td>
+                <td style="vertical-align: middle"><?php echo $movie->getTitle(); ?></td>
                 <td style="vertical-align: middle"><?php echo $quantity; ?> </td>
               </tr>
             </tbody>
