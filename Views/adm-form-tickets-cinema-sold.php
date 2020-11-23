@@ -12,29 +12,32 @@ include_once('nav-user.php');
     <div class="container">
         <div class="row">
         <div class="mx-auto col-md-6 col-10 bg-white pb-3 pr-5 pl-5 pt-4">
-        <h1 class="mb-4"><br>Tickets Sold</h1>
-        <form action="<?php echo FRONT_ROOT ?>Ticket/addTicket" method="post">
+        <h1 class="mb-4"><br>Revenue for Cinema</h1>
+        <form action="<?php echo FRONT_ROOT ?>Ticket/soldTicketsByIdCinema" method="post">
           <div class="form-group row">
             <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">Cinema</label>
-            <div class="dropdown-menu"> 
-            <?php
-            foreach($cinemaList as $cinema) { ?>
-            <a class="dropdown-item" href="<?php echo FRONT_ROOT."Cinema/showListViewByOwner";?>"><?php echo $cinema->getName() ?><br></a>
-            <?php } ?>
+            <div class="col-sm-9">
+              <select class="form-control" id="idCinema" placeholder="idCinema" name="idCinema">
+                  <?php foreach($cinemasList as $cinema){
+                      if($_SESSION["loggedUser"] == $cinema->getOwner()->getEmail()){?>
+                        <option value="<?php echo $cinema->getId();?>"><?php echo $cinema->getName(); ?></option>
+                  <?php } } ?>
+              </select>
             </div>
           </div>
           <div class="form-group row">
-            <label for="Cinema" class="font-weight-bolder bg-info text-black col-form-label col-sm-11">From Date:<div class="form-group"> <input type="date" class="form-control" placeholder="Date" name="date" id="date" required></div></label>
+            <label for="Movie" class="font-weight-bolder bg-info text-black col-form-label col-sm-11">From Date:<div class="form-group"> <input type="date" class="form-control" placeholder="Date" name="date" id="date" required></div></label>
           </div>
           <div class="form-group row">
-            <label for="Cinema" class="font-weight-bolder bg-info text-black col-form-label col-sm-11">Until Date:<div class="form-group"> <input type="date" class="form-control" placeholder="Date" name="date" id="date" required></div></label>
+            <label for="Movie" class="font-weight-bolder bg-info text-black col-form-label col-sm-11">Until Date:<div class="form-group"> <input type="date" class="form-control" placeholder="Date" name="date2" id="date2" required></div></label>
           </div>
-          </div>
-          <div class ="m-3">
+          <div class="card-body mx-auto">
             <button type="submit" class="btn btn-primary">Query<br></button>
+          </div>
           </div>
         </form>
       </div>
+      
     </div>
   </div>
 </div>

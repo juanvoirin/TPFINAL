@@ -12,13 +12,16 @@ include_once('nav-user.php');
     <div class="container">
         <div class="row">
         <div class="mx-auto col-md-6 col-10 bg-white pb-3 pr-5 pl-5 pt-4">
-        <h1 class="mb-4"><br>Tickets Sold</h1>
+        <h1 class="mb-4"><br>Revenue for Movie</h1>
         <form action="<?php echo FRONT_ROOT ?>Ticket/soldTicketsByIdMovie" method="post">
           <div class="form-group row">
             <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">Movie</label>
             <div class="col-sm-9">
-              <input type="number" class="form-control" placeholder="Movie" name="movie" id="movie">
-            </div>
+                            <select class="form-control" id="idMovie" placeholder="idMovie" name="idMovie">
+                                <?php foreach($movieList as $movie){?>
+                                        <option value="<?php echo $movie->getId();?>"><?php echo $movie->getTitle(); ?></option>
+                                <?php } ?>
+                            </select>
             </div>
           </div>
           <div class="form-group row">
@@ -27,12 +30,13 @@ include_once('nav-user.php');
           <div class="form-group row">
             <label for="Movie" class="font-weight-bolder bg-info text-black col-form-label col-sm-11">Until Date:<div class="form-group"> <input type="date" class="form-control" placeholder="Date" name="date2" id="date2" required></div></label>
           </div>
-          </div>
-          <div class ="m-3">
+          <div class="card-body mx-auto">
             <button type="submit" class="btn btn-primary">Query<br></button>
+          </div>
           </div>
         </form>
       </div>
+      
     </div>
   </div>
 </div>

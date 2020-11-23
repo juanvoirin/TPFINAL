@@ -108,7 +108,7 @@
             return $global;
        }
 
-       public function getSoldByIdCine($id_cine, $date_1, $date_2){
+       public function getSoldByIdCinema($id_cine, $date_1, $date_2){
 
         $query = "CALL ScreeningsByIdCineAndDate(?,?,?)";
 
