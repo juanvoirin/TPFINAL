@@ -50,8 +50,6 @@
 
         }
 
-
-
         public function getById($id)
         {
             $query = "CALL Screenings_GetById(?)";
@@ -163,6 +161,39 @@
             $movieDao = new MovieDAO();
 
             foreach($result as $row){
+                if($row['date'] >= date('Y-m-d')){
+                    $screening = new Screening();
+                    $screening->setId($row['id']);
+                    $screening->setDate($row['date']);
+                    $screening->setTime($row['time']);
+                    $screening->setRuntime($row['runtime']);
+                    $screening->setSold($row['sold']);
+                    $screening->setRoom($roomDao->getById($row['id_room']));
+                    $screening->setMovie($movieDao->getById($row['id_movie']));
+
+                    array_push($this->screeningsList, $screening);
+                }
+            }
+            return $this->screeningsList; 
+        }
+
+        public function getByOwner($idOwner)
+        {
+            $this->screeningsList = array();
+
+            $query = "CALL Screenings_GetByOwner(?)";
+
+            $parameters["idOwner"] = $idOwner;
+            
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+            
+            $roomDao = new RoomDAO();
+
+            $movieDao = new MovieDAO();
+
+            foreach($result as $row){
                 $screening = new Screening();
                 $screening->setId($row['id']);
                 $screening->setDate($row['date']);
@@ -174,9 +205,7 @@
 
                 array_push($this->screeningsList, $screening);
             }
-            return $this->screeningsList;
-
-            
+            return $this->screeningsList; 
         }
 
         public function add(Screening $screening)
@@ -273,6 +302,54 @@
 
             return $screening;
 
+        }
+
+        public function sumSoldScreening($idScreening, $quantity){
+
+            $query = "CALL Screenings_SumSoldScreening(?, ?)";
+
+            $parameters["idScreening"] = $idScreening;
+            $parameters["quantity"] = $quantity;
+
+            $this->connection = Connection::GetInstance();
+
+            $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+
+        }
+
+        public function getCapacityByMovie($idMovie, $idOwner){
+
+            $query = "CALL Screenings_GetCapacityByMovie(?, ?)";
+
+            $parameters["idMovie"] = $idMovie;
+            $parameters["idOwner"] = $idOwner;
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+            foreach($result as $row){
+                $capacity = $row["capacity"];
+            }
+
+            return $capacity;
+        }
+
+        public function getCapacityByCinema($idCinema){
+
+            $query = "CALL Screenings_GetCapacityByCinema(?)";
+
+            $parameters["idCinema"] = $idCinema;
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+
+            foreach($result as $row){
+                $capacity = $row["capacity"];
+            }
+
+            return $capacity;
         }
 
     }

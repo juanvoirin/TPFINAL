@@ -38,17 +38,42 @@ class ScreeningController
 
         public function showListView($message = ""){
             
-            try{
-                $screeningDao = new ScreeningDAO();
+            if($_SESSION["type"] == "user"){
+                try{
+                    $screeningDao = new ScreeningDAO();
 
-                $screeningList = array();
-                $screeningList = $screeningDao->getAll();
+                    $screeningList = array();
+                    $screeningList = $screeningDao->getAll();
 
-            }catch(Exception $e){
-                $message = "No fue posible establecer una conexion con la Base de Datos.";
+                }catch(Exception $e){
+                    $message = "No fue posible establecer una conexion con la Base de Datos.";
+                }
+
+                require_once(VIEWS_PATH."user-list-screenings.php");
+            }else{
+                $this->showListViewOwner();
             }
+        }
 
-            require_once(VIEWS_PATH."user-list-screenings.php");
+        public function showListViewOwner($message = ""){
+            
+            if($_SESSION["type"] == "administrator"){
+                try{
+                    $screeningDao = new ScreeningDAO();
+
+                    $userDao = new UserDAO();
+
+                    $screeningList = array();
+                    $screeningList = $screeningDao->getByOwner($userDao->getByEmail($_SESSION["loggedUser"])->getId());
+
+                }catch(Exception $e){
+                    $message = "No fue posible establecer una conexion con la Base de Datos.";
+                }
+
+                require_once(VIEWS_PATH."user-list-screenings.php");
+            }else{
+                $this->showListView();
+            }
         }
 
         public function showListScreeningsIdMovie($idMovie){
