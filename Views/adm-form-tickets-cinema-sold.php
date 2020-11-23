@@ -15,7 +15,7 @@ include_once('nav-user.php');
         <h1 class="mb-4"><br>Revenue for Cinema</h1>
         <form action="<?php echo FRONT_ROOT ?>Ticket/soldTicketsByIdCinema" method="post">
           <div class="form-group row">
-            <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">Movie</label>
+            <label for="id" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">Cinema</label>
             <div class="col-sm-9">
               <select class="form-control" id="idCinema" placeholder="idCinema" name="idCinema">
                   <?php foreach($cinemasList as $cinema){
