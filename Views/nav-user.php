@@ -8,7 +8,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbar12"> 
       <a class="navbar-brand d-none d-md-block" href="<?php echo FRONT_ROOT."Home/showHomeView"?>">
-        <i class="fa d-inline fa-lg fa-circle"></i>
+        <img  src="<?php echo IMG_PATH."nav-logo.png"?>" width="70" height="50">
         <b>MoviePass</b>
       </a>
 
@@ -17,8 +17,6 @@
         <li class="nav-item"> <a class="nav-link" href="<?php echo  FRONT_ROOT."Movie/showListView";?>">Movies</a> </li>
         <?php if ($_SESSION["type"] == "administrator") { ?>
           <li class="nav-item"> <a class="nav-link" href="<?php echo  FRONT_ROOT."Movie/showAddView";?>">Insert Movies</a> </li>
-
-          <!--<li class="nav-item"> <a class="nav-link" href="<?php //echo  FRONT_ROOT."Screening/showListView";?>">Screenings</a> </li>-->
           <li class="nav-item"> <a class="nav-link" href="<?php echo  FRONT_ROOT."Screening/showListViewOwner";?>">Screenings</a> </li>
           <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
