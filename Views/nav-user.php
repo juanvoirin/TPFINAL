@@ -17,9 +17,12 @@
         <li class="nav-item"> <a class="nav-link" href="<?php echo  FRONT_ROOT."Movie/showListView";?>">Movies</a> </li>
         <?php if ($_SESSION["type"] == "administrator") { ?>
           <li class="nav-item"> <a class="nav-link" href="<?php echo  FRONT_ROOT."Movie/showAddView";?>">Insert Movies</a> </li>
+
+          <!--<li class="nav-item"> <a class="nav-link" href="<?php //echo  FRONT_ROOT."Screening/showListView";?>">Screenings</a> </li>-->
           <li class="nav-item"> <a class="nav-link" href="<?php echo  FRONT_ROOT."Screening/showListViewOwner";?>">Screenings</a> </li>
-          <li class="nav-item"> <a class="nav-link" href="<?php echo  FRONT_ROOT."Purchase/showRevenueView";?>">Revenue</a> </li>
+          <li class="nav-item"> <a class="nav-link" href="<?php echo  FRONT_ROOT."Ticket/soldTicketsForm";?>">Revenue</a> </li>
           <li class="nav-item"> <a class="nav-link" href="<?php echo  FRONT_ROOT."Ticket/showListViewMoviesByOwner"; ?>">Tickets</a> </li>
+
         <?php } else { ?>
           <li class="nav-item"> <a class="nav-link" href="<?php echo  FRONT_ROOT."Screening/showListView";?>">Screenings</a> </li>
           <li class="nav-item"> <a class="nav-link" href="<?php echo  FRONT_ROOT."Ticket/showListViewByUser"; ?>">Tickets</a> </li>

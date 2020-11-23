@@ -183,6 +183,39 @@
                 $this->showListViewByUser("Ocurrio un error al intentar comprar un ticket.");
             }
         }
+    
+
+        public function soldTicketsForm(){
+
+            try{
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                    $ticketDao = new TicketDAO();
+                    
+                    require_once(VIEWS_PATH."adm-form-tickets-movies-sold.php");
+                }else{
+                    $this->index();
+                }
+
+            }catch(Exception $e){
+                echo "No es posible realizar la siguiete consulta";
+            }
+        }
+
+        public function soldTicketsByIdMovie($id_movie, $date_1, $date_2){
+            try{
+                if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                    $ticketDao = new TicketDAO();
+
+                    $quantity = $ticketDao->getSoldByIdMovie($id_movie, $date_1, $date_2);
+
+                    require_once(VIEWS_PATH."adm-list-tickets-sold.php");
+                }else{
+                    $this->index();
+                }
+            }catch(Exception $e){
+                echo "No fue posible establecer una conexion con la Base de Datos.";
+            }
+        }
 
     }
 ?>

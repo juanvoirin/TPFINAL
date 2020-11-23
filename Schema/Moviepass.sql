@@ -704,6 +704,34 @@ END$$
 
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `ScreeningsByIdMovieAndDate`;
+
+DELIMITER $$
+
+CREATE PROCEDURE ScreeningsByIdMovieAndDate ( IN id_movie INT, IN `date_1` date, IN `date_2` date)
+BEGIN
+	SELECT s.id as `id_screening`,r.price as `price`
+	FROM screenings s 
+	JOIN rooms r 
+	ON r.id = s.id_room
+	WHERE s.id_movie = id_movie && s.date between `date_1` and `date_2`;
+END $$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `ScreeningsByIdCineAndDate`;
+
+DELIMITER $$
+
+CREATE PROCEDURE ScreeningsByIdCineAndDate ( IN id_cine INT, IN `date_1` date, IN `date_2` date)
+BEGIN
+	SELECT s.id as `id_screening`,r.price as `price`
+	FROM rooms r
+	JOIN screenings s  
+	ON s.id_room = r.id
+	WHERE r.id_cinema = id_cine && s.date between `date_1` and `date_2`;
+END $$
+                
 DROP PROCEDURE IF EXISTS `Tickets_GetListMoviesByOwner` ;
 
 DELIMITER $$
