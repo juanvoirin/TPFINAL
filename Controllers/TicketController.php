@@ -205,7 +205,9 @@
             try{
                 if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
                     $ticketDao = new TicketDAO();
+                    $movieDao = new MovieDAO();
 
+                    $movie = $movieDao->getById($id_movie);
                     $quantity = $ticketDao->getSoldByIdMovie($id_movie, $date_1, $date_2);
 
                     require_once(VIEWS_PATH."adm-list-tickets-sold.php");

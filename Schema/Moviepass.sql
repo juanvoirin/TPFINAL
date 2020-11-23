@@ -732,7 +732,7 @@ BEGIN
 	WHERE r.id_cinema = id_cine && s.date between `date_1` and `date_2`;
 END $$
                 
-DROP PROCEDURE IF EXISTS `Tickets_GetListMoviesByOwner` ;
+DROP PROCEDURE IF EXISTS `Tickets_GetListMoviesByOwner`;
 
 DELIMITER $$
 
