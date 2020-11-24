@@ -40,7 +40,7 @@ include_once('nav-user.php');
           <div class="form-group row">
             <label for="capacity" class="font-weight-bolder bg-info text-black col-form-label col-sm-3">Quantity</label>
             <div class="col-sm-9">
-              <input type="number" min="0" max="<?php echo $ticketAvailability ?>"class="form-control" placeholder="Quantity" name="quantity" id="quantity">
+              <input type="number" min="1" max="<?php echo $ticketAvailability ?>"class="form-control" placeholder="Quantity" name="quantity" id="quantity">
             </div>
           </div>
           <div class ="m-3">
