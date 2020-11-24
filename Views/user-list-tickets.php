@@ -32,6 +32,7 @@
                 <th>Runtime</th>
                 <th>Cinema</th>
                 <th>Room</th>
+                <th>QR</th>
               </tr>
             </thead>
             <tbody>
@@ -48,13 +49,16 @@
                 <td style="vertical-align: middle"><?php echo $tickets->getScreening()->getRuntime(); ?> Min.</td>
                 <td style="vertical-align: middle"><?php echo $tickets->getScreening()->getRoom()->getCinema()->getName(); ?></td>
                 <td style="vertical-align: middle"><?php echo $tickets->getScreening()->getRoom()->getName(); ?></td>
+                <td style="vertical-align: middle">
+                  <a href="<?php echo FRONT_ROOT."Ticket/showQR?idTicket=".$tickets->getId(); ?>" class="btn btn-primary">QR</a>
+                </td>
               </tr>
               <?php } ?>
             </tbody>
           </table>
             <div>
               <div class="card-body mx-auto">
-              <a href="<?php echo FRONT_ROOT."Movie/showListView" ?>" class="btn btn-outline-secondary"><strong>Back To Movies</strong></a>
+              <a href="<?php echo FRONT_ROOT."Movie/showListView"; ?>" class="btn btn-outline-secondary"><strong>Back To Movies</strong></a>
               </div>
             </div>
         </div>

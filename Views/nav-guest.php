@@ -5,7 +5,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbar12"> 
       <a class="navbar-brand d-none d-md-block" href="<?php echo FRONT_ROOT."Home/showHomeView "?>">
-        <i class="fa d-inline fa-lg fa-circle"></i>
+        <img  src="<?php echo IMG_PATH."nav-logo.png"?>" width="70" height="50">
         <b>MoviePass</b>
       </a>
       <ul class="navbar-nav mx-auto">

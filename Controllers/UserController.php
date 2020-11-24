@@ -44,7 +44,7 @@
 
                 $genreList = array();
                 $genreList = $this->genreDao->getAll();
-                
+
                 $this->movieDao = new MovieDAO();
 
                 $movieList = array();
