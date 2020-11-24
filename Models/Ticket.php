@@ -31,6 +31,9 @@
             return $this->screening;
         }
 
-    }
+        public function getQrInfo(){
+            return $this->getId()."-".$this->getUser()->getName()."-".$this->getScreening()->getMovie()->getTitle()."-".$this->getScreening()->getRoom()->getCinema()->getName()."-".$this->getScreening()->getRoom()->getName()."-".$this->getScreening()->getDate()."/".$this->getScreening()->getTime();
+		}
 
+	}
 ?>

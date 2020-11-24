@@ -37,18 +37,43 @@ class ScreeningController
         }
 
         public function showListView($message = ""){
-            
-            try{
-                $screeningDao = new ScreeningDAO();
 
-                $screeningList = array();
-                $screeningList = $screeningDao->getAll();
+            if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                $this->showListViewOwner();
+            }else{
+                try{
+                    $screeningDao = new ScreeningDAO();
 
-            }catch(Exception $e){
-                $message = "No fue posible establecer una conexion con la Base de Datos.";
+                    $screeningList = array();
+                    $screeningList = $screeningDao->getAll();
+
+                }catch(Exception $e){
+                    $message = "No fue posible establecer una conexion con la Base de Datos.";
+                }
+
+                require_once(VIEWS_PATH."user-list-screenings.php");
             }
+        }
 
-            require_once(VIEWS_PATH."user-list-screenings.php");
+        public function showListViewOwner($message = ""){
+            
+            if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                try{
+                    $screeningDao = new ScreeningDAO();
+
+                    $userDao = new UserDAO();
+
+                    $screeningList = array();
+                    $screeningList = $screeningDao->getByOwner($userDao->getByEmail($_SESSION["loggedUser"])->getId());
+
+                }catch(Exception $e){
+                    $message = "No fue posible establecer una conexion con la Base de Datos.";
+                }
+
+                require_once(VIEWS_PATH."user-list-screenings.php");
+            }else{
+                $this->showListView();
+            }
         }
 
         public function showListScreeningsIdMovie($idMovie){
@@ -205,7 +230,7 @@ class ScreeningController
             }
         }
 
-        private function checkTime($time, $idRoom, $date, $idMovie){
+        /*private function checkTime($time, $idRoom, $date, $idMovie){
             $screeningDAO = new ScreeningDAO();
             $screenings = $screeningDAO->getByRoomAndDate($idRoom, $date);
             $result = TRUE;
@@ -273,7 +298,7 @@ class ScreeningController
             }
 
             return $result;
-        }
+        }*/
 
         //HORA TEST
         private function checkTime2($time, $idRoom, $date, $idMovie){
@@ -295,7 +320,7 @@ class ScreeningController
 
             $result = TRUE;
 
-            $timeActual = new datetime($time);
+            $timeActual = new datetime($date.$time);
 
             //Busca la funcion anterior y posterior si las hay. Si hay una funcion en el mismo horario cambia el resultado.
             if(count($screenings) > 0){
@@ -324,7 +349,7 @@ class ScreeningController
                 $hours = floor($runtime / 60);
                 $minutes = floor($runtime - ($hours * 60));
 
-                $hourFinishAnterior = new datetime ($anterior->getTime());
+                $hourFinishAnterior = new datetime ($anterior->getDate().$anterior->getTime());
                 $hourFinishAnterior->modify('+'.$hours." hour");
                 $hourFinishAnterior->modify('+'.$minutes."minutes");
 
@@ -364,7 +389,7 @@ class ScreeningController
 
             try{
                 if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
-                    if($this->checkTime($time, $idRoom, $date, $idMovie)){
+                    if($this->checkTime2($time, $idRoom, $date, $idMovie)){
 
                         $movieDao = new MovieDAO();
                         $movie = $movieDao->getById($idMovie);
