@@ -115,6 +115,8 @@
 
             try{
                 if(isset($_SESSION["type"]) && $_SESSION["type"] != "administrator"){
+                    $ticketsList = array();
+
                     $ticketDao = new TicketDAO();
                     $userDao = new UserDAO();
 
