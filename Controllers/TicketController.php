@@ -52,7 +52,7 @@
                     $ticket['movie'] = $row['title'];
                     $ticket['sold'] = $row['sold'];
                     $ticket['remaining'] = $screeningDao->getCapacityByMovie($row['idMovie'], $idUser) - $row['sold'];
-    
+
                     array_push($list, $ticket);
                 }
 
