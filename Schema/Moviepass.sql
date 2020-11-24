@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `cinemas`
     CONSTRAINT fk_user_cinema FOREIGN KEY (`owner`) REFERENCES users(`id`)
 )Engine=InnoDB;
     
+    
 CREATE TABLE IF NOT EXISTS rooms
 (
 	`id` INT NOT NULL auto_increment,
