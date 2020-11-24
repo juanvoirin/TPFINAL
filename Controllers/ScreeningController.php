@@ -37,8 +37,10 @@ class ScreeningController
         }
 
         public function showListView($message = ""){
-            
-            if($_SESSION["type"] == "user"){
+
+            if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
+                $this->showListViewOwner();
+            }else{
                 try{
                     $screeningDao = new ScreeningDAO();
 
@@ -50,14 +52,12 @@ class ScreeningController
                 }
 
                 require_once(VIEWS_PATH."user-list-screenings.php");
-            }else{
-                $this->showListViewOwner();
             }
         }
 
         public function showListViewOwner($message = ""){
             
-            if($_SESSION["type"] == "administrator"){
+            if(isset($_SESSION["type"]) && $_SESSION["type"] == "administrator"){
                 try{
                     $screeningDao = new ScreeningDAO();
 
